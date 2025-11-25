@@ -7,13 +7,13 @@
             id, line_name, line_no, url, is_valid, is_delete, create_at, update_at
         FROM line
         <trim prefix="WHERE" prefixOverrides="AND">
-            <if test="param.lineNo != null">
+            <if test="param.lineNo != null and param.lineNo != ''">
                 line_no = #{param.lineNo}
             </if>
-            <if test="param.lineName != null">
+            <if test="param.lineName != null and param.lineName != ''">
                 AND line_name = #{param.lineName}
             </if>
-            <if test="param.isValid != null">
+            <if test="param.isValid != null and param.isValid != ''">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0
@@ -25,13 +25,13 @@
         SELECT COUNT(*)
         FROM line
         <trim prefix="WHERE" prefixOverrides="AND">
-            <if test="param.lineNo != null">
+            <if test="param.lineNo != null and param.lineNo != ''">
                 line_no = #{param.lineNo}
             </if>
-            <if test="param.lineName != null">
+            <if test="param.lineName != null and param.lineName != ''">
                 AND line_name = #{param.lineName}
             </if>
-            <if test="param.isValid != null">
+            <if test="param.isValid != null and param.isValid != ''">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0

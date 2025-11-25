@@ -2,6 +2,9 @@ package com.vgbhfive.service;
 
 import com.vgbhfive.dto.ResponseContent;
 import com.vgbhfive.dto.line.LineQueryParam;
+import com.vgbhfive.entity.LineEntity;
+
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @projectName: v-rule
@@ -11,5 +14,9 @@ import com.vgbhfive.dto.line.LineQueryParam;
 public interface LineService {
 
     ResponseContent queryList(LineQueryParam param);
+
+    ResponseContent create(LineEntity lineEntity, HttpServletRequest request, boolean isUpdate);
+
+    ResponseContent update(LineEntity lineEntity, HttpServletRequest request);
 
 }
