@@ -1,0 +1,28 @@
+CREATE TABLE `line` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_name` varchar(32) NOT NULL COMMENT '业务线名称',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `url` varchar(128) NOT NULL DEFAULT '' COMMENT 'core地址url',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `line_no` (`line_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务线表';
+
+CREATE TABLE `scene` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `scene_name` varchar(32) NOT NULL COMMENT '场景名称',
+  `field` varchar(128) NOT NULL COMMENT '数据字段',
+  `scene_no` varchar(32) NOT NULL COMMENT '场景编码',
+  `is_valid` tinyint(3) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(3) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `scene_no` (`scene_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='场景表';
+
+

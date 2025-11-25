@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.mapper.LineMapper">
+
+    <select id="queryList" resultType="com.vgbhfive.dto.line.LineListDto">
+        SELECT
+            id, line_name, line_no, url, is_valid, is_delete, create_at, update_at
+        FROM line
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.lineName != null">
+                AND line_name = #{param.lineName}
+            </if>
+            <if test="param.isValid != null">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="queryTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM line
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.lineName != null">
+                AND line_name = #{param.lineName}
+            </if>
+            <if test="param.isValid != null">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+    </select>
+
+</mapper>
