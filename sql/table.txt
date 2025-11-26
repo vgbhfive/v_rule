@@ -1,6 +1,6 @@
 CREATE TABLE `line` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `line_name` varchar(32) NOT NULL COMMENT '业务线名称',
+  `line_name` varchar(64) NOT NULL COMMENT '业务线名称',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
   `url` varchar(128) NOT NULL DEFAULT '' COMMENT 'core地址url',
   `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
@@ -14,15 +14,51 @@ CREATE TABLE `line` (
 CREATE TABLE `scene` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
-  `scene_name` varchar(32) NOT NULL COMMENT '场景名称',
+  `scene_name` varchar(128) NOT NULL COMMENT '场景名称',
   `field` varchar(128) NOT NULL COMMENT '数据字段',
   `scene_no` varchar(32) NOT NULL COMMENT '场景编码',
-  `is_valid` tinyint(3) NOT NULL COMMENT '是否有效',
-  `is_delete` tinyint(3) NOT NULL COMMENT '是否删除',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`),
   KEY `scene_no` (`scene_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='场景表';
 
+CREATE TABLE `data_source` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `data_source_name` varchar(32) NOT NULL COMMENT '数据源名称',
+  `data_source_no` varchar(128) NOT NULL COMMENT '数据源编码',
+  `data_category_no` varchar(32) NOT NULL COMMENT '数据源分类编码',
+  `source_from` varchar(32) NOT NULL COMMENT '一级来源',
+  `source_type` varchar(32) NOT NULL COMMENT '二级分类',
+  `field` varchar(128) NOT NULL COMMENT '字段',
+  `type` varchar(32) NOT NULL COMMENT '字段类型',
+  `format` varchar(32) NOT NULL COMMENT '字段格式',
+  `version` int(11) NOT NULL COMMENT '版本',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `data_source_no` (`data_source_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据源表';
 
+CREATE TABLE `data_category` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `data_category_name` varchar(32) NOT NULL COMMENT '数据源分类名称',
+  `data_category_no` varchar(128) NOT NULL COMMENT '数据源分类编码',
+  `source_from` varchar(32) NOT NULL COMMENT '一级来源',
+  `source_type` varchar(32) NOT NULL COMMENT '二级分类',
+  `category_type` tinyint(1) NOT NULL COMMENT '分类类型',
+  `priority` int(11) NOT NULL COMMENT '优先级',
+  `version` int(11) NOT NULL COMMENT '版本',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `data_category_no` (`data_category_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据源分类表';

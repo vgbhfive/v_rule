@@ -1,14 +1,13 @@
 package com.vgbhfive.dto.datasource;
 
-import com.vgbhfive.dto.PageRequest;
 import lombok.Data;
 
 /**
  * @Author vgbhfive
- * @Date 2025/11/26 12:15
+ * @Date 2025/11/26 15:41
  */
 @Data
-public class DataSourceQueryParam extends PageRequest {
+public class DataSourceListDto {
 
     private String lineNo;
 
@@ -18,8 +17,20 @@ public class DataSourceQueryParam extends PageRequest {
 
     private String dataCategoryNo;
 
+    private String sourceFrom;
+
+    private String sourceType;
+
     private String field;
 
+    private String type;
+
+    private String format;
+
+    private Integer version;
+
     private Integer isValid;
+
+    private Integer isDelete;
 
 }
