@@ -29,7 +29,7 @@ CREATE TABLE `data_source` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
   `data_source_name` varchar(32) NOT NULL COMMENT '数据源名称',
-  `data_source_no` varchar(128) NOT NULL COMMENT '数据源编码',
+  `data_source_no` varchar(32) NOT NULL COMMENT '数据源编码',
   `data_category_no` varchar(32) NOT NULL COMMENT '数据源分类编码',
   `source_from` varchar(32) NOT NULL COMMENT '一级来源',
   `source_type` varchar(32) NOT NULL COMMENT '二级分类',
@@ -49,7 +49,7 @@ CREATE TABLE `data_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
   `data_category_name` varchar(32) NOT NULL COMMENT '数据源分类名称',
-  `data_category_no` varchar(128) NOT NULL COMMENT '数据源分类编码',
+  `data_category_no` varchar(32) NOT NULL COMMENT '数据源分类编码',
   `source_from` varchar(32) NOT NULL COMMENT '一级来源',
   `source_type` varchar(32) NOT NULL COMMENT '二级分类',
   `category_type` tinyint(1) NOT NULL COMMENT '分类类型',
@@ -62,3 +62,48 @@ CREATE TABLE `data_category` (
   PRIMARY KEY (`id`),
   KEY `data_category_no` (`data_category_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='数据源分类表';
+
+CREATE TABLE `rule` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `rule_name` varchar(32) NOT NULL COMMENT '规则名称',
+  `rule_no` varchar(32) NOT NULL COMMENT '规则编码',
+  `data_source_no` varchar(32) NOT NULL COMMENT '数据源编码',
+  `cond` varchar(32) NOT NULL COMMENT '条件',
+  `threshold` varchar(256) NOT NULL COMMENT '阈值',
+  `threshold_type` varchar(256) NOT NULL COMMENT '阈值类型',
+  `result` varchar(16) NOT NULL COMMENT '结果',
+  `version` int(11) NOT NULL COMMENT '版本',
+  `deploy_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '部署时间',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `rule_no` (`rule_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='规则表';
+
+CREATE TABLE `rule_set` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `rule_set_name` varchar(32) NOT NULL COMMENT '规则集名称',
+  `rule_set_no` varchar(128) NOT NULL COMMENT '规则集编码',
+  `first_no` varchar(32) NOT NULL COMMENT '规则/规则集编码',
+  `first_type` varchar(6) NOT NULL COMMENT '规则/规则集类型 rule/rule_set',
+  `second_no` varchar(32) NOT NULL COMMENT '规则/规则集编码',
+  `second_type` varchar(6) NOT NULL COMMENT '规则/规则集类型  rule/rule_set',
+  `combine` varchar(8) NOT NULL COMMENT '联合符号',
+  `cond` varchar(32) NOT NULL COMMENT '条件',
+  `threshold` varchar(16) NOT NULL COMMENT '阈值',
+  `result` varchar(16) NOT NULL COMMENT '结果',
+  `version` int(11) NOT NULL COMMENT '版本',
+  `deploy_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '部署时间',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `rule_set_no` (`rule_set_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='规则集表';
+
+
