@@ -35,6 +35,9 @@ public class LineEntity {
      */
     private String lineNo;
 
+    /**
+     * 引擎url
+     */
     private String url;
 
     private Integer isValid;

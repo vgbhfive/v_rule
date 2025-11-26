@@ -1,8 +1,8 @@
 package com.vgbhfive.service;
 
-import javafx.scene.Scene;
-
-import java.util.List;
+import com.vgbhfive.dto.ResponseContent;
+import com.vgbhfive.dto.scene.SceneQueryParam;
+import com.vgbhfive.entity.SceneEntity;
 
 /**
  * @projectName: v-rule
@@ -11,6 +11,10 @@ import java.util.List;
  */
 public interface SceneService {
 
-    List<Scene> queryList();
+    ResponseContent queryList(SceneQueryParam param);
+
+    ResponseContent create(SceneEntity sceneEntity);
+
+    ResponseContent update(SceneEntity sceneEntity);
 
 }

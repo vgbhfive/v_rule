@@ -34,14 +34,14 @@ public class LineController {
 
     @PostMapping("/create")
     @Log
-    public ResponseContent create(@Valid @RequestBody LineEntity lineEntity, HttpServletRequest request) {
-        return lineService.create(lineEntity, request, false);
+    public ResponseContent create(@Valid @RequestBody LineEntity lineEntity) {
+        return lineService.create(lineEntity);
     }
 
     @PostMapping("/update")
     @Log
-    public ResponseContent update(@Valid @RequestBody LineEntity lineEntity, HttpServletRequest request) {
-        return lineService.update(lineEntity, request);
+    public ResponseContent update(@Valid @RequestBody LineEntity lineEntity) {
+        return lineService.update(lineEntity);
     }
 
 }

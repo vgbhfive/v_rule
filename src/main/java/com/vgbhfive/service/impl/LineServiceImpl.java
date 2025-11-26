@@ -45,7 +45,7 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public ResponseContent create(LineEntity lineEntity, HttpServletRequest request, boolean isUpdate) {
+    public ResponseContent create(LineEntity lineEntity) {
         lineEntity.setId(null);
         Date now = new Date();
         lineEntity.setCreateAt(now);
@@ -58,7 +58,7 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public ResponseContent update(LineEntity lineEntity, HttpServletRequest request) {
+    public ResponseContent update(LineEntity lineEntity) {
         LineEntity oldLineEntity = new LineEntity();
         oldLineEntity.setIsDelete(1);
         oldLineEntity.setUpdateAt(new Date());
@@ -67,7 +67,7 @@ public class LineServiceImpl implements LineService {
         if (update < 1) {
             throw new DataBaseException("更新业务线失败");
         }
-        return this.create(lineEntity, request, true);
+        return this.create(lineEntity);
     }
 
 }

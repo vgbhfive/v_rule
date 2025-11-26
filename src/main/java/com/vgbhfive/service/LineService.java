@@ -15,8 +15,8 @@ public interface LineService {
 
     ResponseContent queryList(LineQueryParam param);
 
-    ResponseContent create(LineEntity lineEntity, HttpServletRequest request, boolean isUpdate);
+    ResponseContent create(LineEntity lineEntity);
 
-    ResponseContent update(LineEntity lineEntity, HttpServletRequest request);
+    ResponseContent update(LineEntity lineEntity);
 
 }

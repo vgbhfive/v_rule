@@ -1,8 +1,13 @@
 package com.vgbhfive.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import javafx.scene.Scene;
+import com.vgbhfive.dto.scene.SceneListDto;
+import com.vgbhfive.dto.scene.SceneQueryParam;
+import com.vgbhfive.entity.SceneEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @projectName: v-rule
@@ -10,5 +15,10 @@ import org.apache.ibatis.annotations.Mapper;
  * @date: 2025/11/23 23:25
  */
 @Mapper
-public interface SceneMapper extends BaseMapper<Scene> {
+public interface SceneMapper extends BaseMapper<SceneEntity> {
+
+    List<SceneListDto> queryList(@Param("param") SceneQueryParam param, @Param("start") Integer start, @Param("limit") Integer limit);
+
+    Integer queryTotalCount(@Param("param") SceneQueryParam param);
+
 }

@@ -25,12 +25,24 @@ public class SceneEntity {
     @TableId(type = IdType.AUTO)
     private Integer id;
 
+    /**
+     * 业务线编码
+     */
     private String lineNo;
 
+    /**
+     * 场景名称
+     */
     private String sceneName;
 
+    /**
+     * 场景字段
+     */
     private String field;
 
+    /**
+     * 场景编码
+     */
     private String sceneNo;
 
     private Integer isValid;
