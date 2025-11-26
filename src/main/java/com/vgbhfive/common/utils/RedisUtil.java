@@ -1,0 +1,28 @@
+package com.vgbhfive.common.utils;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.stereotype.Component;
+
+import java.util.concurrent.TimeUnit;
+
+/**
+ * @projectName: v-rule
+ * @author: vgbhfive
+ * @date: 2025/11/26 21:50
+ */
+@Component
+public class RedisUtil {
+
+    private static final Logger logger = LoggerFactory.getLogger(RedisUtil.class);
+
+    private static RedisTemplate redisTemplate;
+
+    public static Integer incrementAndExpire(String type) {
+        Long id = redisTemplate.opsForValue().increment(type, 1);
+        redisTemplate.expire(type, 1, TimeUnit.DAYS);
+        return id.intValue();
+    }
+
+}

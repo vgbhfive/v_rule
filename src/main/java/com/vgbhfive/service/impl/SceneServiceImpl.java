@@ -1,13 +1,13 @@
 package com.vgbhfive.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.vgbhfive.common.constants.Constant;
 import com.vgbhfive.common.exception.DataBaseException;
+import com.vgbhfive.common.utils.NoGenerateUtil;
 import com.vgbhfive.dto.PageResponse;
 import com.vgbhfive.dto.ResponseContent;
-import com.vgbhfive.dto.line.LineListDto;
 import com.vgbhfive.dto.scene.SceneListDto;
 import com.vgbhfive.dto.scene.SceneQueryParam;
-import com.vgbhfive.entity.LineEntity;
 import com.vgbhfive.entity.SceneEntity;
 import com.vgbhfive.mapper.SceneMapper;
 import com.vgbhfive.service.SceneService;
@@ -48,7 +48,7 @@ public class SceneServiceImpl implements SceneService {
     @Override
     public ResponseContent create(SceneEntity sceneEntity) {
         sceneEntity.setId(null);
-        sceneEntity.setSceneNo(""); // TODO
+        sceneEntity.setSceneNo(NoGenerateUtil.generateNo(Constant.NO_CJ));
         Date now = new Date();
         sceneEntity.setCreateAt(now);
         sceneEntity.setUpdateAt(now);

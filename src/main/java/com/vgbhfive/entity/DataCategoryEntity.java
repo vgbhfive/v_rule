@@ -3,20 +3,24 @@ package com.vgbhfive.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 /**
- * @Author vgbhfive
- * @Date 2025/11/26 12:17
+ * @projectName: v-rule
+ * @author: vgbhfive
+ * @date: 2025/11/26 21:28
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@TableName("data_source")
-public class DataSourceEntity {
+@TableName("data_category")
+public class DataCategoryEntity {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -27,14 +31,9 @@ public class DataSourceEntity {
     private String lineNo;
 
     /**
-     * 数据源名称
+     * 数据源分类名称
      */
-    private String dataSourceName;
-
-    /**
-     * 数据源编码
-     */
-    private String dataSourceNo;
+    private String dataCategoryName;
 
     /**
      * 数据源分类编码
@@ -52,19 +51,14 @@ public class DataSourceEntity {
     private String sourceType;
 
     /**
-     * 字段
+     * 分类类型
      */
-    private String field;
+    private Integer categoryType;
 
     /**
-     * 字段类型
+     * 优先级
      */
-    private String type;
-
-    /**
-     * 字段格式
-     */
-    private String format;
+    private Integer priority;
 
     /**
      * 版本

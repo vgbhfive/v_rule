@@ -5,7 +5,6 @@ import com.vgbhfive.dto.ResponseContent;
 import com.vgbhfive.dto.datasource.DataSourceQueryParam;
 import com.vgbhfive.entity.DataSourceEntity;
 import com.vgbhfive.service.DataSourceService;
-import lombok.Value;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,7 +18,7 @@ import javax.validation.Valid;
  * @Date 2025/11/26 12:12
  */
 @RestController
-@RequestMapping("/datasource")
+@RequestMapping("/data/source")
 public class DataSourceController {
 
     @Resource
@@ -34,13 +33,13 @@ public class DataSourceController {
     @PostMapping("/create")
     @Log
     public ResponseContent create(@RequestBody DataSourceEntity dataSourceEntity) {
-        return ResponseContent.success();
+        return dataSourceService.create(dataSourceEntity, false);
     }
 
     @PostMapping("/update")
     @Log
     public ResponseContent update(@RequestBody DataSourceEntity dataSourceEntity) {
-        return ResponseContent.success();
+        return dataSourceService.update(dataSourceEntity);
     }
 
 }

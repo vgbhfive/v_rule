@@ -52,7 +52,7 @@ CREATE TABLE `data_category` (
   `data_category_no` varchar(32) NOT NULL COMMENT '数据源分类编码',
   `source_from` varchar(32) NOT NULL COMMENT '一级来源',
   `source_type` varchar(32) NOT NULL COMMENT '二级分类',
-  `category_type` tinyint(1) NOT NULL COMMENT '分类类型',
+  `category_type` tinyint(1) NOT NULL DEFAULT '0' COMMENT '分类类型 0-普通',
   `priority` int(11) NOT NULL COMMENT '优先级',
   `version` int(11) NOT NULL COMMENT '版本',
   `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',

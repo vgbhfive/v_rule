@@ -34,10 +34,16 @@ public class ResponseContent<T> {
 
     public static ResponseContent success(Object object) {
         ResponseContent<Object> result = new ResponseContent<>();
-        result.setStatus(0);
+        result.setStatus(200);
         result.setMsg("success");
         result.setData(object);
         return result;
+    }
+
+    public static ResponseContent error() {
+        ResponseContent res = new ResponseContent();
+        res.setStatus(199);
+        return res;
     }
 
 }

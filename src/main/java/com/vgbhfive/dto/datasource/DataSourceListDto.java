@@ -9,6 +9,8 @@ import lombok.Data;
 @Data
 public class DataSourceListDto {
 
+    private Integer id;
+
     private String lineNo;
 
     private String dataSourceName;

@@ -4,8 +4,6 @@ import com.vgbhfive.dto.ResponseContent;
 import com.vgbhfive.dto.line.LineQueryParam;
 import com.vgbhfive.entity.LineEntity;
 
-import javax.servlet.http.HttpServletRequest;
-
 /**
  * @projectName: v-rule
  * @author: vgbhfive

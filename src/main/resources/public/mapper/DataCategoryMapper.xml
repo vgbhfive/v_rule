@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.mapper.DataCategoryMapper">
+
+    <select id="queryList" resultType="com.vgbhfive.dto.datacategory.DataCategoryListDto">
+        SELECT
+            id, line_no, data_category_name, data_category_no, source_from, source_type, category_type, priority, version, is_valid, is_delete, create_at, update_at
+        FROM data_category
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.dataCategoryName != null and param.dataCategoryName != ''">
+                AND data_category_name like CONCAT(#{param.dataCategoryName}, '%')
+            </if>
+            <if test="param.dataCategoryNo != null and param.dataCategoryNo != ''">
+                AND data_category_no = #{param.dataCategoryNo}
+            </if>
+            <if test="param.isValid != null and param.isValid != ''">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="queryTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM data_category
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.dataCategoryName != null and param.dataCategoryName != ''">
+                AND data_category_name like CONCAT(#{param.dataCategoryName}, '%')
+            </if>
+            <if test="param.dataCategoryNo != null and param.dataCategoryNo != ''">
+                AND data_category_no = #{param.dataCategoryNo}
+            </if>
+            <if test="param.isValid != null and param.isValid != ''">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+    </select>
+
+</mapper>
