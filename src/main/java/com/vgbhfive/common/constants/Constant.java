@@ -15,4 +15,8 @@ public interface Constant {
 
     String NO_SJY = "SJY";
 
+    String NO_GZ = "GZ";
+
+    String NO_GZJ = "GZJ";
+
 }

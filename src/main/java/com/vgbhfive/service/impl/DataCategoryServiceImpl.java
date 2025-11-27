@@ -27,17 +27,19 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Resource
     private DataCategoryMapper dataCategoryMapper;
+    @Resource
+    private NoGenerateUtil noGenerateUtil;
 
     @Override
     public ResponseContent queryList(DataCategoryQueryParam param) {
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<DataCategoryListDto> lineListDtoList = dataCategoryMapper.queryList(param, start, limit);
+        List<DataCategoryListDto> dataCategoryListDtoList = dataCategoryMapper.queryList(param, start, limit);
         int totalCount = dataCategoryMapper.queryTotalCount(param);
 
         int totalPage = (totalCount - 1) / limit + 1;
-        PageResponse<DataCategoryListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, lineListDtoList);
+        PageResponse<DataCategoryListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, dataCategoryListDtoList);
         return ResponseContent.success(result);
     }
 
@@ -45,10 +47,11 @@ public class DataCategoryServiceImpl implements DataCategoryService {
     public ResponseContent create(DataCategoryEntity dataCategoryEntity, boolean isUpdate) {
         if (isUpdate) {
             dataCategoryEntity.setVersion(dataCategoryEntity.getVersion() + 1);
+        } else {
+            dataCategoryEntity.setDataCategoryNo(noGenerateUtil.generateNo(Constant.NO_SJYFL));
         }
         dataCategoryEntity.setId(null);
         Date now = new Date();
-        dataCategoryEntity.setDataCategoryNo(NoGenerateUtil.generateNo(Constant.NO_SJYFL));
         dataCategoryEntity.setCreateAt(now);
         dataCategoryEntity.setUpdateAt(now);
         Integer insert = dataCategoryMapper.insert(dataCategoryEntity);

@@ -17,8 +17,8 @@ import java.util.List;
 @Mapper
 public interface DataCategoryMapper extends BaseMapper<DataCategoryEntity> {
 
-    List<DataCategoryListDto> queryList(@Param("param")DataCategoryQueryParam param, @Param("start") Integer start, @Param("param") Integer limit);
+    List<DataCategoryListDto> queryList(@Param("param") DataCategoryQueryParam param, @Param("start") Integer start, @Param("limit") Integer limit);
 
-    Integer queryTotalCount(@Param("param")DataCategoryQueryParam param);
+    Integer queryTotalCount(@Param("param") DataCategoryQueryParam param);
 
 }

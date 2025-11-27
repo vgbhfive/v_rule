@@ -12,6 +12,8 @@ public class DataCategoryListDto {
 
     private Integer id;
 
+    private String lineNo;
+
     private String dataCategoryName;
 
     private String dataCategoryNo;
@@ -27,5 +29,7 @@ public class DataCategoryListDto {
     private Integer version;
 
     private Integer isValid;
+
+    private Integer isDelete;
 
 }

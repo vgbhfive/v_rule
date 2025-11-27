@@ -31,6 +31,8 @@ public class SceneServiceImpl implements SceneService {
 
     @Resource
     private SceneMapper sceneMapper;
+    @Resource
+    private NoGenerateUtil noGenerateUtil;
 
     @Override
     public ResponseContent queryList(SceneQueryParam param) {
@@ -46,9 +48,11 @@ public class SceneServiceImpl implements SceneService {
     }
 
     @Override
-    public ResponseContent create(SceneEntity sceneEntity) {
+    public ResponseContent create(SceneEntity sceneEntity, boolean isUpdate) {
+        if (!isUpdate) {
+            sceneEntity.setSceneNo(noGenerateUtil.generateNo(Constant.NO_CJ));
+        }
         sceneEntity.setId(null);
-        sceneEntity.setSceneNo(NoGenerateUtil.generateNo(Constant.NO_CJ));
         Date now = new Date();
         sceneEntity.setCreateAt(now);
         sceneEntity.setUpdateAt(now);
@@ -69,6 +73,6 @@ public class SceneServiceImpl implements SceneService {
         if (update < 1) {
             throw new DataBaseException("更新场景失败");
         }
-        return this.create(sceneEntity);
+        return this.create(sceneEntity, true);
     }
 }

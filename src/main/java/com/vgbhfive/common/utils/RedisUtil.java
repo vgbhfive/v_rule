@@ -2,6 +2,7 @@ package com.vgbhfive.common.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
@@ -17,9 +18,10 @@ public class RedisUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(RedisUtil.class);
 
-    private static RedisTemplate redisTemplate;
+    @Autowired
+    private RedisTemplate redisTemplate;
 
-    public static Integer incrementAndExpire(String type) {
+    public Integer incrementAndExpire(String type) {
         Long id = redisTemplate.opsForValue().increment(type, 1);
         redisTemplate.expire(type, 1, TimeUnit.DAYS);
         return id.intValue();

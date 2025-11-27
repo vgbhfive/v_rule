@@ -14,6 +14,7 @@ import com.vgbhfive.service.DataSourceService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -26,6 +27,8 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Autowired
     private DataSourceMapper dataSourceMapper;
+    @Resource
+    private NoGenerateUtil noGenerateUtil;
 
     @Override
     public ResponseContent queryList(DataSourceQueryParam param) {
@@ -44,10 +47,11 @@ public class DataSourceServiceImpl implements DataSourceService {
     public ResponseContent create(DataSourceEntity dataSourceEntity, boolean isUpdate) {
         if (isUpdate) {
             dataSourceEntity.setVersion(dataSourceEntity.getVersion() + 1);
+        } else {
+            dataSourceEntity.setDataSourceNo(noGenerateUtil.generateNo(Constant.NO_SJY));
         }
         dataSourceEntity.setId(null);
         Date now = new Date();
-        dataSourceEntity.setDataSourceNo(NoGenerateUtil.generateNo(Constant.NO_SJY));
         dataSourceEntity.setCreateAt(now);
         dataSourceEntity.setUpdateAt(now);
         Integer insert = dataSourceMapper.insert(dataSourceEntity);

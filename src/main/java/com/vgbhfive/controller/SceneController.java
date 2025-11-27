@@ -34,7 +34,7 @@ public class SceneController {
     @PostMapping("/create")
     @Log
     public ResponseContent create(@RequestBody SceneEntity sceneEntity) {
-        return sceneService.create(sceneEntity);
+        return sceneService.create(sceneEntity, false);
     }
 
     @PostMapping("/update")

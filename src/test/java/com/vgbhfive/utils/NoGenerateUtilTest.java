@@ -2,8 +2,14 @@ package com.vgbhfive.utils;
 
 import com.vgbhfive.common.constants.Constant;
 import com.vgbhfive.common.utils.NoGenerateUtil;
+import com.vgbhfive.common.utils.RedisUtil;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.redis.core.RedisTemplate;
+
+import javax.annotation.Resource;
+import java.util.Objects;
 
 /**
  * @projectName: v-rule
@@ -13,9 +19,12 @@ import org.springframework.boot.test.context.SpringBootTest;
 @SpringBootTest
 public class NoGenerateUtilTest {
 
+    @Resource
+    private NoGenerateUtil noGenerateUtil;
+
     @Test
     public void testNoGenerate() {
-        System.out.println(NoGenerateUtil.generateNo(Constant.NO_SJYFL));
+        System.out.println(noGenerateUtil.generateNo(Constant.NO_SJYFL));
     }
 
 }

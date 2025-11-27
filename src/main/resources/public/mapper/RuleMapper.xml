@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.mapper.RuleMapper">
+
+    <select id="queryList" resultType="com.vgbhfive.dto.rule.RuleListDto">
+        SELECT
+            id, line_no, rule_name, rule_no, data_source_no, cond, threshold, threshold_type, result, version, deploy_at, is_valid, is_delete, create_at, update_at
+        FROM rule
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.ruleName != null and param.ruleName != ''">
+                AND rule_name like CONCAT(#{param.ruleName}, '%')
+            </if>
+            <if test="param.ruleNo != null and param.ruleNo != ''">
+                AND rule_no = #{param.ruleNo}
+            </if>
+            <if test="param.dataSourceNo != null and param.dataSourceNo != ''">
+                AND data_source_no = #{param.dataSourceNo}
+            </if>
+            <if test="param.isValid != null and param.isValid != ''">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="queryTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM rule
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.ruleName != null and param.ruleName != ''">
+                AND rule_name like CONCAT(#{param.ruleName}, '%')
+            </if>
+            <if test="param.ruleNo != null and param.ruleNo != ''">
+                AND rule_no = #{param.ruleNo}
+            </if>
+            <if test="param.dataSourceNo != null and param.dataSourceNo != ''">
+                AND data_source_no = #{param.dataSourceNo}
+            </if>
+            <if test="param.isValid != null and param.isValid != ''">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+    </select>
+
+</mapper>

@@ -13,7 +13,7 @@ public interface SceneService {
 
     ResponseContent queryList(SceneQueryParam param);
 
-    ResponseContent create(SceneEntity sceneEntity);
+    ResponseContent create(SceneEntity sceneEntity, boolean isUpdate);
 
     ResponseContent update(SceneEntity sceneEntity);
 
