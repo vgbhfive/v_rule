@@ -1,9 +1,7 @@
 package com.vgbhfive.controller;
 
-import com.vgbhfive.common.aop.Log;
 import com.vgbhfive.common.enums.*;
 import com.vgbhfive.dto.ResponseContent;
-import lombok.Getter;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -17,8 +15,13 @@ import org.springframework.web.bind.annotation.RestController;
 public class EnumController {
 
     @GetMapping("/valueType")
-    public ResponseContent valueTypes() {
+    public ResponseContent valueType() {
         return ResponseContent.success(ValueType.allInstance());
+    }
+
+    @GetMapping("/fieldType")
+    public ResponseContent fieldType() {
+        return ResponseContent.success(FieldType.allInstance());
     }
 
     @GetMapping("/strategyModel")
