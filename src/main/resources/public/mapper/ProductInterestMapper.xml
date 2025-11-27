@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.mapper.ProductInterestMapper">
+
+    <select id="queryList" resultType="com.vgbhfive.dto.product.ProductInterestListDto">
+        SELECT
+            p.id, p.line_no, p.product_name, p.product_no, p.type, p.remark, p.version, p.deploy_at, p.is_valid, p.is_delete,
+            pi.value_type, pi.value, pi.unit
+        FROM product p
+        LEFT JOIN product_interest pi ON p.product_no = pi.product_no
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.productName != null and param.productName != ''">
+                AND product_name like CONCAT(#{param.productName}, '%')
+            </if>
+            <if test="param.productNo != null and param.productNo != ''">
+                AND product_no = #{param.productNo}
+            </if>
+            <if test="param.isValid != null and param.isValid != ''">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="queryTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM product p
+        LEFT JOIN product_interest pi ON p.product_no = pi.product_no
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.productName != null and param.productName != ''">
+                AND product_name like CONCAT(#{param.productName}, '%')
+            </if>
+            <if test="param.productNo != null and param.productNo != ''">
+                AND product_no = #{param.productNo}
+            </if>
+            <if test="param.isValid != null and param.isValid != ''">
+                AND is_valid = #{param.isValid}
+            </if>
+            AND is_delete = 0
+        </trim>
+    </select>
+
+</mapper>

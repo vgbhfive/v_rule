@@ -3,20 +3,24 @@ package com.vgbhfive.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.*;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+import lombok.ToString;
 
 import java.util.Date;
 
 /**
- * @Author vgbhfive
- * @Date 2025/11/26 12:17
+ * @projectName: v-rule
+ * @author: vgbhfive
+ * @date: 2025/11/27 22:49
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@TableName("data_source")
-public class DataSourceEntity {
+@TableName("product")
+public class ProductEntity {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -27,50 +31,35 @@ public class DataSourceEntity {
     private String lineNo;
 
     /**
-     * 数据源名称
+     * 产品名称
      */
-    private String dataSourceName;
+    private String productName;
 
     /**
-     * 数据源编码
+     * 产品编码
      */
-    private String dataSourceNo;
+    private String productNo;
 
     /**
-     * 数据源分类编码
-     */
-    private String dataCategoryNo;
-
-    /**
-     * 一级来源
-     */
-    private String sourceFrom;
-
-    /**
-     * 二级来源
-     */
-    private String sourceType;
-
-    /**
-     * 字段
-     */
-    private String field;
-
-    /**
-     * 字段类型
-     * @see com.vgbhfive.common.enums.FieldType
+     * 产品类型
+     * @see com.vgbhfive.common.enums.ProductType
      */
     private String type;
 
     /**
-     * 字段格式
+     * 备注
      */
-    private String format;
+    private String remark;
 
     /**
      * 版本
      */
     private Integer version;
+
+    /**
+     * 部署时间
+     */
+    private Date deployAt;
 
     private Integer isValid;
 
