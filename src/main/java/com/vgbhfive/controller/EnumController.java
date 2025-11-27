@@ -23,27 +23,27 @@ public class EnumController {
 
     @GetMapping("/strategyModel")
     public ResponseContent strategyModel() {
-        return ResponseContent.success(StrategyModel.values());
+        return ResponseContent.success(StrategyModel.allInstance());
     }
 
     @GetMapping("/ruleType")
     public ResponseContent ruleType() {
-        return ResponseContent.success(RuleType.values());
+        return ResponseContent.success(RuleType.allInstance());
     }
 
     @GetMapping("/productType")
     public ResponseContent productType() {
-        return ResponseContent.success(ProductType.values());
+        return ResponseContent.success(ProductType.allInstance());
     }
 
     @GetMapping("/periodType")
     public ResponseContent periodType() {
-        return ResponseContent.success(PeriodType.values());
+        return ResponseContent.success(PeriodType.allInstance());
     }
 
     @GetMapping("/interestUnitType")
     public ResponseContent interestUnitType() {
-        return ResponseContent.success(InterestUnitType.values());
+        return ResponseContent.success(InterestUnitType.allInstance());
     }
 
 }
