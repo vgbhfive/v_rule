@@ -14,6 +14,8 @@ public interface DivideService {
 
     ResponseContent create(DivideEntity divideEntity, boolean isUpdate);
 
+    ResponseContent detail(Integer id);
+
     ResponseContent update(DivideEntity divideEntity);
 
 }

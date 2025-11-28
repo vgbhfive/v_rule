@@ -38,7 +38,7 @@
                 p.line_no = #{param.lineNo}
             </if>
             <if test="param.type != null and param.type != ''">
-                p.type = #{param.type}
+                AND p.type = #{param.type}
             </if>
             <if test="param.productName != null and param.productName != ''">
                 AND p.product_name like CONCAT(#{param.productName}, '%')

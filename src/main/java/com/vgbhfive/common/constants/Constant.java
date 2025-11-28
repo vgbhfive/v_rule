@@ -27,4 +27,6 @@ public interface Constant {
 
     String NO_CL = "CL";
 
+    String NO_FLQ = "FLQ";
+
 }

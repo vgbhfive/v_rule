@@ -1,5 +1,6 @@
 package com.vgbhfive.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.common.constants.Constant;
 import com.vgbhfive.common.exception.DataBaseException;
 import com.vgbhfive.common.utils.NoGenerateUtil;
@@ -79,7 +80,23 @@ public class StrategyServiceImpl implements StrategyService {
     @Override
     @Transactional
     public ResponseContent update(StrategyEntity strategyEntity) {
-        return null;
+        StrategyEntity oldStrategyEntity = new StrategyEntity();
+        oldStrategyEntity.setIsDelete(1);
+        oldStrategyEntity.setUpdateAt(new Date());
+        Integer update = strategyMapper.update(oldStrategyEntity,
+                new UpdateWrapper<StrategyEntity>().eq("id", strategyEntity.getId()).eq("is_delete", 0));
+        if (update < 1) {
+            throw new DataBaseException("更新策略集失败");
+        }
+        StrategyRuleDetailEntity oldStrategyRuleDetailEntity = new StrategyRuleDetailEntity();
+        oldStrategyRuleDetailEntity.setIsDelete(1);
+        oldStrategyRuleDetailEntity.setUpdateAt(new Date());
+        Integer updateInterest = strategyRuleDetailMapper.update(oldStrategyRuleDetailEntity,
+                new UpdateWrapper<StrategyRuleDetailEntity>().eq("strategy_no", strategyEntity.getStrategyNo()).eq("is_delete", 0));
+        if (updateInterest < strategyEntity.getRuleDetailEntityList().size()) {
+            throw new DataBaseException("更新策略集失败");
+        }
+        return this.create(strategyEntity, true);
     }
 
     private List<StrategyRuleDetailEntity> buildRuleDetailList(StrategyEntity strategyEntity) {

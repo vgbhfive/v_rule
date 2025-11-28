@@ -2,49 +2,72 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vgbhfive.mapper.DivideMapper">
 
+    <resultMap id="queryDetailById" type="com.vgbhfive.entity.DivideEntity">
+        <id property="id" column="id"/>
+        <result property="lineNo" column="line_no"/>
+        <result property="sceneNo" column="scene_no"/>
+        <result property="divideName" column="divide_name"/>
+        <result property="divideNo" column="divide_no"/>
+        <result property="accessStrategyNo" column="access_strategy_no"/>
+        <result property="riskStrategyNo" column="risk_strategy_no"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="version" column="version"/>
+        <result property="createAt" column="create_at"/>
+        <collection property="productEntityList" javaType="List" ofType="com.vgbhfive.entity.DivideProductEntity">
+            <result property="divideNo" column="divide_no"/>
+            <result property="productNo" column="product_no"/>
+            <result property="type" column="type"/>
+        </collection>
+    </resultMap>
+
     <select id="queryList" resultType="com.vgbhfive.dto.divide.DivideListDto">
         SELECT
-            d.id, d.line_no, d.divide_name, d.divide_no, d.access_strategy_no, d.risk_strategy_no, d.version, d.deploy_at, d.is_valid, d.is_delete,
-            dp.product_no, dp.type
-        FROM divide d
-        LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
+            id, line_no, scene_no, divide_name, divide_no, access_strategy_no, risk_strategy_no, version, deploy_at, is_valid, is_delete, create_at
+        FROM divide
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
-                d.line_no = #{param.lineNo}
+                line_no = #{param.lineNo}
             </if>
             <if test="param.divideName != null and param.divideName != ''">
-                AND d.divide_name like CONCAT(#{param.divideName}, '%')
+                AND divide_name like CONCAT(#{param.divideName}, '%')
             </if>
             <if test="param.divideNo != null and param.divideNo != ''">
-                AND d.divide_no = #{param.divideNo}
+                AND divide_no = #{param.divideNo}
             </if>
             <if test="param.isValid != null and param.isValid != ''">
-                AND d.is_valid = #{param.isValid}
+                AND is_valid = #{param.isValid}
             </if>
-            AND d.is_delete = 0 AND dp.is_delete = 0
+            AND is_delete = 0
         </trim>
         LIMIT #{start}, #{limit}
     </select>
 
     <select id="queryTotalCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM divide d
-        LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
+        FROM divide
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
-                d.line_no = #{param.lineNo}
+                line_no = #{param.lineNo}
             </if>
             <if test="param.divideName != null and param.divideName != ''">
-                AND d.divide_name like CONCAT(#{param.divideName}, '%')
+                AND divide_name like CONCAT(#{param.divideName}, '%')
             </if>
             <if test="param.divideNo != null and param.divideNo != ''">
-                AND d.divide_no = #{param.divideNo}
+                AND divide_no = #{param.divideNo}
             </if>
             <if test="param.isValid != null and param.isValid != ''">
-                AND d.is_valid = #{param.isValid}
+                AND is_valid = #{param.isValid}
             </if>
-            AND d.is_delete = 0 AND dp.is_delete = 0
+            AND is_delete = 0
         </trim>
+    </select>
+
+    <select id="queryDetailById" resultMap="queryDetailById">
+        SELECT d.*, dp.divide_no, dp.product_no, dp.type
+        FROM divide d
+        LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
+        WHERE d.id = #{id}
     </select>
 
 </mapper>

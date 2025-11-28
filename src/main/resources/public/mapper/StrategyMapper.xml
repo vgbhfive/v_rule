@@ -2,6 +2,25 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vgbhfive.mapper.StrategyMapper">
 
+    <resultMap id="queryDetailById" type="com.vgbhfive.entity.StrategyEntity">
+        <id property="id" column="id"/>
+        <result property="lineNo" column="line_no"/>
+        <result property="sceneNo" column="scene_no"/>
+        <result property="strategyName" column="strategy_name"/>
+        <result property="strategyNo" column="strategy_no"/>
+        <result property="model" column="model"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="version" column="version"/>
+        <result property="createAt" column="create_at"/>
+        <collection property="ruleDetailEntityList" javaType="List" ofType="com.vgbhfive.entity.StrategyRuleDetailEntity">
+            <result property="strategyNo" column="strategy_no"/>
+            <result property="detailNo" column="detail_no"/>
+            <result property="ruleType" column="rule_type"/>
+            <result property="priority" column="priority"/>
+        </collection>
+    </resultMap>
+
     <select id="queryList" resultType="com.vgbhfive.dto.strategy.StrategyListDto">
         SELECT
             id, line_no, scene_no, strategy_name, strategy_no, model, version, deploy_at, is_valid, is_delete
@@ -50,8 +69,8 @@
         </trim>
     </select>
 
-    <select id="queryDetailById" resultType="com.vgbhfive.dto.strategy.StrategyDto">
-        SELECT s.*, sr.detail_no, sr.rule_type, sr.priority
+    <select id="queryDetailById" resultMap="queryDetailById">
+        SELECT s.*, sr.strategy_no, sr.detail_no, sr.rule_type, sr.priority
         FROM strategy s
         LEFT JOIN strategy_rule_detail sr ON s.strategy_no = sr.strategy_no
         WHERE s.id = #{id}

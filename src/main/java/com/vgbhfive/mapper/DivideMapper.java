@@ -20,4 +20,6 @@ public interface DivideMapper extends BaseMapper<DivideEntity> {
 
     Integer queryTotalCount(@Param("param") DivideQueryParam param);
 
+    DivideEntity queryDetailById(@Param("id") Integer id);
+
 }

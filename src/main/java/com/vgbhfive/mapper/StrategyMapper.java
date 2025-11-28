@@ -1,7 +1,6 @@
 package com.vgbhfive.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.vgbhfive.dto.strategy.StrategyDto;
 import com.vgbhfive.dto.strategy.StrategyListDto;
 import com.vgbhfive.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.entity.StrategyEntity;
@@ -21,6 +20,6 @@ public interface StrategyMapper extends BaseMapper<StrategyEntity> {
 
     Integer queryTotalCount(@Param("param") StrategyQueryParam param);
 
-    StrategyDto queryDetailById(@Param("id") Integer id);
+    StrategyEntity queryDetailById(@Param("id") Integer id);
 
 }

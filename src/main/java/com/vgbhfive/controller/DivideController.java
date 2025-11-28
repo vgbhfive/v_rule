@@ -5,10 +5,7 @@ import com.vgbhfive.dto.ResponseContent;
 import com.vgbhfive.dto.divide.DivideQueryParam;
 import com.vgbhfive.entity.DivideEntity;
 import com.vgbhfive.service.DivideService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -24,7 +21,7 @@ public class DivideController {
     @Resource
     private DivideService divideService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     public ResponseContent queryList(@Valid @RequestBody DivideQueryParam param) {
         return divideService.queryList(param);
@@ -34,6 +31,12 @@ public class DivideController {
     @Log
     public ResponseContent create(@RequestBody DivideEntity divideEntity) {
         return divideService.create(divideEntity, false);
+    }
+
+    @GetMapping("/detail/{id}")
+    @Log
+    public ResponseContent detail(@PathVariable("id") Integer id) {
+        return divideService.detail(id);
     }
 
     @PostMapping("/update")
