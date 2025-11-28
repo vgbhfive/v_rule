@@ -50,4 +50,11 @@
         </trim>
     </select>
 
+    <select id="queryDetailById" resultType="com.vgbhfive.dto.strategy.StrategyDto">
+        SELECT s.*, sr.detail_no, sr.rule_type, sr.priority
+        FROM strategy s
+        LEFT JOIN strategy_rule_detail sr ON s.strategy_no = sr.strategy_no
+        WHERE s.id = #{id}
+    </select>
+
 </mapper>

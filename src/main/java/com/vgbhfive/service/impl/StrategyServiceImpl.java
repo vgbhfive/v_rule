@@ -73,7 +73,7 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public ResponseContent detail(Integer id) {
-        return null;
+        return ResponseContent.success(strategyMapper.queryDetailById(id));
     }
 
     @Override

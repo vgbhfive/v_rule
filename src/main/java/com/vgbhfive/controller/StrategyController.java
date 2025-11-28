@@ -36,7 +36,7 @@ public class StrategyController {
     @GetMapping("/detail/{id}")
     @Log
     public ResponseContent detail(@PathVariable("id") Integer id) {
-        return ResponseContent.success(id);
+        return strategyService.detail(id);
     }
 
     @PostMapping("/update")
