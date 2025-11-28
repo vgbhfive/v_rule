@@ -19,4 +19,6 @@ public class ProductQueryParam extends PageRequest {
 
     private String productNo;
 
+    private Integer isValid;
+
 }

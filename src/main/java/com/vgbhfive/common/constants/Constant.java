@@ -21,4 +21,10 @@ public interface Constant {
 
     String NO_LL = "LL";
 
+    String NO_ED = "ED";
+
+    String NO_ZQ = "ZQ";
+
+    String NO_CL = "CL";
+
 }

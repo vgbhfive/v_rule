@@ -12,16 +12,15 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * @projectName: v-rule
- * @author: vgbhfive
- * @date: 2025/11/27 22:59
+ * @Author vgbhfive
+ * @Date 2025/11/28 11:06
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@TableName("product_interest")
-public class ProductInterestEntity {
+@TableName("product_period")
+public class ProductPeriodEntity {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
@@ -43,10 +42,10 @@ public class ProductInterestEntity {
     private String value;
 
     /**
-     * 单位
-     * @see com.vgbhfive.common.enums.InterestUnitType
+     * 账期类型
+     * @see com.vgbhfive.common.enums.PeriodType
      */
-    private String unit;
+    private String periodType;
 
     /**
      * 版本

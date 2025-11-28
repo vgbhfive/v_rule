@@ -3,12 +3,11 @@ package com.vgbhfive.dto.product;
 import lombok.Data;
 
 /**
- * @projectName: v-rule
- * @author: vgbhfive
- * @date: 2025/11/27 23:08
+ * @Author vgbhfive
+ * @Date 2025/11/28 11:41
  */
 @Data
-public class ProductInterestListDto {
+public class ProductLimitListDto {
 
     private Integer id;
 
@@ -29,7 +28,5 @@ public class ProductInterestListDto {
     private String valueType;
 
     private String value;
-
-    private String unit;
 
 }

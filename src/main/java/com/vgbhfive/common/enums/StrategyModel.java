@@ -3,7 +3,9 @@ package com.vgbhfive.common.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,17 +16,23 @@ import java.util.Map;
 @AllArgsConstructor
 public enum StrategyModel {
 
-    SERIAL("串行", "serial"),
-    parallel("并行", "parallel");
+    SERIAL(1, "串行", "serial"),
+    parallel(2, "并行", "parallel");
+
+    private Integer id;
 
     private String name;
 
     private String model;
 
-    public static Map<String, String> allInstance() {
-        Map<String, String> values = new HashMap<>();
+    public static List<Map<String, Object>> allInstance() {
+        List<Map<String, Object>> values = new ArrayList<>();
         for (StrategyModel value : StrategyModel.values()) {
-            values.put(value.getName(), value.getModel());
+            Map<String, Object> tmp = new HashMap<>();
+            tmp.put("id", value.getId());
+            tmp.put("name", value.getName());
+            tmp.put("model", value.getModel());
+            values.add(tmp);
         }
         return values;
     }

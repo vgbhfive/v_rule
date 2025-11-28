@@ -12,23 +12,19 @@ import lombok.ToString;
 import java.util.Date;
 
 /**
- * @projectName: v-rule
- * @author: vgbhfive
- * @date: 2025/11/27 22:59
+ * @Author vgbhfive
+ * @Date 2025/11/28 11:24
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@TableName("product_interest")
-public class ProductInterestEntity {
+@TableName("product_limit")
+public class ProductLimitEntity {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
 
-    /**
-     * 产品编码
-     */
     private String productNo;
 
     /**
@@ -41,12 +37,6 @@ public class ProductInterestEntity {
      * 值
      */
     private String value;
-
-    /**
-     * 单位
-     * @see com.vgbhfive.common.enums.InterestUnitType
-     */
-    private String unit;
 
     /**
      * 版本

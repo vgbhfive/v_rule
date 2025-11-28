@@ -3,7 +3,9 @@ package com.vgbhfive.common.enums;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -14,17 +16,23 @@ import java.util.Map;
 @AllArgsConstructor
 public enum RuleType {
 
-    RULE("规则", "rule"),
-    RULE_SET("规则集", "rule_set");
+    RULE(1, "规则", "rule"),
+    RULE_SET(2, "规则集", "rule_set");
+
+    private Integer id;
 
     private String name;
 
     private String key;
 
-    public static Map<String, String> allInstance() {
-        Map<String, String> values = new HashMap<>();
+    public static List<Map<String, Object>> allInstance() {
+        List<Map<String, Object>> values = new ArrayList<>();
         for (RuleType value : RuleType.values()) {
-            values.put(value.getName(), value.getKey());
+            Map<String, Object> tmp = new HashMap<>();
+            tmp.put("id", value.getId());
+            tmp.put("name", value.getName());
+            tmp.put("key", value.getKey());
+            values.add(tmp);
         }
         return values;
     }

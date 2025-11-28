@@ -210,6 +210,7 @@ CREATE TABLE `product_custom` (
 CREATE TABLE `strategy` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `scene_no` varchar(32) NOT NULL COMMENT '场景编码',
   `strategy_name` varchar(32) NOT NULL COMMENT '策略集名称',
   `strategy_no` varchar(32) NOT NULL COMMENT '策略集编码',
   `model` varchar(16) NOT NULL COMMENT '运行模型 serial/parallel',
@@ -230,22 +231,38 @@ CREATE TABLE `strategy_rule_detail` (
   `rule_type` varchar(32) NOT NULL COMMENT '类型 rule/rule_set',
   `priority` int(11) NOT NULL COMMENT '优先级',
   `version` int(11) NOT NULL COMMENT '版本',
-  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
   `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='策略集所属规则详情表表';
 
-CREATE TABLE `strategy_product` (
+CREATE TABLE `divide` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `strategy_no` varchar(32) NOT NULL COMMENT '策略集编码',
-  `product_type` varchar(32) NOT NULL COMMENT '产品类型 interest/limit/dynamic_limit/period/custom',
-  `product_no` varchar(32) NOT NULL COMMENT '产品编码',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `scene_no` varchar(32) NOT NULL COMMENT '场景编码',
+  `divide_name` varchar(32) NOT NULL COMMENT '分流器名称',
+  `divide_no` varchar(32) NOT NULL COMMENT '策略集编码',
+  `access_strategy_no` varchar(32) NOT NULL COMMENT '准入策略集编码',
+  `risk_strategy_no` varchar(32) NOT NULL COMMENT '风控策略集编码',
   `version` int(11) NOT NULL COMMENT '版本',
+  `deploy_at` timestamp DEFAULT NULL COMMENT '部署时间',
   `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
   `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
   `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `divide_no` (`divide_no`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分流器表';
+
+CREATE TABLE `divide_product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `divide_no` varchar(32) NOT NULL COMMENT '策略集编码',
+  `product_no` varchar(32) NOT NULL COMMENT '产品编码',
+  `type` varchar(16) NOT NULL COMMENT '产品类型 interest/limit/dynamic_limit/period/custom',
+  `version` int(11) NOT NULL COMMENT '版本',
+  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='策略集所属产品表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分流器所属产品表';

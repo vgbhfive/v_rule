@@ -15,6 +15,7 @@ import com.vgbhfive.mapper.ProductMapper;
 import com.vgbhfive.service.ProductInterestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
@@ -49,6 +50,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     }
 
     @Override
+    @Transactional
     public ResponseContent create(ProductInterestEntity productInterestEntity, boolean isUpdate) {
         if (isUpdate) {
             productInterestEntity.setVersion(productInterestEntity.getVersion() + 1);
@@ -70,6 +72,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     }
 
     @Override
+    @Transactional
     public ResponseContent update(ProductInterestEntity productInterestEntity) {
         ProductEntity oldProductEntity = new ProductEntity();
         oldProductEntity.setIsDelete(1);
@@ -90,6 +93,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     private ProductEntity buildProductEntity(ProductInterestEntity productInterestEntity) {
         ProductEntity productEntity = new ProductEntity();
         productEntity.setId(null);
+        productEntity.setLineNo(productInterestEntity.getLineNo());
         productEntity.setProductName(productInterestEntity.getProductName());
         productEntity.setProductNo(productInterestEntity.getProductNo());
         productEntity.setType(productInterestEntity.getType());
