@@ -1,6 +1,7 @@
 package com.vgbhfive.service.impl;
 
 import com.vgbhfive.common.constants.Constant;
+import com.vgbhfive.common.exception.DataBaseException;
 import com.vgbhfive.common.utils.NoGenerateUtil;
 import com.vgbhfive.dto.PageResponse;
 import com.vgbhfive.dto.ResponseContent;
@@ -56,9 +57,23 @@ public class StrategyServiceImpl implements StrategyService {
             strategyEntity.setStrategyNo(noGenerateUtil.generateNo(Constant.NO_CL));
         }
         List<StrategyRuleDetailEntity> ruleDetailEntityList = buildRuleDetailList(strategyEntity);
-
-
+        Integer insertDetail = strategyRuleDetailMapper.batchInsertDetails(ruleDetailEntityList);
+        if (insertDetail < strategyEntity.getRuleDetailEntityList().size()) {
+            throw new DataBaseException("创建策略集失败");
+        }
+        Date now = new Date();
+        strategyEntity.setCreateAt(now);
+        strategyEntity.setUpdateAt(now);
+        Integer insert = strategyMapper.insert(strategyEntity);
+        if (insert < 1) {
+            throw new DataBaseException("创建策略集失败");
+        }
         return ResponseContent.success();
+    }
+
+    @Override
+    public ResponseContent detail(Integer id) {
+        return null;
     }
 
     @Override
@@ -70,10 +85,11 @@ public class StrategyServiceImpl implements StrategyService {
     private List<StrategyRuleDetailEntity> buildRuleDetailList(StrategyEntity strategyEntity) {
         List<StrategyRuleDetailEntity> ruleDetailEntityList = new ArrayList<>();
         Date now = new Date();
-        strategyEntity.getStrategyRuleDetailEntityList().forEach(detailEntity -> {
+        strategyEntity.getRuleDetailEntityList().forEach(detailEntity -> {
             detailEntity.setId(null);
             detailEntity.setStrategyNo(strategyEntity.getStrategyNo());
             detailEntity.setVersion(strategyEntity.getVersion());
+            detailEntity.setIsDelete(0);
             detailEntity.setCreateAt(now);
             detailEntity.setUpdateAt(now);
             ruleDetailEntityList.add(detailEntity);

@@ -57,15 +57,17 @@ public class ProductInterestServiceImpl implements ProductInterestService {
         } else {
             productInterestEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_LL));
         }
-        ProductEntity productEntity = buildProductEntity(productInterestEntity);
-        Integer insert = productMapper.insert(productEntity);
-
         productInterestEntity.setId(null);
         Date now = new Date();
         productInterestEntity.setCreateAt(now);
         productInterestEntity.setUpdateAt(now);
         Integer insertInterest = productInterestMapper.insert(productInterestEntity);
-        if (insert < 1 || insertInterest < 1) {
+        if (insertInterest < 1) {
+            throw new DataBaseException("创建利率产品失败");
+        }
+        ProductEntity productEntity = buildProductEntity(productInterestEntity);
+        Integer insert = productMapper.insert(productEntity);
+        if (insert < 1) {
             throw new DataBaseException("创建利率产品失败");
         }
         return ResponseContent.success();

@@ -66,6 +66,6 @@ public class StrategyEntity {
     private Date updateAt;
 
     @TableField(exist = false)
-    private List<StrategyRuleDetailEntity> strategyRuleDetailEntityList;
+    private List<StrategyRuleDetailEntity> ruleDetailEntityList;
 
 }

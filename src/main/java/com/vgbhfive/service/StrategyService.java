@@ -14,6 +14,8 @@ public interface StrategyService {
 
     ResponseContent create(StrategyEntity strategyEntity, boolean isUpdate);
 
+    ResponseContent detail(Integer id);
+
     ResponseContent update(StrategyEntity strategyEntity);
 
 }

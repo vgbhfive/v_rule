@@ -5,10 +5,7 @@ import com.vgbhfive.dto.ResponseContent;
 import com.vgbhfive.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.entity.StrategyEntity;
 import com.vgbhfive.service.StrategyService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -24,7 +21,7 @@ public class StrategyController {
     @Resource
     private StrategyService strategyService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     public ResponseContent queryList(@Valid @RequestBody StrategyQueryParam param) {
         return strategyService.queryList(param);
@@ -34,6 +31,12 @@ public class StrategyController {
     @Log
     public ResponseContent create(@RequestBody StrategyEntity strategyEntity) {
         return strategyService.create(strategyEntity, false);
+    }
+
+    @GetMapping("/detail/{id}")
+    @Log
+    public ResponseContent detail(@PathVariable("id") Integer id) {
+        return ResponseContent.success(id);
     }
 
     @PostMapping("/update")

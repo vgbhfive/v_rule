@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.mapper.StrategyRuleDetailMapper">
+
+    <insert id="batchInsertDetails" parameterType="java.util.List">
+        INSERT INTO strategy_rule_detail
+        (strategy_no, detail_no, rule_type, priority, version, is_delete, create_at, update_at)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.strategyNo},
+            #{item.detailNo},
+            #{item.ruleType},
+            #{item.priority},
+            #{item.version},
+            #{item.isDelete},
+            #{item.createAt},
+            #{item.updateAt}
+            )
+        </foreach>
+    </insert>
+</mapper>
