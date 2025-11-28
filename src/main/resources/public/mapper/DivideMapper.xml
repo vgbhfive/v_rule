@@ -4,46 +4,46 @@
 
     <select id="queryList" resultType="com.vgbhfive.dto.divide.DivideListDto">
         SELECT
-            id, line_no, divide_name, divide_no, access_strategy_no, risk_strategy_no, version, deploy_at, is_valid, is_delete, create_at, update_at
-        FROM divide
+            d.id, d.line_no, d.divide_name, d.divide_no, d.access_strategy_no, d.risk_strategy_no, d.version, d.deploy_at, d.is_valid, d.is_delete,
+            dp.product_no, dp.type
+        FROM divide d
+        LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
-                line_no = #{param.lineNo}
+                d.line_no = #{param.lineNo}
             </if>
             <if test="param.divideName != null and param.divideName != ''">
-                AND divide_name like CONCAT(#{param.divideName}, '%')
+                AND d.divide_name like CONCAT(#{param.divideName}, '%')
             </if>
             <if test="param.divideNo != null and param.divideNo != ''">
-                AND divide_no = #{param.divideNo}
+                AND d.divide_no = #{param.divideNo}
             </if>
             <if test="param.isValid != null and param.isValid != ''">
-                AND is_valid = #{param.isValid}
+                AND d.is_valid = #{param.isValid}
             </if>
-            AND is_delete = 0
+            AND d.is_delete = 0 AND dp.is_delete = 0
         </trim>
         LIMIT #{start}, #{limit}
     </select>
 
     <select id="queryTotalCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM rule
+        FROM divide d
+        LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
-                line_no = #{param.lineNo}
+                d.line_no = #{param.lineNo}
             </if>
-            <if test="param.ruleName != null and param.ruleName != ''">
-                AND rule_name like CONCAT(#{param.ruleName}, '%')
+            <if test="param.divideName != null and param.divideName != ''">
+                AND d.divide_name like CONCAT(#{param.divideName}, '%')
             </if>
-            <if test="param.ruleNo != null and param.ruleNo != ''">
-                AND rule_no = #{param.ruleNo}
-            </if>
-            <if test="param.dataSourceNo != null and param.dataSourceNo != ''">
-                AND data_source_no = #{param.dataSourceNo}
+            <if test="param.divideNo != null and param.divideNo != ''">
+                AND d.divide_no = #{param.divideNo}
             </if>
             <if test="param.isValid != null and param.isValid != ''">
-                AND is_valid = #{param.isValid}
+                AND d.is_valid = #{param.isValid}
             </if>
-            AND is_delete = 0
+            AND d.is_delete = 0 AND dp.is_delete = 0
         </trim>
     </select>
 

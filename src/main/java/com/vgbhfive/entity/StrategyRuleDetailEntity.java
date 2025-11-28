@@ -1,7 +1,6 @@
 package com.vgbhfive.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
-import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
@@ -10,36 +9,20 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * @Author vgbhfive
- * @Date 2025/11/28 14:45
+ * @Date 2025/11/28 16:20
  */
 @Getter
 @Setter
 @NoArgsConstructor
 @ToString
-@TableName("strategy")
-public class StrategyEntity {
+@TableName("strategy_rule_detail")
+public class StrategyRuleDetailEntity {
 
     @TableId(type = IdType.AUTO)
     private Integer id;
-
-    /**
-     * 业务线编码
-     */
-    private String lineNo;
-
-    /**
-     * 场景编码
-     */
-    private String sceneNo;
-
-    /**
-     * 策略集名称
-     */
-    private String strategyName;
 
     /**
      * 策略集编码
@@ -47,25 +30,30 @@ public class StrategyEntity {
     private String strategyNo;
 
     /**
-     * 运行模式
-     * @see com.vgbhfive.common.enums.StrategyModel
+     * 规则编码
      */
-    private String model;
+    private String detailNo;
+
+    /**
+     * 规则类型
+     * @see com.vgbhfive.common.enums.RuleType
+     */
+    private String ruleType;
+
+    /**
+     * 优先级
+     */
+    private Integer priority;
 
     /**
      * 版本
      */
     private Integer version;
 
-    private Integer isValid;
-
     private Integer isDelete;
 
     private Date createAt;
 
     private Date updateAt;
-
-    @TableField(exist = false)
-    private List<StrategyRuleDetailEntity> strategyRuleDetailEntityList;
 
 }
