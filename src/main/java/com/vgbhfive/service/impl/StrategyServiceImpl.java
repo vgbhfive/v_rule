@@ -15,6 +15,7 @@ import com.vgbhfive.mapper.StrategyRuleDetailMapper;
 import com.vgbhfive.service.StrategyService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -50,7 +51,7 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent create(StrategyEntity strategyEntity, boolean isUpdate) {
         if (isUpdate) {
             strategyEntity.setVersion(strategyEntity.getVersion() + 1);
@@ -78,7 +79,7 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent update(StrategyEntity strategyEntity) {
         StrategyEntity oldStrategyEntity = new StrategyEntity();
         oldStrategyEntity.setIsDelete(1);

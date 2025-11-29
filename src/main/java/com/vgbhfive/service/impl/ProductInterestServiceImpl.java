@@ -15,6 +15,7 @@ import com.vgbhfive.mapper.ProductMapper;
 import com.vgbhfive.service.ProductInterestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -50,7 +51,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent create(ProductInterestEntity productInterestEntity, boolean isUpdate) {
         if (isUpdate) {
             productInterestEntity.setVersion(productInterestEntity.getVersion() + 1);
@@ -74,7 +75,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent update(ProductInterestEntity productInterestEntity) {
         ProductEntity oldProductEntity = new ProductEntity();
         oldProductEntity.setIsDelete(1);

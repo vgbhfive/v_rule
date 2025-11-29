@@ -266,3 +266,25 @@ CREATE TABLE `divide_product` (
   `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='分流器所属产品表';
+
+CREATE TABLE `deploy` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `deploy_type` varchar(16) NOT NULL COMMENT '发布模式 scene',
+  `deploy_no` varchar(32) NOT NULL COMMENT '发布编码',
+  `field` varchar(128) NOT NULL COMMENT '发布编码',
+  `name` varchar(128) NOT NULL COMMENT '发布名称',
+  `divide_list` varchar(2048) NOT NULL COMMENT '分流器编码列表',
+  `deploy_desc` varchar(512) NOT NULL COMMENT '上线描述',
+  `params` mediumtext NOT NULL COMMENT '策略数据',
+  `diff` mediumtext NOT NULL COMMENT '策略本地版本与线上版本差异',
+  `status_code` tinyint(4) NOT NULL COMMENT '申请状态码 1-提交审核/2-审核通过/3-审核拒绝/4-撤销审核',
+  `deploy_at` timestamp DEFAULT NULL COMMENT '部署时间',
+  `version` int(11) NOT NULL COMMENT '版本',
+  `is_valid` tinyint(1) NOT NULL COMMENT '是否有效',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `line_no` (`line_no`),
+  KEY `index_create_at` (`create_at`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='场景发布表';

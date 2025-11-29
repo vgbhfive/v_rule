@@ -15,6 +15,7 @@ import com.vgbhfive.mapper.DivideProductMapper;
 import com.vgbhfive.service.DivideService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
@@ -50,7 +51,7 @@ public class DivideServiceImpl implements DivideService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent create(DivideEntity divideEntity, boolean isUpdate) {
         Date now = new Date();
         if (isUpdate) {
@@ -79,7 +80,7 @@ public class DivideServiceImpl implements DivideService {
     }
 
     @Override
-    @Transactional
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent update(DivideEntity divideEntity) {
         DivideEntity oldDivideEntity = new DivideEntity();
         oldDivideEntity.setIsDelete(1);

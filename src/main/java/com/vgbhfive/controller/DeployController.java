@@ -1,7 +1,12 @@
 package com.vgbhfive.controller;
 
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.vgbhfive.common.aop.Log;
+import com.vgbhfive.dto.ResponseContent;
+import com.vgbhfive.entity.DeployEntity;
+import com.vgbhfive.service.DeployService;
+import org.springframework.web.bind.annotation.*;
+
+import javax.annotation.Resource;
 
 /**
  * @projectName: v-rule
@@ -12,6 +17,19 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/deploy")
 public class DeployController {
 
+    @Resource
+    private DeployService deployService;
 
+    @PostMapping("/diff")
+    @Log
+    public ResponseContent diff(@RequestParam("no") String sceneNo, @RequestParam("type") String sceneType) {
+        return deployService.diff(sceneNo, sceneType);
+    }
+    
+    @PostMapping("/insert")
+    @Log
+    public ResponseContent insert(@RequestBody DeployEntity deployEntity) {
+        return ResponseContent.success();
+    }
 
 }
