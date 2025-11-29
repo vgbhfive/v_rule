@@ -3,7 +3,7 @@ server:
 
 spring:
   application:
-    name: v-rule
+    name: v_rule
   profiles:
     active: public
   datasource:

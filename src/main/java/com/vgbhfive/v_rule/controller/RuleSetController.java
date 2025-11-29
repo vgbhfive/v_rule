@@ -1,0 +1,46 @@
+package com.vgbhfive.v_rule.controller;
+
+import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.ruleSet.RuleSetQueryParam;
+import com.vgbhfive.v_rule.entity.RuleSetEntity;
+import com.vgbhfive.v_rule.service.RuleSetService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
+/**
+ * @Author vgbhfive
+ * @Date 2025/11/27 16:42
+ */
+@RestController
+@RequestMapping("/rule_set")
+public class RuleSetController {
+
+    @Resource
+    private RuleSetService ruleSetService;
+
+    @PostMapping("/list")
+    @Log
+    public ResponseContent queryList(@Valid @RequestBody RuleSetQueryParam param) {
+        return ruleSetService.queryList(param);
+    }
+
+    @PostMapping("/create")
+    @Log
+    public ResponseContent create(@RequestBody RuleSetEntity ruleSetEntity) {
+        return ruleSetService.create(ruleSetEntity, false);
+    }
+
+    @PostMapping("/update")
+    @Log
+    public ResponseContent update(@RequestBody RuleSetEntity ruleSetEntity) {
+        return ruleSetService.update(ruleSetEntity);
+    }
+
+
+}

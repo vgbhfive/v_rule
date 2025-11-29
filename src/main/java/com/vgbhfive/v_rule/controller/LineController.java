@@ -1,0 +1,46 @@
+package com.vgbhfive.v_rule.controller;
+
+import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.line.LineQueryParam;
+import com.vgbhfive.v_rule.entity.LineEntity;
+import com.vgbhfive.v_rule.service.LineService;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+import javax.annotation.Resource;
+import javax.validation.Valid;
+
+/**
+ * @projectName: v_rule
+ * @author: vgbhfive
+ * @date: 2025/11/24 23:12
+ */
+@RestController
+@RequestMapping("/line")
+public class LineController {
+
+    @Resource
+    private LineService lineService;
+
+    @PostMapping("/list")
+    @Log
+    public ResponseContent queryList(@RequestBody LineQueryParam param) {
+        return lineService.queryList(param);
+    }
+
+    @PostMapping("/create")
+    @Log
+    public ResponseContent create(@Valid @RequestBody LineEntity lineEntity) {
+        return lineService.create(lineEntity);
+    }
+
+    @PostMapping("/update")
+    @Log
+    public ResponseContent update(@Valid @RequestBody LineEntity lineEntity) {
+        return lineService.update(lineEntity);
+    }
+
+}

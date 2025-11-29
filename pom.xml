@@ -4,7 +4,7 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>com.vgbhfive</groupId>
+    <groupId>com.vgbhfive.v_rule</groupId>
     <artifactId>v_rule</artifactId>
     <version>0.0.1</version>
 
@@ -136,7 +136,7 @@
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.0.2.RELEASE</version>
                 <configuration>
-                    <mainClass>com.vgbhfive.vRuleApplication</mainClass>
+                    <mainClass>com.vgbhfive.v_rule.VRuleApplication</mainClass>
                     <executable>true</executable>
                     <fork>true</fork>
                 </configuration>
@@ -147,8 +147,8 @@
                         </goals>
                         <configuration>
                             <embeddedLaunchScriptProperties>
-                                <pidFilename>v-rule.pid</pidFilename>
-                                <logFilename>v-rule.log</logFilename>
+                                <pidFilename>v_rule.pid</pidFilename>
+                                <logFilename>v_rule.log</logFilename>
                             </embeddedLaunchScriptProperties>
                         </configuration>
                     </execution>

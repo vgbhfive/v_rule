@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.vgbhfive.mapper.SceneMapper">
+<mapper namespace="com.vgbhfive.v_rule.mapper.SceneMapper">
 
-    <select id="queryList" resultType="com.vgbhfive.dto.scene.SceneListDto">
+    <select id="queryList" resultType="com.vgbhfive.v_rule.dto.scene.SceneListDto">
         SELECT
             id, line_no, scene_name, field, scene_no, is_valid, create_at, update_at
         FROM scene

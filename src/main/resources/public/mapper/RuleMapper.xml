@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="com.vgbhfive.mapper.RuleMapper">
+<mapper namespace="com.vgbhfive.v_rule.mapper.RuleMapper">
 
-    <select id="queryList" resultType="com.vgbhfive.dto.rule.RuleListDto">
+    <select id="queryList" resultType="com.vgbhfive.v_rule.dto.rule.RuleListDto">
         SELECT
             id, line_no, rule_name, rule_no, data_source_no, cond, threshold, threshold_type, result, version, deploy_at, is_valid, is_delete, create_at, update_at
         FROM rule

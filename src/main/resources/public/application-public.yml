@@ -1,6 +1,6 @@
 spring:
   application:
-    name: v-rule
+    name: v_rule
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT+8
