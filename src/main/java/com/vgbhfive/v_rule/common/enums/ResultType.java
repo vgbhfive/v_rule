@@ -33,7 +33,7 @@ public enum ResultType {
             Map<String, Object> tmp = new HashMap<>();
             tmp.put("id", value.getId());
             tmp.put("name", value.getName());
-            tmp.put("type", value.getResult());
+            tmp.put("result", value.getResult());
             values.add(tmp);
         }
         return values;
