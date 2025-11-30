@@ -51,4 +51,10 @@
         </trim>
     </select>
 
+    <select id="selectBySceneNo" resultType="com.vgbhfive.v_rule.entity.SceneEntity">
+        SELECT *
+        FROM scene
+        WHERE scene_no = #{sceneNo} AND is_delete = 0
+    </select>
+
 </mapper>

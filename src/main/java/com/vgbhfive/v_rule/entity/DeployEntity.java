@@ -66,7 +66,7 @@ public class DeployEntity {
     /**
      * 策略数据
      */
-    private String param;
+    private String params;
 
     /**
      * 本地版本与线上版本差异
@@ -88,6 +88,8 @@ public class DeployEntity {
      * 版本
      */
     private Integer version;
+
+    private String coreVersion;
 
     private Integer isValid;
 

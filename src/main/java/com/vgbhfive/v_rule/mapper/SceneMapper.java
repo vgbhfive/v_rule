@@ -21,4 +21,6 @@ public interface SceneMapper extends BaseMapper<SceneEntity> {
 
     Integer queryTotalCount(@Param("param") SceneQueryParam param);
 
+    SceneEntity selectBySceneNo(@Param("sceneNo") String sceneNo);
+
 }

@@ -37,4 +37,13 @@ public enum SceneType {
         return values;
     }
 
+    public static SceneType getInstance(String type) {
+        for (SceneType value : SceneType.values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
 }

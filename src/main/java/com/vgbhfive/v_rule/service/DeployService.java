@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.SceneParams;
+import com.vgbhfive.v_rule.entity.DeployEntity;
 
 /**
  * @projectName: v_rule
@@ -10,7 +12,11 @@ import com.vgbhfive.v_rule.dto.deploy.SceneParams;
  */
 public interface DeployService {
 
+    ResponseContent queryList(DeployQueryParam param);
+
     ResponseContent diff(String sceneNo, String sceneType);
+
+    ResponseContent pass(DeployEntity deployEntity);
 
     SceneParams buildSceneParams(String sceneNo);
 

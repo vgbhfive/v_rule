@@ -46,4 +46,11 @@ public class ResponseContent<T> {
         return res;
     }
 
+    public static ResponseContent error(String msg) {
+        ResponseContent res = new ResponseContent();
+        res.setStatus(199);
+        res.setMsg(msg);
+        return res;
+    }
+
 }

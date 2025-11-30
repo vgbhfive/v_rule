@@ -21,4 +21,6 @@ public interface LineMapper extends BaseMapper<LineEntity> {
 
     Integer queryTotalCount(@Param("param") LineQueryParam param);
 
+    LineEntity selectByLineNo(@Param("lineNo") String lineNo);
+
 }
