@@ -49,4 +49,9 @@ public class EnumController {
         return ResponseContent.success(InterestUnitType.allInstance());
     }
 
+    @GetMapping("/resultType")
+    public ResponseContent resultType() {
+        return ResponseContent.success(ResultType.allInstance());
+    }
+
 }
