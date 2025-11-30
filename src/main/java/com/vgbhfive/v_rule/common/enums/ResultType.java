@@ -25,7 +25,7 @@ public enum ResultType {
 
     private String name;
 
-    private String type;
+    private String result;
 
     public static List<Map<String, Object>> allInstance() {
         List<Map<String, Object>> values = new ArrayList<>();
@@ -33,7 +33,7 @@ public enum ResultType {
             Map<String, Object> tmp = new HashMap<>();
             tmp.put("id", value.getId());
             tmp.put("name", value.getName());
-            tmp.put("type", value.getType());
+            tmp.put("type", value.getResult());
             values.add(tmp);
         }
         return values;

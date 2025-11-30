@@ -76,6 +76,7 @@ public class RuleSetEntity {
 
     /**
      * 结果
+     * @see com.vgbhfive.v_rule.common.enums.ResultType
      */
     private String result;
 
