@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.divide.DivideListDto;
 import com.vgbhfive.v_rule.dto.divide.DivideQueryParam;
 import com.vgbhfive.v_rule.entity.DivideEntity;
@@ -21,5 +22,7 @@ public interface DivideMapper extends BaseMapper<DivideEntity> {
     Integer queryTotalCount(@Param("param") DivideQueryParam param);
 
     DivideEntity queryDetailById(@Param("id") Integer id);
+
+    List<SceneStruct.Divide> queryDivideBySceneNo(@Param("sceneNo") String sceneNo);
 
 }

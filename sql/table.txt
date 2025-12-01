@@ -243,6 +243,7 @@ CREATE TABLE `divide` (
   `scene_no` varchar(32) NOT NULL COMMENT '场景编码',
   `divide_name` varchar(32) NOT NULL COMMENT '分流器名称',
   `divide_no` varchar(32) NOT NULL COMMENT '策略集编码',
+  `priority` int(11) NOT NULL COMMENT '优先级',
   `access_strategy_no` varchar(32) NOT NULL COMMENT '准入策略集编码',
   `risk_strategy_no` varchar(32) NOT NULL COMMENT '风控策略集编码',
   `version` int(11) NOT NULL COMMENT '版本',

@@ -26,6 +26,8 @@ public class DivideListDto {
 
     private String riskStrategyNo;
 
+    private Integer priority;
+
     private Integer version;
 
     private Date deployAt;

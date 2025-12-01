@@ -47,6 +47,11 @@ public class DivideEntity {
     private String divideNo;
 
     /**
+     * 优先级
+     */
+    private Integer priority;
+
+    /**
      * 准入策略编码
      */
     private String accessStrategyNo;

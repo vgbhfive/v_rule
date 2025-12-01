@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.scene.SceneListDto;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.SceneEntity;
@@ -22,5 +23,7 @@ public interface SceneMapper extends BaseMapper<SceneEntity> {
     Integer queryTotalCount(@Param("param") SceneQueryParam param);
 
     SceneEntity selectBySceneNo(@Param("sceneNo") String sceneNo);
+
+    SceneStruct.Scene querySceneBySceneNo(@Param("sceneNo") String sceneNo);
 
 }

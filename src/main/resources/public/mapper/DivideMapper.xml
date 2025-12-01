@@ -23,7 +23,7 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.divide.DivideListDto">
         SELECT
-            id, line_no, scene_no, divide_name, divide_no, access_strategy_no, risk_strategy_no, version, deploy_at, is_valid, is_delete, create_at
+            id, line_no, scene_no, divide_name, divide_no, access_strategy_no, risk_strategy_no, priority, version, deploy_at, is_valid, is_delete, create_at
         FROM divide
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
@@ -68,6 +68,10 @@
         FROM divide d
         LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
         WHERE d.id = #{id}
+    </select>
+
+    <select id="queryDivideBySceneNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Divide">
+
     </select>
 
 </mapper>

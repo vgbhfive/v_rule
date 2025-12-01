@@ -3,29 +3,31 @@ package com.vgbhfive.v_rule.service.impl;
 import com.google.gson.Gson;
 import com.vgbhfive.v_rule.common.enums.DeployStatusCode;
 import com.vgbhfive.v_rule.common.enums.SceneType;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.SceneParams;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.scene.SceneListDto;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.DeployEntity;
 import com.vgbhfive.v_rule.entity.LineEntity;
 import com.vgbhfive.v_rule.mapper.DeployMapper;
+import com.vgbhfive.v_rule.mapper.DivideMapper;
 import com.vgbhfive.v_rule.mapper.LineMapper;
 import com.vgbhfive.v_rule.mapper.SceneMapper;
 import com.vgbhfive.v_rule.service.DeployService;
 import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @projectName: v_rule
@@ -35,12 +37,16 @@ import java.util.Set;
 @Service
 public class DeployServiceImpl implements DeployService {
 
+    private static final Logger logger = LoggerFactory.getLogger(DeployServiceImpl.class);
+
     @Autowired
     private DeployMapper deployMapper;
     @Autowired
     private SceneMapper sceneMapper;
     @Autowired
     private LineMapper lineMapper;
+    @Autowired
+    private DivideMapper divideMapper;
     @Resource
     private Gson gson;
 
@@ -139,8 +145,32 @@ public class DeployServiceImpl implements DeployService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public SceneParams buildSceneParams(String sceneNo) {
-        Set<String> divideNos = new HashSet<>();
+        Set<String> strategyNoSet = new HashSet<>();
+        Set<String> productNoSet = new HashSet<>();
+        Set<String> ruleNoSet = new HashSet<>(32);
+        Set<String> ruleSetNoSet = new HashSet<>(32);
+        Set<String> dataManagerNoSet = new HashSet<>(32);
+        Set<String> dataCategoryNoSet = new HashSet<>(32);
 
+        SceneStruct.Scene scene = sceneMapper.querySceneBySceneNo(sceneNo);
+        if (Objects.isNull(scene)) {
+            logger.error("构建场景不存在:{}", sceneNo);
+            throw new ParamException("构建场景不存在");
+        }
+        ArrayList<SceneStruct.Scene> sceneList = new ArrayList<SceneStruct.Scene>() {{
+            add(scene);
+        }};
+        SceneStruct.Line line = new SceneStruct.Line(scene.getLineNo());
+        List<SceneStruct.Line> lineList = new ArrayList<SceneStruct.Line>() {{
+            add(line);
+        }};
+        List<SceneStruct.Divide> divideList = divideMapper.queryDivideBySceneNo(sceneNo);
+        if (divideList.isEmpty()) {
+            throw new ParamException("场景[" + scene.getSceneName() + "]下没有分流器");
+        }
+        divideList.forEach(divide -> {
+
+        });
 
         return null;
     }
