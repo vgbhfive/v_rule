@@ -23,7 +23,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @projectName: v_rule
@@ -137,6 +139,9 @@ public class DeployServiceImpl implements DeployService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public SceneParams buildSceneParams(String sceneNo) {
+        Set<String> divideNos = new HashSet<>();
+
+
         return null;
     }
 
