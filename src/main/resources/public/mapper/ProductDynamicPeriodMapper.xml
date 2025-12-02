@@ -53,4 +53,8 @@
         </trim>
     </select>
 
+    <select id="queryDynamicPeriodByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductDynamicPeriod">
+
+    </select>
+
 </mapper>

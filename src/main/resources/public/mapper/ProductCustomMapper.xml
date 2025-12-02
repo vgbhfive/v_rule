@@ -53,4 +53,12 @@
         </trim>
     </select>
 
+    <select id="queryCustomByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductCustom">
+
+    </select>
+
+    <select id="queryCustomDetailByProductNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductCustomDetail">
+
+    </select>
+
 </mapper>

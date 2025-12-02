@@ -51,6 +51,16 @@ public class DeployServiceImpl implements DeployService {
     @Resource
     private ProductInterestService productInterestService;
     @Resource
+    private ProductPeriodService productPeriodService;
+    @Resource
+    private ProductDynamicPeriodService productDynamicPeriodService;
+    @Resource
+    private ProductLimitService productLimitService;
+    @Resource
+    private ProductDynamicLimitService productDynamicLimitService;
+    @Resource
+    private ProductCustomService productCustomService;
+    @Resource
     private RuleSetService ruleSetService;
     @Resource
     private RuleService ruleService;
@@ -198,6 +208,11 @@ public class DeployServiceImpl implements DeployService {
 
         List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
         List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productInterestNoSet);
+        List<SceneStruct.ProductPeriod> periodList = productPeriodService.queryPeriodByProductNos(productInterestNoSet);
+        List<SceneStruct.ProductDynamicPeriod> dynamicPeriodList = productDynamicPeriodService.queryDynamicPeriodByProductNos(productInterestNoSet);
+        List<SceneStruct.ProductLimit> limitList = productLimitService.queryLimitByProductNos(productInterestNoSet);
+        List<SceneStruct.ProductDynamicLimit> dynamicLimitList = productDynamicLimitService.queryDynamicLimitByProductNos(productInterestNoSet);
+        List<SceneStruct.ProductCustom> customList = productCustomService.queryCustomByProductNos(productInterestNoSet);
 
         strategyList.forEach(strategy -> {
             ruleNoSet.addAll(strategy.getRuleNoList());
@@ -212,6 +227,21 @@ public class DeployServiceImpl implements DeployService {
             if (interest.getValueType().equals(ValueType.DATASOURCE.getType())) {
                 dataSourceNoSet.add(interest.getValue());
             }
+        });
+        periodList.forEach(period -> {
+
+        });
+        dynamicPeriodList.forEach(dynamicPeriod -> {
+
+        });
+        limitList.forEach(limit -> {
+
+        });
+        dynamicLimitList.forEach(dynamicLimit -> {
+
+        });
+        customList.forEach(custom -> {
+
         });
         ruleSetList.forEach(ruleSet -> {
             if (ruleSet.getThresholdType().equals(ValueType.DATASOURCE.getType())) {

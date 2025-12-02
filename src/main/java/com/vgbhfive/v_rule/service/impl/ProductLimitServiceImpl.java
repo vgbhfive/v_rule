@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductLimitListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductLimitEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -48,4 +50,10 @@ public class ProductLimitServiceImpl implements ProductLimitService {
     public ResponseContent update(ProductLimitEntity productLimitEntity) {
         return null;
     }
+
+    @Override
+    public List<SceneStruct.ProductLimit> queryLimitByProductNos(Set<String> productNos) {
+        return productLimitMapper.queryLimitByProductNos(productNos);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductPeriodListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductPeriodEntity;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -47,5 +49,10 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
     @Override
     public ResponseContent update(ProductPeriodEntity productPeriodEntity) {
         return null;
+    }
+
+    @Override
+    public List<SceneStruct.ProductPeriod> queryPeriodByProductNos(Set<String> productNos) {
+        return productPeriodMapper.queryPeriodByProductNos(productNos);
     }
 }
