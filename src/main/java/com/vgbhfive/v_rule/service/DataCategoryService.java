@@ -2,7 +2,11 @@ package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @projectName: v_rule
@@ -16,5 +20,7 @@ public interface DataCategoryService {
     ResponseContent create(DataCategoryEntity dataCategoryEntity, boolean isUpdate);
 
     ResponseContent update(DataCategoryEntity dataCategoryEntity);
+
+    List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(Set<String> dataCategoryNoSet);
 
 }

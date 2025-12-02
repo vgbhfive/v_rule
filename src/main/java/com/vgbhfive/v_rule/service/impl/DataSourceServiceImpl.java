@@ -8,6 +8,7 @@ import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceListDto;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.entity.DataSourceEntity;
 import com.vgbhfive.v_rule.mapper.DataSourceMapper;
 import com.vgbhfive.v_rule.service.DataSourceService;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -72,6 +75,11 @@ public class DataSourceServiceImpl implements DataSourceService {
             throw new DataBaseException("更新数据源失败");
         }
         return this.create(dataSourceEntity, true);
+    }
+
+    @Override
+    public List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(Set<String> dataSourceNoSet) {
+        return Collections.emptyList();
     }
 
 }

@@ -1,8 +1,12 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.rule.RuleQueryParam;
 import com.vgbhfive.v_rule.entity.RuleEntity;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -15,5 +19,7 @@ public interface RuleService {
     ResponseContent create(RuleEntity ruleEntity, boolean isUpdate);
 
     ResponseContent update(RuleEntity ruleEntity);
+
+    List<SceneStruct.Rule> queryRuleByRuleNos(Set<String> ruleNoSet);
 
 }

@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.strategy.StrategyListDto;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
@@ -19,9 +20,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -113,6 +112,11 @@ public class StrategyServiceImpl implements StrategyService {
             ruleDetailEntityList.add(detailEntity);
         });
         return ruleDetailEntityList;
+    }
+
+    @Override
+    public List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet) {
+        return Collections.emptyList();
     }
 
 }

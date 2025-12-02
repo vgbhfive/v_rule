@@ -2,7 +2,11 @@ package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.entity.DataSourceEntity;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -15,5 +19,7 @@ public interface DataSourceService {
     ResponseContent create(DataSourceEntity dataSourceEntity, boolean isUpdate);
 
     ResponseContent update(DataSourceEntity dataSourceEntity);
+
+    List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(Set<String> dataSourceNoSet);
 
 }

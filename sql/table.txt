@@ -71,7 +71,7 @@ CREATE TABLE `rule` (
   `data_source_no` varchar(32) NOT NULL COMMENT '数据源编码',
   `cond` varchar(32) NOT NULL COMMENT '条件',
   `threshold` varchar(256) NOT NULL COMMENT '阈值',
-  `threshold_type` varchar(256) NOT NULL COMMENT '阈值类型',
+  `threshold_type` varchar(256) NOT NULL COMMENT '阈值类型 fixed-固定值/datasource-数据源',
   `result` varchar(16) NOT NULL COMMENT '结果',
   `version` int(11) NOT NULL COMMENT '版本',
   `deploy_at` timestamp NULL DEFAULT NULL COMMENT '部署时间',

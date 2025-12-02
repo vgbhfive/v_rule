@@ -43,6 +43,7 @@ public class SceneStruct {
         private List<String> strategyNoList;
         private Integer version;
         private Integer isValid;
+        private List<String> productInterestNoList;
         private List<ProductInterest> productInterestList;
     }
 

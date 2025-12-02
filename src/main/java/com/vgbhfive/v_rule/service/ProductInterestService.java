@@ -1,8 +1,12 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @projectName: v_rule
@@ -16,5 +20,7 @@ public interface ProductInterestService {
     ResponseContent create(ProductInterestEntity productInterestEntity, boolean isUpdate);
 
     ResponseContent update(ProductInterestEntity productInterestEntity);
+
+    List<SceneStruct.ProductInterest> queryInterestByProductNos(Set<String> productInterestNoSet);
 
 }

@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.rule.RuleListDto;
 import com.vgbhfive.v_rule.dto.rule.RuleQueryParam;
 import com.vgbhfive.v_rule.entity.RuleEntity;
@@ -15,8 +16,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -73,4 +76,10 @@ public class RuleServiceImpl implements RuleService {
         }
         return this.create(ruleEntity, true);
     }
+
+    @Override
+    public List<SceneStruct.Rule> queryRuleByRuleNos(Set<String> ruleNoSet) {
+        return Collections.emptyList();
+    }
+
 }

@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.google.gson.Gson;
 import com.vgbhfive.v_rule.common.enums.DeployStatusCode;
 import com.vgbhfive.v_rule.common.enums.SceneType;
+import com.vgbhfive.v_rule.common.enums.ValueType;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
@@ -13,11 +14,8 @@ import com.vgbhfive.v_rule.dto.scene.SceneListDto;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.DeployEntity;
 import com.vgbhfive.v_rule.entity.LineEntity;
-import com.vgbhfive.v_rule.mapper.DeployMapper;
-import com.vgbhfive.v_rule.mapper.DivideMapper;
-import com.vgbhfive.v_rule.mapper.LineMapper;
-import com.vgbhfive.v_rule.mapper.SceneMapper;
-import com.vgbhfive.v_rule.service.DeployService;
+import com.vgbhfive.v_rule.mapper.*;
+import com.vgbhfive.v_rule.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @projectName: v_rule
@@ -47,6 +46,18 @@ public class DeployServiceImpl implements DeployService {
     private LineMapper lineMapper;
     @Autowired
     private DivideMapper divideMapper;
+    @Resource
+    private StrategyService strategyService;
+    @Resource
+    private ProductInterestService productInterestService;
+    @Resource
+    private RuleSetService ruleSetService;
+    @Resource
+    private RuleService ruleService;
+    @Resource
+    private DataSourceService dataSourceService;
+    @Resource
+    private DataCategoryService dataCategoryService;
     @Resource
     private Gson gson;
 
@@ -115,7 +126,7 @@ public class DeployServiceImpl implements DeployService {
                 // 构建场景 TODO
                 SceneParams params = buildSceneParams(deployEntity.getDeployNo());
                 deployEntity.setParams(gson.toJson(params));
-                deployEntity.setDivideList("");
+                deployEntity.setDivideList(params.getDivideList().stream().map(SceneStruct.Divide::getDivideName).collect(Collectors.joining(",")));
 
                 // diff TODO
                 deployEntity.setDiff("");
@@ -146,10 +157,10 @@ public class DeployServiceImpl implements DeployService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public SceneParams buildSceneParams(String sceneNo) {
         Set<String> strategyNoSet = new HashSet<>();
-        Set<String> productNoSet = new HashSet<>();
+        Set<String> productInterestNoSet = new HashSet<>();
         Set<String> ruleNoSet = new HashSet<>(32);
         Set<String> ruleSetNoSet = new HashSet<>(32);
-        Set<String> dataManagerNoSet = new HashSet<>(32);
+        Set<String> dataSourceNoSet = new HashSet<>(32);
         Set<String> dataCategoryNoSet = new HashSet<>(32);
 
         SceneStruct.Scene scene = sceneMapper.querySceneBySceneNo(sceneNo);
@@ -169,10 +180,42 @@ public class DeployServiceImpl implements DeployService {
             throw new ParamException("场景[" + scene.getSceneName() + "]下没有分流器");
         }
         divideList.forEach(divide -> {
-
+            productInterestNoSet.addAll(divide.getProductInterestNoList());
+            strategyNoSet.addAll(divide.getStrategyNoList());
         });
 
-        return null;
+        List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
+        List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productInterestNoSet);
+
+        strategyList.forEach(strategy -> {
+            ruleNoSet.addAll(strategy.getRuleNoList());
+            ruleSetNoSet.addAll(strategy.getRuleSetNoList());
+        });
+
+        List<SceneStruct.RuleSet> ruleSetList = ruleSetService.queryRuleSetByRuleSetNos(ruleSetNoSet);
+        this.getRuleSetList();
+        List<SceneStruct.Rule> ruleList = ruleService.queryRuleByRuleNos(ruleNoSet);
+
+        ruleList.forEach(rule -> {
+            dataSourceNoSet.add(rule.getDataSourceNo());
+            if (rule.getThresholdType().equals(ValueType.DATASOURCE.getType())) {
+                dataSourceNoSet.add(rule.getThreshold());
+            }
+        });
+        List<SceneStruct.DataSource> dataSourceList = dataSourceService.queryDataSourceByDataSourceNos(dataSourceNoSet);
+        dataSourceList.forEach(dataSource -> {
+            dataCategoryNoSet.add(dataSource.getDataCategoryNo());
+        });
+        List<SceneStruct.DataCategory> dataCategoryList = dataCategoryService.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
+
+        return new SceneParams(lineList, sceneList, divideList);
+    }
+
+    /**
+     * 递归查询所有规则集引用的规则和规则集
+     */
+    private void getRuleSetList() {
+
     }
 
 }

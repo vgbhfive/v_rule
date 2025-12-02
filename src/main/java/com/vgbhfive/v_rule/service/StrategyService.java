@@ -1,8 +1,12 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -17,5 +21,7 @@ public interface StrategyService {
     ResponseContent detail(Integer id);
 
     ResponseContent update(StrategyEntity strategyEntity);
+
+    List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet);
 
 }

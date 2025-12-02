@@ -58,7 +58,9 @@
     </select>
 
     <select id="querySceneBySceneNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Scene">
-
+        SELECT line_no, scene_no, scene_name, field
+        FROM scene
+        WHERE scene_no = #{sceneNo}
     </select>
 
 </mapper>

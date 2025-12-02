@@ -37,4 +37,13 @@ public enum ValueType {
         return values;
     }
 
+    public static ValueType getInstance(String type) {
+        for (ValueType value : ValueType.values()) {
+            if (value.getType().equals(type)) {
+                return value;
+            }
+        }
+        return null;
+    }
+
 }

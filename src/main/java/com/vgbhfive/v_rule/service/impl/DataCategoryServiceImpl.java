@@ -8,14 +8,17 @@ import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryListDto;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
 import com.vgbhfive.v_rule.mapper.DataCategoryMapper;
 import com.vgbhfive.v_rule.service.DataCategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  * @projectName: v_rule
@@ -72,6 +75,11 @@ public class DataCategoryServiceImpl implements DataCategoryService {
             throw new DataBaseException("更新数据源分类失败");
         }
         return this.create(dataCategoryEntity, true);
+    }
+
+    @Override
+    public List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(Set<String> dataCategoryNoSet) {
+        return Collections.emptyList();
     }
 
 }
