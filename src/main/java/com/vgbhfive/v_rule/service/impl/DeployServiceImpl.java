@@ -45,7 +45,7 @@ public class DeployServiceImpl implements DeployService {
     @Autowired
     private LineMapper lineMapper;
     @Autowired
-    private DivideMapper divideMapper;
+    private DivideService divideService;
     @Resource
     private StrategyService strategyService;
     @Resource
@@ -138,7 +138,7 @@ public class DeployServiceImpl implements DeployService {
                 deployEntity.setCoreVersion(url);
                 break;
             default:
-                return ResponseContent.error("上线场景类型");
+                return ResponseContent.error("error deploy type!");
         }
 
         Integer insert = deployMapper.insert(deployEntity);
@@ -158,6 +158,11 @@ public class DeployServiceImpl implements DeployService {
     public SceneParams buildSceneParams(String sceneNo) {
         Set<String> strategyNoSet = new HashSet<>();
         Set<String> productInterestNoSet = new HashSet<>();
+        Set<String> productPeriodNoSet = new HashSet<>();
+        Set<String> productDynamicPeriodNoSet = new HashSet<>();
+        Set<String> productLimitNoSet = new HashSet<>();
+        Set<String> productDynamicLimitNoSet = new HashSet<>();
+        Set<String> productCustomNoSet = new HashSet<>();
         Set<String> ruleNoSet = new HashSet<>(32);
         Set<String> ruleSetNoSet = new HashSet<>(32);
         Set<String> dataSourceNoSet = new HashSet<>(32);
@@ -165,8 +170,8 @@ public class DeployServiceImpl implements DeployService {
 
         SceneStruct.Scene scene = sceneMapper.querySceneBySceneNo(sceneNo);
         if (Objects.isNull(scene)) {
-            logger.error("构建场景不存在:{}", sceneNo);
-            throw new ParamException("构建场景不存在");
+            logger.error("build scene non exists! sceneNo: {}", sceneNo);
+            throw new ParamException("build scene non exists!");
         }
         ArrayList<SceneStruct.Scene> sceneList = new ArrayList<SceneStruct.Scene>() {{
             add(scene);
@@ -175,13 +180,20 @@ public class DeployServiceImpl implements DeployService {
         List<SceneStruct.Line> lineList = new ArrayList<SceneStruct.Line>() {{
             add(line);
         }};
-        List<SceneStruct.Divide> divideList = divideMapper.queryDivideBySceneNo(sceneNo);
+        List<SceneStruct.Divide> divideList = divideService.queryDivideBySceneNo(sceneNo);
         if (divideList.isEmpty()) {
-            throw new ParamException("场景[" + scene.getSceneName() + "]下没有分流器");
+            logger.error("scene non divide! sceneNo: {}", sceneNo);
+            throw new ParamException("scene non divide!");
         }
         divideList.forEach(divide -> {
+            strategyNoSet.add(divide.getAccessStrategyNo());
+            strategyNoSet.add(divide.getRiskStrategyNo());
             productInterestNoSet.addAll(divide.getProductInterestNoList());
-            strategyNoSet.addAll(divide.getStrategyNoList());
+            productPeriodNoSet.addAll(divide.getProductPeriodNoList());
+            productDynamicPeriodNoSet.addAll(divide.getProductDynamicPeriodNoList());
+            productLimitNoSet.addAll(divide.getProductLimitNoList());
+            productDynamicLimitNoSet.addAll(divide.getProductDynamicLimitNoList());
+            productCustomNoSet.addAll(divide.getProductCustomNoList());
         });
 
         List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
@@ -196,6 +208,16 @@ public class DeployServiceImpl implements DeployService {
         this.getRuleSetList();
         List<SceneStruct.Rule> ruleList = ruleService.queryRuleByRuleNos(ruleNoSet);
 
+        interestList.forEach(interest -> {
+            if (interest.getValueType().equals(ValueType.DATASOURCE.getType())) {
+                dataSourceNoSet.add(interest.getValue());
+            }
+        });
+        ruleSetList.forEach(ruleSet -> {
+            if (ruleSet.getThresholdType().equals(ValueType.DATASOURCE.getType())) {
+                dataSourceNoSet.add(ruleSet.getThreshold());
+            }
+        });
         ruleList.forEach(rule -> {
             dataSourceNoSet.add(rule.getDataSourceNo());
             if (rule.getThresholdType().equals(ValueType.DATASOURCE.getType())) {
@@ -212,7 +234,7 @@ public class DeployServiceImpl implements DeployService {
     }
 
     /**
-     * 递归查询所有规则集引用的规则和规则集
+     * 递归查询所有规则集引用的规则和规则集 TODO
      */
     private void getRuleSetList() {
 

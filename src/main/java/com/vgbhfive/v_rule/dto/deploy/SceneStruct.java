@@ -40,11 +40,16 @@ public class SceneStruct {
         private String divideName;
         private String sceneNo;
         private Integer priority;
-        private List<String> strategyNoList;
+        private String accessStrategyNo;
+        private String riskStrategyNo;
         private Integer version;
         private Integer isValid;
         private List<String> productInterestNoList;
-        private List<ProductInterest> productInterestList;
+        private List<String> productPeriodNoList;
+        private List<String> productDynamicPeriodNoList;
+        private List<String> productLimitNoList;
+        private List<String> productDynamicLimitNoList;
+        private List<String> productCustomNoList;
     }
 
     /**
@@ -64,6 +69,7 @@ public class SceneStruct {
 
     @Data
     public static class StrategyDetail {
+        private String strategyNo;
         private String detailNo;
         private String ruleType;
         private Integer priority;
@@ -76,7 +82,6 @@ public class SceneStruct {
     @Data
     public static class ProductInterest {
         private String productNo;
-        private String productName;
         private String valueType;
         private String value;
         private String unit;
@@ -161,6 +166,7 @@ public class SceneStruct {
         private String combine;
         private String cond;
         private String threshold;
+        private String thresholdType;
         private String result;
         private Integer version;
         private Integer isValid;

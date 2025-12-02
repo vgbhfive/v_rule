@@ -17,4 +17,6 @@ public interface DivideProductMapper extends BaseMapper<DivideProductEntity> {
 
     Integer batchInsert(@Param("list")List<DivideProductEntity> divideProductEntityList);
 
+    List<String> queryProductNoListByDivideNo(@Param("divideNo") String divideNo, @Param("type") String type);
+
 }

@@ -44,4 +44,13 @@
         </trim>
     </select>
 
+    <select id="queryRuleSetByRuleSetNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$RuleSet">
+        SELECT rule_set_no, rule_set_name, first_no, first_type, second_no, second_type, combine, cond, threshold, result, version, is_valid
+        FROM rule_set
+        WHERE rule_set_no IN
+        <foreach collection="ruleSetNos" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </select>
+
 </mapper>

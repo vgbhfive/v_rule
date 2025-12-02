@@ -115,7 +115,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
 
     @Override
     public List<SceneStruct.ProductInterest> queryInterestByProductNos(Set<String> productInterestNoSet) {
-        return Collections.emptyList();
+        return productInterestMapper.queryInterestByProductNos(productInterestNoSet);
     }
 
 }

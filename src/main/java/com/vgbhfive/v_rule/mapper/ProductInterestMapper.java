@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductInterestListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @projectName: v_rule
@@ -20,5 +22,7 @@ public interface ProductInterestMapper extends BaseMapper<ProductInterestEntity>
     List<ProductInterestListDto> queryList(@Param("param") ProductQueryParam param, @Param("start") Integer start, @Param("limit") Integer limit);
 
     Integer queryTotalCount(@Param("param") ProductQueryParam param);
+
+    List<SceneStruct.ProductInterest> queryInterestByProductNos(@Param("productNos") Set<String> productNos);
 
 }

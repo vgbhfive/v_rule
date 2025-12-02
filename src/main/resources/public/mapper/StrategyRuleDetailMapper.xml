@@ -20,4 +20,10 @@
         </foreach>
     </insert>
 
+    <select id="queryStrategyDetailByStrategyNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$StrategyDetail">
+        SELECT strategy_no, detail_no, rule_type, priority, version
+        FROM strategy_rule_detail
+        WHERE strategy_no = #{strategyNo}
+    </select>
+
 </mapper>

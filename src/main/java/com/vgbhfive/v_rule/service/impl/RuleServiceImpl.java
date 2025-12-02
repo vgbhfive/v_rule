@@ -79,7 +79,7 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public List<SceneStruct.Rule> queryRuleByRuleNos(Set<String> ruleNoSet) {
-        return Collections.emptyList();
+        return ruleMapper.queryRuleByRuleNos(ruleNoSet);
     }
 
 }

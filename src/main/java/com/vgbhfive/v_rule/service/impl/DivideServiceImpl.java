@@ -2,10 +2,12 @@ package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.divide.DivideListDto;
 import com.vgbhfive.v_rule.dto.divide.DivideQueryParam;
 import com.vgbhfive.v_rule.entity.DivideEntity;
@@ -20,6 +22,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -116,5 +119,18 @@ public class DivideServiceImpl implements DivideService {
         return productEntityList;
     }
 
+    @Override
+    public List<SceneStruct.Divide> queryDivideBySceneNo(String sceneNo) {
+        List<SceneStruct.Divide> divideList = divideMapper.queryDivideBySceneNo(sceneNo);
+        divideList.forEach(divide -> {
+            divide.setProductInterestNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.INTEREST.getType()));
+            divide.setProductPeriodNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.PERIOD.getType()));
+            divide.setProductDynamicPeriodNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.DYNAMIC_PERIOD.getType()));
+            divide.setProductLimitNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.LIMIT.getType()));
+            divide.setProductDynamicLimitNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.DYNAMIC_LIMIT.getType()));
+            divide.setProductCustomNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.CUSTOM.getType()));
+        });
+        return divideList;
+    }
 
 }

@@ -1,8 +1,12 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.divide.DivideQueryParam;
 import com.vgbhfive.v_rule.entity.DivideEntity;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -17,5 +21,7 @@ public interface DivideService {
     ResponseContent detail(Integer id);
 
     ResponseContent update(DivideEntity divideEntity);
+
+    List<SceneStruct.Divide> queryDivideBySceneNo(String sceneNo);
 
 }

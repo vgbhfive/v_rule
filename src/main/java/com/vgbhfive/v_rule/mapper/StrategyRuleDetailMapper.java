@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.entity.StrategyRuleDetailEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -15,5 +16,7 @@ import java.util.List;
 public interface StrategyRuleDetailMapper extends BaseMapper<StrategyRuleDetailEntity> {
 
     Integer batchInsertDetails(@Param("list") List<StrategyRuleDetailEntity> detailEntityList);
+
+    List<SceneStruct.StrategyDetail> queryStrategyDetailByStrategyNo(@Param("strategyNo") String strategyNo);
 
 }

@@ -79,7 +79,7 @@ public class RuleSetServiceImpl implements RuleSetService {
 
     @Override
     public List<SceneStruct.RuleSet> queryRuleSetByRuleSetNos(Set<String> ruleSetNoSet) {
-        return Collections.emptyList();
+        return ruleSetMapper.queryRuleSetByRuleSetNos(ruleSetNoSet);
     }
 
 }

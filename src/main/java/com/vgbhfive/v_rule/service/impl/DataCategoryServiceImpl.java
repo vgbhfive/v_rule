@@ -79,7 +79,7 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Override
     public List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(Set<String> dataCategoryNoSet) {
-        return Collections.emptyList();
+        return dataCategoryMapper.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
     }
 
 }

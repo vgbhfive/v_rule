@@ -3,8 +3,8 @@ package com.vgbhfive.v_rule.controller;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
-import com.vgbhfive.v_rule.service.ProductDynamicPeriodService;
-import com.vgbhfive.v_rule.service.ProductPeriodService;
+import com.vgbhfive.v_rule.service.ProductDynamicLimitService;
+import com.vgbhfive.v_rule.service.ProductLimitService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,16 +18,16 @@ import javax.validation.Valid;
  * @Date 2025/11/28 11:33
  */
 @RestController
-@RequestMapping("/product/period")
-public class ProductPeriodController {
+@RequestMapping("/product/dynamic/limit")
+public class ProductDynamicLimitController {
 
     @Resource
-    private ProductPeriodService productPeriodService;
+    private ProductDynamicLimitService productDynamicLimitService;
 
     @PostMapping("/list")
     @Log
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {
-        return productPeriodService.queryList(param);
+        return productDynamicLimitService.queryList(param);
     }
 
 }

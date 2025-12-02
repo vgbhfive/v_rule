@@ -50,4 +50,13 @@
         </trim>
     </select>
 
+    <select id="queryRuleByRuleNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Rule">
+        SELECT rule_no, rule_name, data_source_no, cond, threshold, threshold_type, result, version, is_valid
+        FROM rule
+        WHERE rule_no IN
+        <foreach collection="ruleNos" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </select>
+
 </mapper>

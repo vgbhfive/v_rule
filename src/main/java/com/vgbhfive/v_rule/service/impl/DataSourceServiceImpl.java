@@ -79,7 +79,7 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(Set<String> dataSourceNoSet) {
-        return Collections.emptyList();
+        return dataSourceMapper.queryDataSourceByDataSourceNos(dataSourceNoSet);
     }
 
 }

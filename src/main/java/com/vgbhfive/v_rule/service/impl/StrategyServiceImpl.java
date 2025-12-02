@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.enums.RuleType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -116,7 +117,13 @@ public class StrategyServiceImpl implements StrategyService {
 
     @Override
     public List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet) {
-        return Collections.emptyList();
+        List<SceneStruct.Strategy> strategyList = strategyMapper.queryStrategyByStrategyNos(strategyNoSet);
+        strategyList.forEach(strategy -> {
+            strategy.setRuleNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getStrategyNo(), RuleType.RULE.getKey()));
+            strategy.setRuleSetNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getStrategyNo(), RuleType.RULE_SET.getKey()));
+            strategy.setStrategyDetailList(strategyRuleDetailMapper.queryStrategyDetailByStrategyNo(strategy.getStrategyNo()));
+        });
+        return strategyList;
     }
 
 }

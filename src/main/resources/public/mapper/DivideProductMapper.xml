@@ -19,4 +19,10 @@
         </foreach>
     </insert>
 
+    <select id="queryProductNoListByDivideNo" resultType="java.lang.String">
+        SELECT distinct product_no
+        FROM divide_product
+        WHERE divide_no = #{divideNo} AND type = #{type}
+    </select>
+
 </mapper>

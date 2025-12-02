@@ -76,4 +76,19 @@
         WHERE s.id = #{id}
     </select>
 
+    <select id="queryStrategyByStrategyNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Strategy">
+        SELECT strategy_no, strategy_name, model, version, is_valid
+        FROM strategy
+        WHERE strategy_no IN
+        <foreach collection="strategyNos" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+    </select>
+
+    <select id="queryStrategyDetailRuleNoByStrategyNo" resultType="java.lang.String">
+        SELECT detail_no
+        FROM strategy_rule_detail
+        WHERE strategy_no = #{strategyNo} AND rule_type = #{ruleType}
+    </select>
+
 </mapper>

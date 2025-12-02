@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.strategy.StrategyListDto;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
@@ -8,6 +9,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * @Author vgbhfive
@@ -21,5 +23,9 @@ public interface StrategyMapper extends BaseMapper<StrategyEntity> {
     Integer queryTotalCount(@Param("param") StrategyQueryParam param);
 
     StrategyEntity queryDetailById(@Param("id") Integer id);
+
+    List<SceneStruct.Strategy> queryStrategyByStrategyNos(@Param("strategyNos") Set<String> strategyNos);
+
+    List<String> queryStrategyDetailRuleNoByStrategyNo(@Param("strategyNo") String strategyNo, @Param("ruleType") String ruleType);
 
 }
