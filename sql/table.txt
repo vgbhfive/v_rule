@@ -1,3 +1,17 @@
+CREATE TABLE `user` (
+  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
+  `email` varchar(32) NOT NULL COMMENT '用户名',
+  `password` varchar(128) NOT NULL COMMENT '密码',
+  `salt` int(16) NOT NULL COMMENT '盐值',
+  `status` tinyint(1) NOT NULL COMMENT '状态 0-正常/1-冻结/2-默认密码',
+  `name` varchar(32) NOT NULL COMMENT '姓名',
+  `mobile` varchar(32) NOT NULL COMMENT '手机号',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
+
 CREATE TABLE `line` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_name` varchar(64) NOT NULL COMMENT '业务线名称',

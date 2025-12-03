@@ -53,4 +53,11 @@ public class ResponseContent<T> {
         return res;
     }
 
+    public static ResponseContent error(Integer code, String msg) {
+        ResponseContent res = new ResponseContent();
+        res.setStatus(code);
+        res.setMsg(msg);
+        return res;
+    }
+
 }

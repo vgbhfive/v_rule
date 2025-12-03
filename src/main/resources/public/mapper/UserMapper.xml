@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.v_rule.mapper.UserMapper">
+
+    <select id="selectByEmail" resultType="com.vgbhfive.v_rule.entity.UserEntity">
+        SELECT *
+        FROM user
+        WHERE email = #{email}
+    </select>
+
+    <update id="updateByEmail" parameterType="com.vgbhfive.v_rule.entity.UserEntity">
+        UPDATE user SET password = #{entity.password}, salt = #{entity.salt}, status = #{entity.status}, update_at = #{entity.updateAt}
+        WHERE email = #{entity.email}
+    </update>
+
+</mapper>

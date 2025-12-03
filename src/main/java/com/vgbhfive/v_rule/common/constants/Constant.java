@@ -9,6 +9,8 @@ public interface Constant {
 
     String REDIS_PREFIX = "v_rule:";
 
+    String DEFAULT_PASSWORD = "v_rule";
+
     String NO_CJ = "CJ";
 
     String NO_SJYFL = "SJYFL";
