@@ -1,16 +1,27 @@
 package com.vgbhfive.v_rule.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductCustomListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
+import com.vgbhfive.v_rule.entity.ProductCustomEntity;
+import com.vgbhfive.v_rule.entity.ProductEntity;
 import com.vgbhfive.v_rule.entity.ProductLimitEntity;
 import com.vgbhfive.v_rule.mapper.ProductCustomMapper;
+import com.vgbhfive.v_rule.mapper.ProductMapper;
 import com.vgbhfive.v_rule.service.ProductCustomService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Propagation;
+import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -22,7 +33,11 @@ import java.util.Set;
 public class ProductCustomServiceImpl implements ProductCustomService {
 
     @Autowired
+    private ProductMapper productMapper;
+    @Autowired
     private ProductCustomMapper productCustomMapper;
+    @Resource
+    private NoGenerateUtil noGenerateUtil;
 
     @Override
     public ResponseContent queryList(ProductQueryParam param) {
@@ -38,13 +53,64 @@ public class ProductCustomServiceImpl implements ProductCustomService {
     }
 
     @Override
-    public ResponseContent create(ProductLimitEntity productLimitEntity, boolean isUpdate) {
-        return null;
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public ResponseContent create(ProductEntity productEntity, boolean isUpdate) {
+        Date now = new Date();
+        if (isUpdate) {
+            productEntity.setVersion(productEntity.getVersion() + 1);
+        } else {
+            productEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_ZDY));
+            productEntity.setCreateAt(now);
+        }
+        productEntity.setId(null);
+        productEntity.setUpdateAt(now);
+
+        List<ProductCustomEntity> customEntityList = buildCustomEntityList(productEntity);
+        Integer insertCustom = productCustomMapper.batchInsert(customEntityList);
+        if (insertCustom < productEntity.getProductCustomEntityList().size()) {
+            throw new DataBaseException("创建自定义产品失败");
+        }
+        Integer insert = productMapper.insert(productEntity);
+        if (insert < 1) {
+            throw new DataBaseException("创建自定义产品失败");
+        }
+        return ResponseContent.success();
+    }
+
+    private List<ProductCustomEntity> buildCustomEntityList(ProductEntity entity) {
+        Date now = new Date();
+        entity.getProductCustomEntityList().forEach(customEntity -> {
+            customEntity.setProductNo(entity.getProductNo());
+            customEntity.setVersion(entity.getVersion());
+            customEntity.setIsDelete(0);
+            customEntity.setCreateAt(entity.getCreateAt());
+            customEntity.setUpdateAt(now);
+        });
+        return entity.getProductCustomEntityList();
     }
 
     @Override
-    public ResponseContent update(ProductLimitEntity productLimitEntity) {
-        return null;
+    public ResponseContent detail(Integer id) {
+        return ResponseContent.success(productCustomMapper.queryDetailById(id));
+    }
+
+    @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
+    public ResponseContent update(ProductEntity productEntity) {
+        ProductCustomEntity oldProductCustomEntity = new ProductCustomEntity();
+        oldProductCustomEntity.setProductNo(productEntity.getProductNo());
+        oldProductCustomEntity.setIsDelete(1);
+        productCustomMapper.update(oldProductCustomEntity,
+                new UpdateWrapper<ProductCustomEntity>().eq("product_no", productEntity.getProductNo()).eq("is_delete", 0));
+        ProductEntity oldProductEntity = new ProductEntity();
+        oldProductEntity.setProductNo(productEntity.getProductNo());
+        oldProductCustomEntity.setIsDelete(1);
+        Integer update = productMapper.update(oldProductEntity,
+                new UpdateWrapper<ProductEntity>().eq("id", productEntity.getId()).eq("is_delete", 0));
+        if (update < 1) {
+            throw new DataBaseException("修改自定义产品失败");
+        }
+        return this.create(productEntity, true);
     }
 
     @Override

@@ -2,63 +2,114 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vgbhfive.v_rule.mapper.ProductCustomMapper">
 
+    <resultMap id="detailById" type="com.vgbhfive.v_rule.entity.ProductEntity">
+        <id property="id" column="id"/>
+        <result property="lineNo" column="line_no"/>
+        <result property="productNo" column="product_no"/>
+        <result property="productName" column="product_name"/>
+        <result property="type" column="type"/>
+        <result property="remark" column="remark"/>
+        <result property="version" column="version"/>
+        <result property="deployAt" column="deploy_at"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="version" column="version"/>
+        <result property="createAt" column="create_at"/>
+        <collection property="productCustomEntityList" javaType="List" ofType="com.vgbhfive.v_rule.entity.ProductCustomEntity">
+            <result property="productNo" column="product_no"/>
+            <result property="valueType" column="value_type"/>
+            <result property="value" column="value"/>
+            <result property="keyName" column="key_name"/>
+        </collection>
+    </resultMap>
+
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.product.ProductCustomListDto">
         SELECT
-            p.id, p.line_no, p.product_name, p.product_no, p.type, p.remark, p.version, p.deploy_at, p.is_valid, p.is_delete,
-            pp.value_type, pp.value
-        FROM product p
-        LEFT JOIN product_period pp ON p.product_no = pp.product_no
+            id, line_no, product_name, product_no, type, remark, version, deploy_at, is_valid, create_at
+        FROM product
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
-                p.line_no = #{param.lineNo}
+                line_no = #{param.lineNo}
             </if>
             <if test="param.type != null and param.type != ''">
-                AND p.type = #{param.type}
+                AND type = #{param.type}
             </if>
             <if test="param.productName != null and param.productName != ''">
-                AND p.product_name like CONCAT(#{param.productName}, '%')
+                AND product_name like CONCAT(#{param.productName}, '%')
             </if>
             <if test="param.productNo != null and param.productNo != ''">
-                AND p.product_no = #{param.productNo}
+                AND product_no = #{param.productNo}
             </if>
             <if test="param.isValid != null and param.isValid != ''">
-                AND p.is_valid = #{param.isValid}
+                AND is_valid = #{param.isValid}
             </if>
-            AND p.is_delete = 0 AND pp.is_delete = 0
+            AND is_delete = 0
         </trim>
         LIMIT #{start}, #{limit}
     </select>
 
     <select id="queryTotalCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
-        FROM product p
-        LEFT JOIN product_period pp ON p.product_no = pp.product_no
+        FROM product
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
-                p.line_no = #{param.lineNo}
+                line_no = #{param.lineNo}
             </if>
             <if test="param.type != null and param.type != ''">
-                AND p.type = #{param.type}
+                AND type = #{param.type}
             </if>
             <if test="param.productName != null and param.productName != ''">
-                AND p.product_name like CONCAT(#{param.productName}, '%')
+                AND product_name like CONCAT(#{param.productName}, '%')
             </if>
             <if test="param.productNo != null and param.productNo != ''">
-                AND p.product_no = #{param.productNo}
+                AND product_no = #{param.productNo}
             </if>
             <if test="param.isValid != null and param.isValid != ''">
-                AND p.is_valid = #{param.isValid}
+                AND is_valid = #{param.isValid}
             </if>
-            AND p.is_delete = 0 AND pp.is_delete = 0
+            AND is_delete = 0
         </trim>
     </select>
 
-    <select id="queryCustomByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductCustom">
+    <insert id="batchInsert" parameterType="java.util.List">
+        INSERT INTO product_custom
+        (product_no, value_type, key_name, value, version, is_delete, create_at, update_at)
+        VALUES
+        <foreach collection="entityList" item="item" separator=",">
+            (
+            #{item.productNo},
+            #{item.valueType},
+            #{item.keyName},
+            #{item.value},
+            #{item.version},
+            #{item.isDelete},
+            #{item.createAt},
+            #{item.updateAt}
+            )
+        </foreach>
+    </insert>
 
+    <select id="queryDetailById" resultMap="detailById">
+        SELECT p.*, pc.value_type, pc.value, pc.key_name
+        FROM product p
+        LEFT JOIN product_custom pc ON p.product_no = pc.product_no
+        WHERE p.id = #{id}
+    </select>
+
+    <select id="queryCustomByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductCustom">
+        SELECT product_no, remark
+        FROM product
+        WHERE product_no IN
+        <foreach collection="productNos" item="no" open="(" separator="," close=")">
+            #{no}
+        </foreach>
+        AND is_delete = 0
     </select>
 
     <select id="queryCustomDetailByProductNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductCustomDetail">
-
+        SELECT product_no, value_type, value, key_name, version
+        FROM product_custom
+        WHERE product_no = #{productNo} AND is_delete = 0
     </select>
 
 </mapper>

@@ -1,5 +1,6 @@
 package com.vgbhfive.v_rule.service.impl;
 
+import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
@@ -13,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -43,6 +45,15 @@ public class ProductLimitServiceImpl implements ProductLimitService {
 
     @Override
     public ResponseContent create(ProductLimitEntity productLimitEntity, boolean isUpdate) {
+        Date now = new Date();
+        if (isUpdate) {
+            productLimitEntity.setVersion(productLimitEntity.getVersion() + 1);
+        } else {
+            productLimitEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_ED));
+            productLimitEntity.setCreateAt(now);
+        }
+        productLimitEntity.setId(null);
+        productLimitEntity.setUpdateAt(now);
         return null;
     }
 

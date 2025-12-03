@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -79,6 +76,9 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public List<SceneStruct.Rule> queryRuleByRuleNos(Set<String> ruleNoSet) {
+        if (ruleNoSet.isEmpty()) {
+            return new ArrayList<>();
+        }
         return ruleMapper.queryRuleByRuleNos(ruleNoSet);
     }
 

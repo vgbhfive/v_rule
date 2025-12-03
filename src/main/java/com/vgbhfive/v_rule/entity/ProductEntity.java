@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.vgbhfive.v_rule.common.enums.ProductType;
@@ -10,6 +11,7 @@ import lombok.Setter;
 import lombok.ToString;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * @projectName: v_rule
@@ -69,5 +71,8 @@ public class ProductEntity {
     private Date createAt;
 
     private Date updateAt;
+
+    @TableField(exist = false)
+    private List<ProductCustomEntity> productCustomEntityList;
 
 }

@@ -41,7 +41,7 @@ public class ProductCustomEntity {
     /**
      * 键
      */
-    private String key;
+    private String keyName;
 
     /**
      * 值
@@ -58,20 +58,5 @@ public class ProductCustomEntity {
     private Date createAt;
 
     private Date updateAt;
-
-    @TableField(exist = false)
-    private String lineNo;
-
-    @TableField(exist = false)
-    private String productName;
-
-    @TableField(exist = false)
-    private String type;
-
-    @TableField(exist = false)
-    private String remark;
-
-    @TableField(exist = false)
-    private Integer isValid;
 
 }

@@ -5,10 +5,7 @@ import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 import com.vgbhfive.v_rule.service.ProductInterestService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -25,7 +22,7 @@ public class ProductInterestController {
     @Resource
     private ProductInterestService productInterestService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {
         return productInterestService.queryList(param);

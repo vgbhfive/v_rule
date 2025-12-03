@@ -63,6 +63,7 @@
         <foreach collection="dataSourceNos" item="no" open="(" separator="," close=")">
             #{no}
         </foreach>
+        AND is_delete = 0
     </select>
 
 </mapper>

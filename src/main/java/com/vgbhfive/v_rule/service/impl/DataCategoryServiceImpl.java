@@ -15,10 +15,7 @@ import com.vgbhfive.v_rule.service.DataCategoryService;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @projectName: v_rule
@@ -79,6 +76,9 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Override
     public List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(Set<String> dataCategoryNoSet) {
+        if (dataCategoryNoSet.isEmpty()) {
+            return new ArrayList<>();
+        }
         return dataCategoryMapper.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
     }
 

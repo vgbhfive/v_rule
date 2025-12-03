@@ -77,6 +77,23 @@ public class ProductInterestServiceImpl implements ProductInterestService {
         return ResponseContent.success();
     }
 
+    private ProductEntity buildProductEntity(ProductInterestEntity productInterestEntity) {
+        ProductEntity productEntity = new ProductEntity();
+        productEntity.setId(null);
+        productEntity.setLineNo(productInterestEntity.getLineNo());
+        productEntity.setProductName(productInterestEntity.getProductName());
+        productEntity.setProductNo(productInterestEntity.getProductNo());
+        productEntity.setType(productInterestEntity.getType());
+        productEntity.setRemark(productInterestEntity.getRemark());
+        productEntity.setVersion(productInterestEntity.getVersion());
+        productEntity.setIsValid(productInterestEntity.getIsValid());
+        productEntity.setIsDelete(productInterestEntity.getIsDelete());
+        Date now = new Date();
+        productEntity.setCreateAt(now);
+        productEntity.setUpdateAt(now);
+        return productEntity;
+    }
+
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent update(ProductInterestEntity productInterestEntity) {
@@ -94,23 +111,6 @@ public class ProductInterestServiceImpl implements ProductInterestService {
             throw new DataBaseException("更新利率产品失败");
         }
         return this.create(productInterestEntity, true);
-    }
-
-    private ProductEntity buildProductEntity(ProductInterestEntity productInterestEntity) {
-        ProductEntity productEntity = new ProductEntity();
-        productEntity.setId(null);
-        productEntity.setLineNo(productInterestEntity.getLineNo());
-        productEntity.setProductName(productInterestEntity.getProductName());
-        productEntity.setProductNo(productInterestEntity.getProductNo());
-        productEntity.setType(productInterestEntity.getType());
-        productEntity.setRemark(productInterestEntity.getRemark());
-        productEntity.setVersion(productInterestEntity.getVersion());
-        productEntity.setIsValid(productInterestEntity.getIsValid());
-        productEntity.setIsDelete(productInterestEntity.getIsDelete());
-        Date now = new Date();
-        productEntity.setCreateAt(now);
-        productEntity.setUpdateAt(now);
-        return productEntity;
     }
 
     @Override

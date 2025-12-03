@@ -1,5 +1,7 @@
 package com.vgbhfive.v_rule.dto.deploy;
 
+import com.vgbhfive.v_rule.common.enums.PeriodType;
+import com.vgbhfive.v_rule.common.enums.ValueType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -46,9 +48,7 @@ public class SceneStruct {
         private Integer isValid;
         private List<String> productInterestNoList;
         private List<String> productPeriodNoList;
-        private List<String> productDynamicPeriodNoList;
         private List<String> productLimitNoList;
-        private List<String> productDynamicLimitNoList;
         private List<String> productCustomNoList;
     }
 
@@ -85,6 +85,7 @@ public class SceneStruct {
         private String valueType;
         private String value;
         private String unit;
+        private String remark;
         private Integer version;
     }
 
@@ -94,14 +95,11 @@ public class SceneStruct {
     @Data
     public static class ProductPeriod {
         private String productNo;
-    }
-
-    /**
-     * 动态账期产品
-     */
-    @Data
-    public static class ProductDynamicPeriod {
-        private String productNo;
+        private String valueType;
+        private String value;
+        private String periodType;
+        private String remark;
+        private Integer version;
     }
 
     /**
@@ -110,14 +108,10 @@ public class SceneStruct {
     @Data
     public static class ProductLimit {
         private String productNo;
-    }
-
-    /**
-     * 动态额度产品
-     */
-    @Data
-    public static class ProductDynamicLimit {
-        private String productNo;
+        private String valueType;
+        private String value;
+        private String remark;
+        private Integer version;
     }
 
     /**
@@ -126,6 +120,7 @@ public class SceneStruct {
     @Data
     public static class ProductCustom {
         private String productNo;
+        private String remark;
         private List<ProductCustomDetail> productCustomDetailList;
     }
 
@@ -134,6 +129,7 @@ public class SceneStruct {
         private String key;
         private String valueType;
         private String value;
+        private String version;
     }
 
     /**

@@ -53,11 +53,7 @@ public class DeployServiceImpl implements DeployService {
     @Resource
     private ProductPeriodService productPeriodService;
     @Resource
-    private ProductDynamicPeriodService productDynamicPeriodService;
-    @Resource
     private ProductLimitService productLimitService;
-    @Resource
-    private ProductDynamicLimitService productDynamicLimitService;
     @Resource
     private ProductCustomService productCustomService;
     @Resource
@@ -169,9 +165,7 @@ public class DeployServiceImpl implements DeployService {
         Set<String> strategyNoSet = new HashSet<>();
         Set<String> productInterestNoSet = new HashSet<>();
         Set<String> productPeriodNoSet = new HashSet<>();
-        Set<String> productDynamicPeriodNoSet = new HashSet<>();
         Set<String> productLimitNoSet = new HashSet<>();
-        Set<String> productDynamicLimitNoSet = new HashSet<>();
         Set<String> productCustomNoSet = new HashSet<>();
         Set<String> ruleNoSet = new HashSet<>(32);
         Set<String> ruleSetNoSet = new HashSet<>(32);
@@ -200,19 +194,15 @@ public class DeployServiceImpl implements DeployService {
             strategyNoSet.add(divide.getRiskStrategyNo());
             productInterestNoSet.addAll(divide.getProductInterestNoList());
             productPeriodNoSet.addAll(divide.getProductPeriodNoList());
-            productDynamicPeriodNoSet.addAll(divide.getProductDynamicPeriodNoList());
             productLimitNoSet.addAll(divide.getProductLimitNoList());
-            productDynamicLimitNoSet.addAll(divide.getProductDynamicLimitNoList());
             productCustomNoSet.addAll(divide.getProductCustomNoList());
         });
 
         List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
         List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productInterestNoSet);
-        List<SceneStruct.ProductPeriod> periodList = productPeriodService.queryPeriodByProductNos(productInterestNoSet);
-        List<SceneStruct.ProductDynamicPeriod> dynamicPeriodList = productDynamicPeriodService.queryDynamicPeriodByProductNos(productInterestNoSet);
-        List<SceneStruct.ProductLimit> limitList = productLimitService.queryLimitByProductNos(productInterestNoSet);
-        List<SceneStruct.ProductDynamicLimit> dynamicLimitList = productDynamicLimitService.queryDynamicLimitByProductNos(productInterestNoSet);
-        List<SceneStruct.ProductCustom> customList = productCustomService.queryCustomByProductNos(productInterestNoSet);
+        List<SceneStruct.ProductPeriod> periodList = productPeriodService.queryPeriodByProductNos(productPeriodNoSet);
+        List<SceneStruct.ProductLimit> limitList = productLimitService.queryLimitByProductNos(productLimitNoSet);
+        List<SceneStruct.ProductCustom> customList = productCustomService.queryCustomByProductNos(productCustomNoSet);
 
         strategyList.forEach(strategy -> {
             ruleNoSet.addAll(strategy.getRuleNoList());
@@ -229,19 +219,21 @@ public class DeployServiceImpl implements DeployService {
             }
         });
         periodList.forEach(period -> {
-
-        });
-        dynamicPeriodList.forEach(dynamicPeriod -> {
-
+            if (period.getValueType().equals(ValueType.DATASOURCE.getType())) {
+                dataSourceNoSet.add(period.getValue());
+            }
         });
         limitList.forEach(limit -> {
-
-        });
-        dynamicLimitList.forEach(dynamicLimit -> {
-
+            if (limit.getValueType().equals(ValueType.DATASOURCE.getType())) {
+                dataSourceNoSet.add(limit.getValue());
+            }
         });
         customList.forEach(custom -> {
-
+            custom.getProductCustomDetailList().forEach(customDetail -> {
+                if (customDetail.getValueType().equals(ValueType.DATASOURCE.getType())) {
+                    dataSourceNoSet.add(customDetail.getValue());
+                }
+            });
         });
         ruleSetList.forEach(ruleSet -> {
             if (ruleSet.getThresholdType().equals(ValueType.DATASOURCE.getType())) {

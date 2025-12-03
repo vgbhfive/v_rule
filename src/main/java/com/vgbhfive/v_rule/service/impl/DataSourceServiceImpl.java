@@ -16,10 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -79,6 +76,9 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(Set<String> dataSourceNoSet) {
+        if (dataSourceNoSet.isEmpty()) {
+            return new ArrayList<>();
+        }
         return dataSourceMapper.queryDataSourceByDataSourceNos(dataSourceNoSet);
     }
 

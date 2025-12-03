@@ -3,12 +3,9 @@ package com.vgbhfive.v_rule.controller;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
-import com.vgbhfive.v_rule.service.ProductDynamicLimitService;
+import com.vgbhfive.v_rule.entity.ProductLimitEntity;
 import com.vgbhfive.v_rule.service.ProductLimitService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -23,19 +20,23 @@ public class ProductLimitController {
 
     @Resource
     private ProductLimitService productLimitService;
-    @Resource
-    private ProductDynamicLimitService productDynamicLimitService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {
         return productLimitService.queryList(param);
     }
 
-    @PostMapping("/dynamic/list")
+    @PostMapping("/create")
     @Log
-    public ResponseContent queryDynamicList(@Valid @RequestBody ProductQueryParam param) {
-        return productDynamicLimitService.queryList(param);
+    public ResponseContent create(@RequestBody ProductLimitEntity productLimitEntity) {
+        return productLimitService.create(productLimitEntity, false);
+    }
+
+    @PostMapping("/update")
+    @Log
+    public ResponseContent update(@RequestBody ProductLimitEntity productLimitEntity) {
+        return productLimitService.update(productLimitEntity);
     }
 
 }

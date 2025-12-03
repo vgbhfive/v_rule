@@ -5,6 +5,7 @@ import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductCustomListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductCustomEntity;
+import com.vgbhfive.v_rule.entity.ProductEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
@@ -22,6 +23,10 @@ public interface ProductCustomMapper extends BaseMapper<ProductCustomEntity> {
     List<ProductCustomListDto> queryList(@Param("param") ProductQueryParam param, @Param("start") Integer start, @Param("limit") Integer limit);
 
     Integer queryTotalCount(@Param("param") ProductQueryParam param);
+
+    Integer batchInsert(@Param("entityList") List<ProductCustomEntity> productCustomEntityList);
+
+    ProductEntity queryDetailById(@Param("id") Integer id);
 
     List<SceneStruct.ProductCustom> queryCustomByProductNos(@Param("productNos") Set<String> productNos);
 

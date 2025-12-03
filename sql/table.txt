@@ -164,23 +164,6 @@ CREATE TABLE `product_period` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品账期表';
 
-CREATE TABLE `product_dynamic_period` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `product_no` varchar(32) NOT NULL COMMENT '策略集编码',
-  `min_value_type` varchar(16) NOT NULL COMMENT '最小值类型 fixed/dataSource',
-  `min_value` varchar(16) NOT NULL COMMENT '最小值',
-  `max_value_type` varchar(16) NOT NULL COMMENT '最大值类型 fixed/dataSource',
-  `max_value` varchar(16) NOT NULL COMMENT '最大值',
-  `step_type` varchar(16) NOT NULL COMMENT '步进类型 fixed/dataSource',
-  `step_value` varchar(16) NOT NULL COMMENT '步进值',
-  `period_type` varchar(16) NOT NULL COMMENT '账期类型 day/week/month/year',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
-  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品动态账期表';
-
 CREATE TABLE `product_limit` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `product_no` varchar(32) NOT NULL COMMENT '策略集编码',
@@ -193,27 +176,11 @@ CREATE TABLE `product_limit` (
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品额度表';
 
-CREATE TABLE `product_dynamic_limit` (
-  `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
-  `product_no` varchar(32) NOT NULL COMMENT '策略集编码',
-  `min_value_type` varchar(16) NOT NULL COMMENT '最小值类型 fixed/dataSource',
-  `min_value` varchar(16) NOT NULL COMMENT '最小值',
-  `max_value_type` varchar(16) NOT NULL COMMENT '最大值类型 fixed/dataSource',
-  `max_value` varchar(16) NOT NULL COMMENT '最大值',
-  `step_type` varchar(16) NOT NULL COMMENT '步进类型 fixed/dataSource',
-  `step_value` varchar(16) NOT NULL COMMENT '步进值',
-  `version` int(11) NOT NULL COMMENT '版本',
-  `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
-  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='产品动态额度表';
-
 CREATE TABLE `product_custom` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `product_no` varchar(32) NOT NULL COMMENT '策略集编码',
   `value_type` varchar(16) NOT NULL COMMENT '值类型 fixed/dataSource',
-  `key` varchar(16) NOT NULL COMMENT '键',
+  `key_name` varchar(16) NOT NULL COMMENT '键',
   `value` varchar(16) NOT NULL COMMENT '值',
   `version` int(11) NOT NULL COMMENT '版本',
   `is_delete` tinyint(1) NOT NULL COMMENT '是否删除',
