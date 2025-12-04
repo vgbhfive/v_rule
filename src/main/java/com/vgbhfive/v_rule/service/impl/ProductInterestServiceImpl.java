@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -56,14 +57,14 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent create(ProductInterestEntity productInterestEntity, boolean isUpdate) {
+        Date now = new Date();
         if (isUpdate) {
             productInterestEntity.setVersion(productInterestEntity.getVersion() + 1);
         } else {
             productInterestEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_LL));
+            productInterestEntity.setCreateAt(now);
         }
         productInterestEntity.setId(null);
-        Date now = new Date();
-        productInterestEntity.setCreateAt(now);
         productInterestEntity.setUpdateAt(now);
         Integer insertInterest = productInterestMapper.insert(productInterestEntity);
         if (insertInterest < 1) {
@@ -83,14 +84,13 @@ public class ProductInterestServiceImpl implements ProductInterestService {
         productEntity.setLineNo(productInterestEntity.getLineNo());
         productEntity.setProductName(productInterestEntity.getProductName());
         productEntity.setProductNo(productInterestEntity.getProductNo());
-        productEntity.setType(productInterestEntity.getType());
+        productEntity.setType(ProductType.INTEREST.getType());
         productEntity.setRemark(productInterestEntity.getRemark());
         productEntity.setVersion(productInterestEntity.getVersion());
-        productEntity.setIsValid(productInterestEntity.getIsValid());
-        productEntity.setIsDelete(productInterestEntity.getIsDelete());
-        Date now = new Date();
-        productEntity.setCreateAt(now);
-        productEntity.setUpdateAt(now);
+        productEntity.setIsValid(1);
+        productEntity.setIsDelete(0);
+        productEntity.setCreateAt(productInterestEntity.getCreateAt());
+        productEntity.setUpdateAt(new Date());
         return productEntity;
     }
 

@@ -1,14 +1,19 @@
 package com.vgbhfive.v_rule.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.enums.ProductType;
+import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.product.ProductLimitListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
+import com.vgbhfive.v_rule.entity.ProductEntity;
 import com.vgbhfive.v_rule.entity.ProductLimitEntity;
 import com.vgbhfive.v_rule.mapper.ProductLimitMapper;
+import com.vgbhfive.v_rule.mapper.ProductMapper;
 import com.vgbhfive.v_rule.service.ProductLimitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -27,6 +32,8 @@ public class ProductLimitServiceImpl implements ProductLimitService {
 
     @Autowired
     private ProductLimitMapper productLimitMapper;
+    @Autowired
+    private ProductMapper productMapper;
     @Resource
     private NoGenerateUtil noGenerateUtil;
 
@@ -53,13 +60,56 @@ public class ProductLimitServiceImpl implements ProductLimitService {
             productLimitEntity.setCreateAt(now);
         }
         productLimitEntity.setId(null);
+        productLimitEntity.setIsValid(1);
+        productLimitEntity.setIsDelete(0);
         productLimitEntity.setUpdateAt(now);
-        return null;
+        Integer insertLimit = productLimitMapper.insert(productLimitEntity);
+        if (insertLimit < 1) {
+            throw new DataBaseException("新增额度产品失败");
+        }
+        ProductEntity productEntity = buildProductEntity(productLimitEntity);
+        Integer insert = productMapper.insert(productEntity);
+        if (insert < 1) {
+            throw new DataBaseException("新增额度产品失败");
+        }
+        return ResponseContent.success();
+    }
+
+    private ProductEntity buildProductEntity(ProductLimitEntity productLimitEntity) {
+        ProductEntity entity = new ProductEntity();
+        entity.setId(null);
+        entity.setLineNo(productLimitEntity.getLineNo());
+        entity.setProductName(productLimitEntity.getProductName());
+        entity.setProductNo(productLimitEntity.getProductNo());
+        entity.setType(ProductType.LIMIT.getType());
+        entity.setRemark(productLimitEntity.getRemark());
+        entity.setVersion(productLimitEntity.getVersion());
+        entity.setIsValid(1);
+        entity.setIsDelete(0);
+        entity.setCreateAt(productLimitEntity.getCreateAt());
+        entity.setUpdateAt(new Date());
+        return entity;
     }
 
     @Override
     public ResponseContent update(ProductLimitEntity productLimitEntity) {
-        return null;
+        ProductEntity oldProductEntity = new ProductEntity();
+        oldProductEntity.setId(productLimitEntity.getId());
+        oldProductEntity.setIsDelete(1);
+        Integer update = productMapper.update(oldProductEntity,
+                new UpdateWrapper<ProductEntity>().eq("id", productLimitEntity.getId()).eq("is_delete", 0));
+        if (update < 1) {
+            throw new DataBaseException("修改额度产品失败");
+        }
+        ProductLimitEntity oldProductLimitEntity = new ProductLimitEntity();
+        oldProductLimitEntity.setProductNo(productLimitEntity.getProductNo());
+        oldProductLimitEntity.setIsDelete(1);
+        Integer updateLimit = productLimitMapper.update(oldProductLimitEntity,
+                new UpdateWrapper<ProductLimitEntity>().eq("product_no", productLimitEntity.getProductNo()).eq("is_delete", 0));
+        if (updateLimit < 1) {
+            throw new DataBaseException("修改额度产品失败");
+        }
+        return this.create(productLimitEntity, true);
     }
 
     @Override

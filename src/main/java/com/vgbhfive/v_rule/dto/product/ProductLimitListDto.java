@@ -2,6 +2,8 @@ package com.vgbhfive.v_rule.dto.product;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author vgbhfive
  * @Date 2025/11/28 11:41
@@ -28,5 +30,7 @@ public class ProductLimitListDto {
     private String valueType;
 
     private String value;
+
+    private Date createAt;
 
 }

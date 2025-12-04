@@ -45,14 +45,16 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Override
     public ResponseContent create(DataCategoryEntity dataCategoryEntity, boolean isUpdate) {
+        Date now = new Date();
         if (isUpdate) {
             dataCategoryEntity.setVersion(dataCategoryEntity.getVersion() + 1);
         } else {
             dataCategoryEntity.setDataCategoryNo(noGenerateUtil.generateNo(Constant.NO_SJYFL));
+            dataCategoryEntity.setCreateAt(now);
         }
         dataCategoryEntity.setId(null);
-        Date now = new Date();
-        dataCategoryEntity.setCreateAt(now);
+        dataCategoryEntity.setIsValid(1);
+        dataCategoryEntity.setIsDelete(0);
         dataCategoryEntity.setUpdateAt(now);
         Integer insert = dataCategoryMapper.insert(dataCategoryEntity);
         if (insert < 1) {

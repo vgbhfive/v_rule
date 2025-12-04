@@ -2,6 +2,8 @@ package com.vgbhfive.v_rule.dto.datasource;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @Author vgbhfive
  * @Date 2025/11/26 15:41
@@ -33,6 +35,6 @@ public class DataSourceListDto {
 
     private Integer isValid;
 
-    private Integer isDelete;
+    private Date createAt;
 
 }

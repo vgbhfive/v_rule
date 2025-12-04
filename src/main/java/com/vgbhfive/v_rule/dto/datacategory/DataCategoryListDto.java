@@ -2,6 +2,8 @@ package com.vgbhfive.v_rule.dto.datacategory;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
@@ -30,6 +32,6 @@ public class DataCategoryListDto {
 
     private Integer isValid;
 
-    private Integer isDelete;
+    private Date createAt;
 
 }

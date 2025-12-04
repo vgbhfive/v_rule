@@ -45,14 +45,16 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public ResponseContent create(DataSourceEntity dataSourceEntity, boolean isUpdate) {
+        Date now = new Date();
         if (isUpdate) {
             dataSourceEntity.setVersion(dataSourceEntity.getVersion() + 1);
         } else {
+            dataSourceEntity.setCreateAt(now);
             dataSourceEntity.setDataSourceNo(noGenerateUtil.generateNo(Constant.NO_SJY));
         }
         dataSourceEntity.setId(null);
-        Date now = new Date();
-        dataSourceEntity.setCreateAt(now);
+        dataSourceEntity.setIsValid(1);
+        dataSourceEntity.setIsDelete(0);
         dataSourceEntity.setUpdateAt(now);
         Integer insert = dataSourceMapper.insert(dataSourceEntity);
         if (insert < 1) {

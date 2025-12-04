@@ -2,6 +2,8 @@ package com.vgbhfive.v_rule.dto.product;
 
 import lombok.Data;
 
+import java.util.Date;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
@@ -31,5 +33,7 @@ public class ProductInterestListDto {
     private String value;
 
     private String unit;
+
+    private Date createAt;
 
 }

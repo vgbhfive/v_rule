@@ -4,8 +4,8 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.product.ProductPeriodListDto">
         SELECT
-            p.id, p.line_no, p.product_name, p.product_no, p.type, p.remark, p.version, p.deploy_at, p.is_valid, p.is_delete,
-            pp.value_type, pp.value
+            p.id, p.line_no, p.product_name, p.product_no, p.type, p.remark, p.version, p.deploy_at, p.is_valid, p.is_delete, p.create_at,
+            pp.value_type, pp.value, pp.period_type
         FROM product p
         LEFT JOIN product_period pp ON p.product_no = pp.product_no
         <trim prefix="WHERE" prefixOverrides="AND">
@@ -54,12 +54,14 @@
     </select>
 
     <select id="queryPeriodByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductPeriod">
-        SELECT *
-        FROM product_period
-        WHERE product_no IN
+        SELECT p.product_no, p.remark, pe.value_type, pe.value, pe.period_type, pe.version
+        FROM product p
+        LEFT JOIN product_period pe ON p.product_no = pe.product_no
+        WHERE p.product_no IN
         <foreach collection="productNos" item="no" open="(" separator="," close=")">
             #{no}
         </foreach>
+        AND p.is_delete = 0 AND pe.is_delete = 0
     </select>
 
 </mapper>
