@@ -23,7 +23,7 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.strategy.StrategyListDto">
         SELECT
-            id, line_no, scene_no, strategy_name, strategy_no, model, version, deploy_at, is_valid, is_delete
+            id, line_no, scene_no, strategy_name, strategy_no, model, version, deploy_at, is_valid, create_at
         FROM strategy
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">

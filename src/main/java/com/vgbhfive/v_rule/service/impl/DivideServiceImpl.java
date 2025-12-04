@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.divide.DivideListDto;
 import com.vgbhfive.v_rule.dto.divide.DivideQueryParam;
 import com.vgbhfive.v_rule.entity.DivideEntity;
@@ -21,10 +24,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -60,8 +60,8 @@ public class DivideServiceImpl implements DivideService {
         if (isUpdate) {
             divideEntity.setVersion(divideEntity.getVersion() + 1);
         } else {
-            divideEntity.setCreateAt(now);
             divideEntity.setDivideNo(noGenerateUtil.generateNo(Constant.NO_FLQ));
+            divideEntity.setCreateAt(now);
         }
         List<DivideProductEntity> productEntityList = buildProductEntityList(divideEntity);
         Integer insertProduct = divideProductMapper.batchInsert(productEntityList);
@@ -69,6 +69,8 @@ public class DivideServiceImpl implements DivideService {
             throw new DataBaseException("创建分流器失败");
         }
         divideEntity.setId(null);
+        divideEntity.setIsValid(1);
+        divideEntity.setIsDelete(0);
         divideEntity.setUpdateAt(now);
         Integer insert = divideMapper.insert(divideEntity);
         if (insert < 1) {
@@ -128,6 +130,41 @@ public class DivideServiceImpl implements DivideService {
             divide.setProductLimitNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.LIMIT.getType()));
         });
         return divideList;
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Divide> divideList, List<SceneStruct.Divide> lastDivideList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        // 上次发布分流器
+        Map<String, SceneStruct.Divide> lastDeployDivideMap = new HashMap<>();
+        lastDivideList.forEach(divide -> lastDeployDivideMap.put(divide.getDivideNo(), divide));
+
+        // 与最近一次上线版本分流器对比
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        ignoreList.add("isValid");
+        for (SceneStruct.Divide divide : divideList) {
+            List<DetailCompareResult> DetailCompareResultList;
+            if (lastDeployDivideMap.containsKey(divide.getDivideNo())) {
+                SceneStruct.Divide lastDeployDivide = lastDeployDivideMap.get(divide.getDivideNo());
+                DetailCompareResultList = CompareUtil.compare(lastDeployDivide, divide, ignoreList);
+                lastDivideList.remove(lastDeployDivide);
+            } else {
+                DetailCompareResultList = CompareUtil.compare(null, divide, null);
+            }
+            if (!DetailCompareResultList.isEmpty()) {
+                VersionDiffDetail versionDiffDetail = new VersionDiffDetail(divide.getDivideNo(), divide.getDivideName(), DetailCompareResultList);
+                versionDiffDetailList.add(versionDiffDetail);
+            }
+        }
+
+        // 相比多配置的分流器
+        for (SceneStruct.Divide lastDeployDivide : lastDivideList) {
+            List<DetailCompareResult> compareResultDTOList = CompareUtil.compare(lastDeployDivide, null, null);
+            VersionDiffDetail versionDiffDetail = new VersionDiffDetail(lastDeployDivide.getDivideNo(), lastDeployDivide.getDivideName(), compareResultDTOList);
+            versionDiffDetailList.add(versionDiffDetail);
+        }
+        return versionDiffDetailList;
     }
 
 }

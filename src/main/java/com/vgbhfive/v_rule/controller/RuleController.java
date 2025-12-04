@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.rule.RuleQueryParam;
 import com.vgbhfive.v_rule.entity.RuleEntity;
@@ -26,18 +27,21 @@ public class RuleController {
 
     @PostMapping("/list")
     @Log
+    @Permission
     public ResponseContent queryList(@Valid @RequestBody RuleQueryParam param) {
         return ruleService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
+    @Permission
     public ResponseContent create(@RequestBody RuleEntity ruleEntity) {
         return ruleService.create(ruleEntity, false);
     }
 
     @PostMapping("/update")
     @Log
+    @Permission
     public ResponseContent update(@RequestBody RuleEntity ruleEntity) {
         return ruleService.update(ruleEntity);
     }

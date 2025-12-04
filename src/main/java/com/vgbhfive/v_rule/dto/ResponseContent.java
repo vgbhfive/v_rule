@@ -40,6 +40,14 @@ public class ResponseContent<T> {
         return result;
     }
 
+    public static <T> ResponseContent<T> success(String msg, T object, Class<T> dataClazz) {
+        ResponseContent<T> result = new ResponseContent<>();
+        result.setStatus(0);
+        result.setMsg(msg);
+        result.setData(object);
+        return result;
+    }
+
     public static ResponseContent error() {
         ResponseContent res = new ResponseContent();
         res.setStatus(199);

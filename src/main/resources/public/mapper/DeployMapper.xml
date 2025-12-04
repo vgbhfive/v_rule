@@ -14,4 +14,8 @@
         WHERE line_no = #{lineNo} AND deploy_no = #{no}
     </select>
 
+    <select id="queryLastDeploy" resultType="com.vgbhfive.v_rule.entity.DeployEntity">
+
+    </select>
+
 </mapper>

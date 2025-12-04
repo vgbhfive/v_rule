@@ -8,6 +8,7 @@ import com.vgbhfive.v_rule.common.utils.RedisUtil;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
 import com.vgbhfive.v_rule.dto.user.LoginReq;
+import com.vgbhfive.v_rule.dto.user.UserInfo;
 import com.vgbhfive.v_rule.entity.UserEntity;
 import com.vgbhfive.v_rule.mapper.UserMapper;
 import com.vgbhfive.v_rule.service.UserService;
@@ -46,11 +47,22 @@ public class UserServiceImpl implements UserService {
             boolean isEqual = Md5Util.verify(loginReq.getPassword(), entity.getSalt(), entity.getPassword());
             if (isEqual) {
                 String token = UUID.randomUUID().toString().replace("-", "");
-                redisUtil.set(Constant.REDIS_PREFIX + token, null, 10, TimeUnit.MINUTES);
+                UserInfo userInfo = buildUserInfo(entity);
+                redisUtil.set(Constant.REDIS_PREFIX + token, userInfo, 15, TimeUnit.MINUTES);
                 return ResponseContent.success(token);
             }
         }
         return ResponseContent.error(500, "用户名或密码错误");
+    }
+
+    private UserInfo buildUserInfo(UserEntity entity) {
+        UserInfo userInfo = new UserInfo();
+        userInfo.setId(entity.getId());
+        userInfo.setName(entity.getName());
+        userInfo.setEmail(entity.getEmail());
+        userInfo.setMobile(entity.getMobile());
+        userInfo.setAdmin(entity.getName().equals("")); // todo
+        return userInfo;
     }
 
     @Override
@@ -123,4 +135,16 @@ public class UserServiceImpl implements UserService {
         userMapper.updateByEmail(updateEntity);
         return ResponseContent.success("修改密码成功");
     }
+
+    @Override
+    public ResponseContent verifyLogin(String token) {
+        String key = Constant.REDIS_PREFIX + token;
+        UserInfo userInfo = redisUtil.getObject(key, UserInfo.class);
+        if (Objects.nonNull(userInfo)) {
+            redisUtil.expire(key, 30, TimeUnit.MINUTES);
+            return ResponseContent.success(userInfo);
+        }
+        return ResponseContent.error(100, "未查询到用户信息");
+    }
+
 }

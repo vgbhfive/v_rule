@@ -49,8 +49,8 @@ public class DataSourceServiceImpl implements DataSourceService {
         if (isUpdate) {
             dataSourceEntity.setVersion(dataSourceEntity.getVersion() + 1);
         } else {
-            dataSourceEntity.setCreateAt(now);
             dataSourceEntity.setDataSourceNo(noGenerateUtil.generateNo(Constant.NO_SJY));
+            dataSourceEntity.setCreateAt(now);
         }
         dataSourceEntity.setId(null);
         dataSourceEntity.setIsValid(1);

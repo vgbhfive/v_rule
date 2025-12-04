@@ -45,14 +45,16 @@ public class RuleServiceImpl implements RuleService {
 
     @Override
     public ResponseContent create(RuleEntity ruleEntity, boolean isUpdate) {
+        Date now = new Date();
         if (isUpdate) {
             ruleEntity.setVersion(ruleEntity.getVersion() + 1);
         } else {
             ruleEntity.setRuleNo(noGenerateUtil.generateNo(Constant.NO_GZ));
+            ruleEntity.setCreateAt(now);
         }
         ruleEntity.setId(null);
-        Date now = new Date();
-        ruleEntity.setCreateAt(now);
+        ruleEntity.setIsValid(1);
+        ruleEntity.setIsDelete(0);
         ruleEntity.setUpdateAt(now);
         Integer insert = ruleMapper.insert(ruleEntity);
         if (insert < 1) {

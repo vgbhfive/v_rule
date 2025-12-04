@@ -35,6 +35,6 @@ public class RuleListDto {
 
     private Integer isValid;
 
-    private Integer isDelete;
+    private Date createAt;
 
 }

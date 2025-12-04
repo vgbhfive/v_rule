@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
@@ -24,18 +25,21 @@ public class DataCategoryController {
 
     @GetMapping("/list")
     @Log
+    @Permission
     public ResponseContent queryList(@Valid @RequestBody DataCategoryQueryParam param) {
         return dataCategoryService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
+    @Permission
     public ResponseContent create(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.create(dataCategoryEntity, false);
     }
 
     @PostMapping("/update")
     @Log
+    @Permission
     public ResponseContent update(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.update(dataCategoryEntity);
     }

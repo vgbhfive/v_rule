@@ -1,13 +1,16 @@
 package com.vgbhfive.v_rule.service.impl;
 
 import com.google.gson.Gson;
+import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.DeployStatusCode;
 import com.vgbhfive.v_rule.common.enums.SceneType;
 import com.vgbhfive.v_rule.common.enums.ValueType;
 import com.vgbhfive.v_rule.common.exception.ParamException;
+import com.vgbhfive.v_rule.common.utils.RedisUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.DeployVersionDiff;
 import com.vgbhfive.v_rule.dto.deploy.SceneParams;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.scene.SceneListDto;
@@ -66,6 +69,8 @@ public class DeployServiceImpl implements DeployService {
     private DataCategoryService dataCategoryService;
     @Resource
     private Gson gson;
+    @Resource
+    private RedisUtil redisUtil;
 
     @Override
     public ResponseContent queryList(DeployQueryParam param) {
@@ -100,8 +105,25 @@ public class DeployServiceImpl implements DeployService {
      * @return
      */
     @Override
-    public ResponseContent diff(String sceneNo, String sceneType) {
-        return ResponseContent.success(sceneNo + " " + sceneType);
+    public ResponseContent diff(String sceneNo, String sceneType) throws Exception {
+        SceneParams sceneParams = buildSceneParams(sceneNo);
+        String diffRedisKey = String.format("%s:%s:%s", Constant.REDIS_PREFIX_DEPLOY_DIFF, sceneParams.getLineList().get(0).getLineNo(), sceneNo);
+
+        DeployVersionDiff deployVersionDiff = new DeployVersionDiff();
+        DeployEntity lastDeployEntity = deployMapper.queryLastDeploy(sceneNo);
+        if (Objects.isNull(lastDeployEntity)) {
+            deployVersionDiff.setDeployStatus(1);
+            redisUtil.setAndExpire(diffRedisKey, deployVersionDiff);
+            return ResponseContent.success("首次上线", deployVersionDiff, DeployVersionDiff.class);
+        }
+
+        SceneParams lastSceneParams = gson.fromJson(lastDeployEntity.getParams(), SceneParams.class);
+        deployVersionDiff.setDeployStatus(0);
+        deployVersionDiff.setDivide(divideService.queryDeployDiff(sceneParams.getDivideList(), lastSceneParams.getDivideList()));
+        // TODO
+
+        redisUtil.setAndExpire(diffRedisKey, deployVersionDiff);
+        return ResponseContent.success("success", deployVersionDiff, DeployVersionDiff.class);
     }
 
     /**

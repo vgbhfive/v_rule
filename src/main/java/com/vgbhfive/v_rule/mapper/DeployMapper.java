@@ -17,4 +17,6 @@ public interface DeployMapper extends BaseMapper<DeployEntity> {
 
     Integer selectMaxVersion(@Param("lineNo") String lineNo, @Param("no") String no);
 
+    DeployEntity queryLastDeploy(@Param("sceneNo") String sceneNo);
+
 }

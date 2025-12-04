@@ -5,6 +5,7 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.MethodSignature;
+import org.junit.jupiter.api.Order;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -20,6 +21,7 @@ import java.util.Map;
  */
 @Aspect
 @Component
+@Order(1)
 public class LogAspect {
 
     private static final Logger logger = LoggerFactory.getLogger(LogAspect.class);

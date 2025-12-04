@@ -9,6 +9,8 @@ public interface Constant {
 
     String REDIS_PREFIX = "v_rule:";
 
+    String REDIS_PREFIX_DEPLOY_DIFF = "v_rule:deploy:diff";
+
     String DEFAULT_PASSWORD = "v_rule";
 
     String NO_CJ = "CJ";

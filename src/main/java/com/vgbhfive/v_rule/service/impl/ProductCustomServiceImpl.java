@@ -11,7 +11,6 @@ import com.vgbhfive.v_rule.dto.product.ProductCustomListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductCustomEntity;
 import com.vgbhfive.v_rule.entity.ProductEntity;
-import com.vgbhfive.v_rule.entity.ProductLimitEntity;
 import com.vgbhfive.v_rule.mapper.ProductCustomMapper;
 import com.vgbhfive.v_rule.mapper.ProductMapper;
 import com.vgbhfive.v_rule.service.ProductCustomService;
@@ -64,6 +63,8 @@ public class ProductCustomServiceImpl implements ProductCustomService {
             productEntity.setCreateAt(now);
         }
         productEntity.setId(null);
+        productEntity.setIsValid(1);
+        productEntity.setIsDelete(0);
         productEntity.setUpdateAt(now);
 
         List<ProductCustomEntity> customEntityList = buildCustomEntityList(productEntity);

@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductLimitEntity;
@@ -23,18 +24,21 @@ public class ProductLimitController {
 
     @GetMapping("/list")
     @Log
+    @Permission
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {
         return productLimitService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
+    @Permission
     public ResponseContent create(@RequestBody ProductLimitEntity productLimitEntity) {
         return productLimitService.create(productLimitEntity, false);
     }
 
     @PostMapping("/update")
     @Log
+    @Permission
     public ResponseContent update(@RequestBody ProductLimitEntity productLimitEntity) {
         return productLimitService.update(productLimitEntity);
     }

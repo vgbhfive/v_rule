@@ -4,7 +4,7 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.rule.RuleListDto">
         SELECT
-            id, line_no, rule_name, rule_no, data_source_no, cond, threshold, threshold_type, result, version, deploy_at, is_valid, is_delete, create_at, update_at
+            id, line_no, rule_name, rule_no, data_source_no, cond, threshold, threshold_type, result, version, deploy_at, is_valid, create_at
         FROM rule
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">

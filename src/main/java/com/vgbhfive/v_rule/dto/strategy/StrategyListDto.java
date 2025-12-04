@@ -29,6 +29,6 @@ public class StrategyListDto {
 
     private Integer isValid;
 
-    private Integer isDelete;
+    private Date createAt;
 
 }

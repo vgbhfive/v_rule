@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
 import com.vgbhfive.v_rule.entity.DeployEntity;
@@ -24,6 +25,7 @@ public class DeployController {
 
     @GetMapping("/scene/list")
     @Log
+    @Permission
     public ResponseContent queryList(@Valid @RequestBody DeployQueryParam param) {
         return ResponseContent.success();
     }
@@ -36,7 +38,8 @@ public class DeployController {
      */
     @PostMapping("/diff")
     @Log
-    public ResponseContent diff(@RequestParam("no") String sceneNo, @RequestParam("type") String sceneType) {
+    @Permission
+    public ResponseContent diff(@RequestParam("no") String sceneNo, @RequestParam("type") String sceneType) throws Exception {
         return deployService.diff(sceneNo, sceneType);
     }
 
@@ -47,6 +50,7 @@ public class DeployController {
      */
     @PostMapping("/pass")
     @Log
+    @Permission
     public ResponseContent pass(@RequestBody DeployEntity deployEntity) {
         return deployService.pass(deployEntity);
     }
@@ -57,6 +61,7 @@ public class DeployController {
      */
     @PostMapping("/rollback")
     @Log
+    @Permission
     public ResponseContent rollback() {
         return ResponseContent.success();
     }

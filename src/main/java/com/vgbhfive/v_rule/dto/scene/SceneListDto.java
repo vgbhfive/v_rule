@@ -25,6 +25,4 @@ public class SceneListDto {
 
     private Date createAt;
 
-    private Date updateAt;
-
 }

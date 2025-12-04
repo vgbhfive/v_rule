@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
 import com.vgbhfive.v_rule.dto.user.LoginReq;
@@ -30,12 +31,14 @@ public class UserController {
 
     @PostMapping("/register")
     @Log
+    @Permission
     public ResponseContent register(@RequestBody UserEntity userEntity) {
         return userService.register(userEntity);
     }
 
     @PostMapping("/resetPassword")
     @Log
+    @Permission
     public ResponseContent resetPassword(@RequestParam("email") String email) {
         return userService.resetPassword(email);
     }

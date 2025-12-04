@@ -49,12 +49,14 @@ public class SceneServiceImpl implements SceneService {
 
     @Override
     public ResponseContent create(SceneEntity sceneEntity, boolean isUpdate) {
+        Date now = new Date();
         if (!isUpdate) {
             sceneEntity.setSceneNo(noGenerateUtil.generateNo(Constant.NO_CJ));
+            sceneEntity.setCreateAt(now);
         }
         sceneEntity.setId(null);
-        Date now = new Date();
-        sceneEntity.setCreateAt(now);
+        sceneEntity.setIsValid(1);
+        sceneEntity.setIsDelete(0);
         sceneEntity.setUpdateAt(now);
         Integer insert = sceneMapper.insert(sceneEntity);
         if (insert < 1) {
@@ -75,4 +77,5 @@ public class SceneServiceImpl implements SceneService {
         }
         return this.create(sceneEntity, true);
     }
+
 }

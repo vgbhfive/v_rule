@@ -53,19 +53,23 @@ public class StrategyServiceImpl implements StrategyService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent create(StrategyEntity strategyEntity, boolean isUpdate) {
+        Date now = new Date();
         if (isUpdate) {
             strategyEntity.setVersion(strategyEntity.getVersion() + 1);
         } else {
             strategyEntity.setStrategyNo(noGenerateUtil.generateNo(Constant.NO_CL));
+            strategyEntity.setCreateAt(now);
         }
+        strategyEntity.setId(null);
+        strategyEntity.setIsValid(1);
+        strategyEntity.setIsDelete(0);
+        strategyEntity.setUpdateAt(now);
+
         List<StrategyRuleDetailEntity> ruleDetailEntityList = buildRuleDetailList(strategyEntity);
         Integer insertDetail = strategyRuleDetailMapper.batchInsertDetails(ruleDetailEntityList);
         if (insertDetail < strategyEntity.getRuleDetailEntityList().size()) {
             throw new DataBaseException("创建策略集失败");
         }
-        Date now = new Date();
-        strategyEntity.setCreateAt(now);
-        strategyEntity.setUpdateAt(now);
         Integer insert = strategyMapper.insert(strategyEntity);
         if (insert < 1) {
             throw new DataBaseException("创建策略集失败");

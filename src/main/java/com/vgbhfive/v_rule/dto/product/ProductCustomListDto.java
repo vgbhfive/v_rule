@@ -29,4 +29,6 @@ public class ProductCustomListDto {
 
     private String value;
 
+    private Data createAt;
+
 }

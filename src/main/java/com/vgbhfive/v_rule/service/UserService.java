@@ -19,4 +19,6 @@ public interface UserService {
 
     ResponseContent changePassword(ChangePasswordParam param);
 
+    ResponseContent verifyLogin(String token);
+
 }

@@ -62,6 +62,8 @@ public class ProductInterestServiceImpl implements ProductInterestService {
             productInterestEntity.setCreateAt(now);
         }
         productInterestEntity.setId(null);
+        productInterestEntity.setIsValid(1);
+        productInterestEntity.setIsDelete(0);
         productInterestEntity.setUpdateAt(now);
         Integer insertInterest = productInterestMapper.insert(productInterestEntity);
         if (insertInterest < 1) {

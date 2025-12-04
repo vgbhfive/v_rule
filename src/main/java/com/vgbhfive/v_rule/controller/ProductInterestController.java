@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
@@ -24,18 +25,21 @@ public class ProductInterestController {
 
     @GetMapping("/list")
     @Log
+    @Permission
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {
         return productInterestService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
+    @Permission
     public ResponseContent create(@RequestBody ProductInterestEntity productInterestEntity) {
         return productInterestService.create(productInterestEntity, false);
     }
 
     @PostMapping("/update")
     @Log
+    @Permission
     public ResponseContent update(@RequestBody ProductInterestEntity productInterestEntity) {
         return productInterestService.update(productInterestEntity);
     }

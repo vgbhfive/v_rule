@@ -2,6 +2,8 @@ package com.vgbhfive.v_rule.dto.deploy;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
@@ -9,4 +11,10 @@ import lombok.Data;
  */
 @Data
 public class DeployVersionDiff {
+
+    // 1-首次上线、0-正常上线
+    private Integer deployStatus;
+
+    private List<VersionDiffDetail> divide;
+
 }

@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
+import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.SceneEntity;
@@ -26,18 +27,21 @@ public class SceneController {
 
     @PostMapping("/list")
     @Log
+    @Permission
     public ResponseContent queryList(@RequestBody SceneQueryParam param) {
         return sceneService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
+    @Permission
     public ResponseContent create(@RequestBody SceneEntity sceneEntity) {
         return sceneService.create(sceneEntity, false);
     }
 
     @PostMapping("/update")
     @Log
+    @Permission
     public ResponseContent update(@RequestBody SceneEntity sceneEntity) {
         return sceneService.update(sceneEntity);
     }
