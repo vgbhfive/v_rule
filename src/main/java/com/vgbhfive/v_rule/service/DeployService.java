@@ -20,4 +20,6 @@ public interface DeployService {
 
     SceneParams buildSceneParams(String sceneNo);
 
+    ResponseContent rollback();
+
 }

@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -114,6 +115,9 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
 
     @Override
     public List<SceneStruct.ProductPeriod> queryPeriodByProductNos(Set<String> productNos) {
+        if (productNos.isEmpty()) {
+            return new ArrayList<>();
+        }
         return productPeriodMapper.queryPeriodByProductNos(productNos);
     }
 }

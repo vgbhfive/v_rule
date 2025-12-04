@@ -21,10 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.Collections;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @projectName: v_rule
@@ -114,8 +111,11 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     }
 
     @Override
-    public List<SceneStruct.ProductInterest> queryInterestByProductNos(Set<String> productInterestNoSet) {
-        return productInterestMapper.queryInterestByProductNos(productInterestNoSet);
+    public List<SceneStruct.ProductInterest> queryInterestByProductNos(Set<String> productNos) {
+        if (productNos.isEmpty()) {
+            return new ArrayList<>();
+        }
+        return productInterestMapper.queryInterestByProductNos(productNos);
     }
 
 }

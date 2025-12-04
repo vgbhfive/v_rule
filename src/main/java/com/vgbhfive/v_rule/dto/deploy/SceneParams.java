@@ -22,4 +22,20 @@ public class SceneParams {
 
     private List<SceneStruct.Divide> divideList;
 
+    private List<SceneStruct.Strategy> strategyList;
+
+    private List<SceneStruct.ProductInterest> interestList;
+
+    private List<SceneStruct.ProductPeriod> periodList;
+
+    private List<SceneStruct.ProductLimit> limitList;
+
+    private List<SceneStruct.RuleSet> ruleSetList;
+
+    private List<SceneStruct.Rule> ruleList;
+
+    private List<SceneStruct.DataSource> dataSourceList;
+
+    private List<SceneStruct.DataCategory> dataCategoryList;
+
 }

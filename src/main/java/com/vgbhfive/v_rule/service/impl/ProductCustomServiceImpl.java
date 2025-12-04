@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -115,6 +116,9 @@ public class ProductCustomServiceImpl implements ProductCustomService {
 
     @Override
     public List<SceneStruct.ProductCustom> queryCustomByProductNos(Set<String> productNos) {
+        if (productNos.isEmpty()) {
+            return new ArrayList<>();
+        }
         List<SceneStruct.ProductCustom> customList = productCustomMapper.queryCustomByProductNos(productNos);
         customList.forEach(custom -> {
             custom.setProductCustomDetailList(productCustomMapper.queryCustomDetailByProductNo(custom.getProductNo()));

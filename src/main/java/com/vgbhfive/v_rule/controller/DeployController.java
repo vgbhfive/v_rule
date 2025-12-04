@@ -41,7 +41,7 @@ public class DeployController {
     }
 
     /**
-     * 构建场景的策略数据
+     * 通过审核并构建场景的策略数据
      * @param deployEntity
      * @return
      */
@@ -49,6 +49,16 @@ public class DeployController {
     @Log
     public ResponseContent pass(@RequestBody DeployEntity deployEntity) {
         return deployService.pass(deployEntity);
+    }
+
+    /**
+     * 回滚场景
+     * @return
+     */
+    @PostMapping("/rollback")
+    @Log
+    public ResponseContent rollback() {
+        return ResponseContent.success();
     }
 
 }

@@ -129,8 +129,10 @@ public class DeployServiceImpl implements DeployService {
         SceneType type = SceneType.getInstance(deployEntity.getDeployType());
         switch (type) {
             case SCENE:
-                // 构建场景 TODO
+                // 构建场景
                 SceneParams params = buildSceneParams(deployEntity.getDeployNo());
+                deployEntity.setField(params.getSceneList().get(0).getField());
+                deployEntity.setName(params.getSceneList().get(0).getSceneName());
                 deployEntity.setParams(gson.toJson(params));
                 deployEntity.setDivideList(params.getDivideList().stream().map(SceneStruct.Divide::getDivideName).collect(Collectors.joining(",")));
 
@@ -252,7 +254,8 @@ public class DeployServiceImpl implements DeployService {
         });
         List<SceneStruct.DataCategory> dataCategoryList = dataCategoryService.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
 
-        return new SceneParams(lineList, sceneList, divideList);
+        return new SceneParams(lineList, sceneList, divideList, strategyList, interestList, periodList, limitList,
+                ruleSetList, ruleList, dataSourceList, dataCategoryList);
     }
 
     /**
@@ -260,6 +263,11 @@ public class DeployServiceImpl implements DeployService {
      */
     private void getRuleSetList() {
 
+    }
+
+    @Override
+    public ResponseContent rollback() {
+        return null;
     }
 
 }

@@ -5,10 +5,7 @@ import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
 import com.vgbhfive.v_rule.service.DataCategoryService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -25,7 +22,7 @@ public class DataCategoryController {
     @Resource
     private DataCategoryService dataCategoryService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     public ResponseContent queryList(@Valid @RequestBody DataCategoryQueryParam param) {
         return dataCategoryService.queryList(param);

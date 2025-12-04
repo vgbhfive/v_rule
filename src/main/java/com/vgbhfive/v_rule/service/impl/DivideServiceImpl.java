@@ -126,7 +126,6 @@ public class DivideServiceImpl implements DivideService {
             divide.setProductInterestNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.INTEREST.getType()));
             divide.setProductPeriodNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.PERIOD.getType()));
             divide.setProductLimitNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.LIMIT.getType()));
-            divide.setProductCustomNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.CUSTOM.getType()));
         });
         return divideList;
     }
