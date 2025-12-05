@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.rule.RuleQueryParam;
 import com.vgbhfive.v_rule.entity.RuleEntity;
 
@@ -21,5 +22,7 @@ public interface RuleService {
     ResponseContent update(RuleEntity ruleEntity);
 
     List<SceneStruct.Rule> queryRuleByRuleNos(Set<String> ruleNoSet);
+
+    List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Rule> ruleList, List<SceneStruct.Rule> lastRuleList) throws Exception;
 
 }

@@ -13,6 +13,7 @@
 | 额度、利率、账期产品 | &check; | &check; | &check; |
 | 自定义产品      | &check; | &check; | &check; |
 | 分流器        | &check; | &check; | &check; |
+| 上线Diff     | &check; | &check; | &check; |
 | 一键上线、回滚    | &check; | &check; | &check; |
 | 业务线数据管理    |         | &check; | &check; |
 | 用户权限管理     |         | &check; | &check; |
@@ -27,6 +28,7 @@
 | 流量重放       |         | &check; | &check; |
 | 用户流程标识     |         | &check; | &check; |
 | 场景指标监控     |         | &check; | &check; |
+| 场景分析报告     |         | &check; | &check; |
 | 技术支持       |         | &check; | &check; |
 | 专属模型、特征开发  |         |  | &check; |
 

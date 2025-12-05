@@ -15,7 +15,11 @@
     </select>
 
     <select id="queryLastDeploy" resultType="com.vgbhfive.v_rule.entity.DeployEntity">
-
+        SELECT *
+        FROM deploy
+        WHERE deploy_no = #{sceneNo}
+        ORDER BY id DESC
+        LIMIT 1
     </select>
 
 </mapper>

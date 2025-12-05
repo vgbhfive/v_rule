@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
+import com.vgbhfive.v_rule.dto.deploy.SceneParams;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.product.ProductInterestListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
@@ -118,6 +122,35 @@ public class ProductInterestServiceImpl implements ProductInterestService {
             return new ArrayList<>();
         }
         return productInterestMapper.queryInterestByProductNos(productNos);
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductInterest> productInterestList, List<SceneStruct.ProductInterest> lastProductInterestList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.ProductInterest> lastProductInterestMap = new HashMap<>();
+        lastProductInterestList.forEach(lastProductInterest -> lastProductInterestMap.put(lastProductInterest.getProductNo(), lastProductInterest));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        for (SceneStruct.ProductInterest productInterest : productInterestList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastProductInterestMap.containsKey(productInterest.getProductNo())) {
+                SceneStruct.ProductInterest lastProductInterest = lastProductInterestMap.get(productInterest.getProductNo());
+                detailCompareResultList = CompareUtil.compare(lastProductInterest, productInterest, ignoreList);
+                lastProductInterestList.remove(lastProductInterest);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, productInterest, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(productInterest.getProductNo(), productInterest.getProductName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.ProductInterest lastProductInterest : lastProductInterestList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductInterest, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductInterest.getProductNo(), lastProductInterest.getProductName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

@@ -30,6 +30,8 @@ public class SceneParams {
 
     private List<SceneStruct.ProductLimit> limitList;
 
+    private List<SceneStruct.ProductCustom> customList;
+
     private List<SceneStruct.RuleSet> ruleSetList;
 
     private List<SceneStruct.Rule> ruleList;

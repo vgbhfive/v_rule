@@ -3,12 +3,15 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryListDto;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
 import com.vgbhfive.v_rule.mapper.DataCategoryMapper;
 import com.vgbhfive.v_rule.service.DataCategoryService;
@@ -82,6 +85,36 @@ public class DataCategoryServiceImpl implements DataCategoryService {
             return new ArrayList<>();
         }
         return dataCategoryMapper.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataCategory> dataCategoryList, List<SceneStruct.DataCategory> lastDataCategoryList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.DataCategory> lastDataCategoryMap = new HashMap<>();
+        lastDataCategoryList.forEach(lastDataCategory -> lastDataCategoryMap.put(lastDataCategory.getDataCategoryNo(), lastDataCategory));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        ignoreList.add("isValid");
+        for (SceneStruct.DataCategory dataCategory : dataCategoryList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastDataCategoryMap.containsKey(dataCategory.getDataCategoryNo())) {
+                SceneStruct.DataCategory lastDataCategory = lastDataCategoryMap.get(dataCategory.getDataCategoryNo());
+                detailCompareResultList = CompareUtil.compare(lastDataCategory, dataCategory, ignoreList);
+                lastDataCategoryList.remove(lastDataCategory);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, dataCategory, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(dataCategory.getDataCategoryNo(), dataCategory.getDataCategoryName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.DataCategory lastDataCategory : lastDataCategoryList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDataCategory, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastDataCategory.getDataCategoryNo(), lastDataCategory.getDataCategoryName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

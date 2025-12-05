@@ -3,10 +3,13 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.product.ProductCustomListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductCustomEntity;
@@ -20,10 +23,7 @@ import org.springframework.transaction.annotation.Propagation;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -125,6 +125,35 @@ public class ProductCustomServiceImpl implements ProductCustomService {
             custom.setProductCustomDetailList(productCustomMapper.queryCustomDetailByProductNo(custom.getProductNo()));
         });
         return customList;
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductCustom> productCustomList, List<SceneStruct.ProductCustom> lastProductCustomList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.ProductCustom> lastProductCustomMap = new HashMap<>();
+        lastProductCustomList.forEach(lastProductCustom -> lastProductCustomMap.put(lastProductCustom.getProductNo(), lastProductCustom));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        for (SceneStruct.ProductCustom productCustom : productCustomList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastProductCustomMap.containsKey(productCustom.getProductNo())) {
+                SceneStruct.ProductCustom lastProductCustom = lastProductCustomMap.get(productCustom.getProductNo());
+                detailCompareResultList = CompareUtil.compare(lastProductCustom, productCustom, ignoreList);
+                lastProductCustomList.remove(lastProductCustom);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, productCustom, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(productCustom.getProductNo(), productCustom.getProductName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.ProductCustom lastProductCustom : lastProductCustomList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductCustom, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductCustom.getProductNo(), lastProductCustom.getProductName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

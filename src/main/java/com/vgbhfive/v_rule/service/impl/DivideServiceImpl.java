@@ -128,6 +128,7 @@ public class DivideServiceImpl implements DivideService {
             divide.setProductInterestNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.INTEREST.getType()));
             divide.setProductPeriodNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.PERIOD.getType()));
             divide.setProductLimitNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.LIMIT.getType()));
+            divide.setProductCustomNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.CUSTOM.getType()));
         });
         return divideList;
     }
@@ -136,33 +137,32 @@ public class DivideServiceImpl implements DivideService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Divide> divideList, List<SceneStruct.Divide> lastDivideList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         // 上次发布分流器
-        Map<String, SceneStruct.Divide> lastDeployDivideMap = new HashMap<>();
-        lastDivideList.forEach(divide -> lastDeployDivideMap.put(divide.getDivideNo(), divide));
+        Map<String, SceneStruct.Divide> lastDivideMap = new HashMap<>();
+        lastDivideList.forEach(divide -> lastDivideMap.put(divide.getDivideNo(), divide));
 
         // 与最近一次上线版本分流器对比
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.Divide divide : divideList) {
-            List<DetailCompareResult> DetailCompareResultList;
-            if (lastDeployDivideMap.containsKey(divide.getDivideNo())) {
-                SceneStruct.Divide lastDeployDivide = lastDeployDivideMap.get(divide.getDivideNo());
-                DetailCompareResultList = CompareUtil.compare(lastDeployDivide, divide, ignoreList);
-                lastDivideList.remove(lastDeployDivide);
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastDivideMap.containsKey(divide.getDivideNo())) {
+                SceneStruct.Divide lastDivide = lastDivideMap.get(divide.getDivideNo());
+                detailCompareResultList = CompareUtil.compare(lastDivide, divide, ignoreList);
+                lastDivideList.remove(lastDivide);
             } else {
-                DetailCompareResultList = CompareUtil.compare(null, divide, null);
+                // 现在多配置的分流器
+                detailCompareResultList = CompareUtil.compare(null, divide, null);
             }
-            if (!DetailCompareResultList.isEmpty()) {
-                VersionDiffDetail versionDiffDetail = new VersionDiffDetail(divide.getDivideNo(), divide.getDivideName(), DetailCompareResultList);
-                versionDiffDetailList.add(versionDiffDetail);
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(divide.getDivideNo(), divide.getDivideName(), detailCompareResultList));
             }
         }
 
-        // 相比多配置的分流器
+        // 相比现在多配置的分流器
         for (SceneStruct.Divide lastDeployDivide : lastDivideList) {
-            List<DetailCompareResult> compareResultDTOList = CompareUtil.compare(lastDeployDivide, null, null);
-            VersionDiffDetail versionDiffDetail = new VersionDiffDetail(lastDeployDivide.getDivideNo(), lastDeployDivide.getDivideName(), compareResultDTOList);
-            versionDiffDetailList.add(versionDiffDetail);
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDeployDivide, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastDeployDivide.getDivideNo(), lastDeployDivide.getDivideName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

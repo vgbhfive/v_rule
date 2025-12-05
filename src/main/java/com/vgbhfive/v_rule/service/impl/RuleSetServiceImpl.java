@@ -3,10 +3,13 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetListDto;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetQueryParam;
 import com.vgbhfive.v_rule.entity.RuleSetEntity;
@@ -82,6 +85,36 @@ public class RuleSetServiceImpl implements RuleSetService {
             return new ArrayList<>();
         }
         return ruleSetMapper.queryRuleSetByRuleSetNos(ruleSetNoSet);
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> lastRuleSetList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.RuleSet> lastRuleSetMap = new HashMap<>();
+        lastRuleSetList.forEach(lastRuleSet -> lastRuleSetMap.put(lastRuleSet.getRuleSetNo(), lastRuleSet));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        ignoreList.add("isValid");
+        for (SceneStruct.RuleSet ruleSet : ruleSetList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastRuleSetMap.containsKey(ruleSet.getRuleSetNo())) {
+                SceneStruct.RuleSet lastRuleSet = lastRuleSetMap.get(ruleSet.getRuleSetNo());
+                detailCompareResultList = CompareUtil.compare(lastRuleSet, ruleSet, ignoreList);
+                lastRuleSetList.remove(lastRuleSet);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, ruleSet, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(ruleSet.getRuleSetNo(), ruleSet.getRuleSetName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.RuleSet lastRuleSet : lastRuleSetList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastRuleSet, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastRuleSet.getRuleSetNo(), lastRuleSet.getRuleSetName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

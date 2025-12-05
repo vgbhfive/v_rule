@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.product.ProductLimitListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
@@ -19,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -119,6 +119,35 @@ public class ProductLimitServiceImpl implements ProductLimitService {
             return new ArrayList<>();
         }
         return productLimitMapper.queryLimitByProductNos(productNos);
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductLimit> productLimitList, List<SceneStruct.ProductLimit> lastProductLimitList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.ProductLimit> lastProductLimitMap = new HashMap<>();
+        lastProductLimitList.forEach(lastProductLimit -> lastProductLimitMap.put(lastProductLimit.getProductNo(), lastProductLimit));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        for (SceneStruct.ProductLimit productLimit : productLimitList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastProductLimitMap.containsKey(productLimit.getProductNo())) {
+                SceneStruct.ProductLimit lastProductLimit = lastProductLimitMap.get(productLimit.getProductNo());
+                detailCompareResultList = CompareUtil.compare(lastProductLimit, productLimit, ignoreList);
+                lastProductLimitList.remove(lastProductLimit);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, productLimit, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(productLimit.getProductNo(), productLimit.getProductName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.ProductLimit lastProductLimit : lastProductLimitList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductLimit, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductLimit.getProductNo(), lastProductLimit.getProductName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

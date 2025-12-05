@@ -61,12 +61,15 @@ public class UserServiceImpl implements UserService {
         userInfo.setName(entity.getName());
         userInfo.setEmail(entity.getEmail());
         userInfo.setMobile(entity.getMobile());
-        userInfo.setAdmin(entity.getName().equals("")); // todo
+        userInfo.setAdmin(entity.getEmail().equals("admin"));
         return userInfo;
     }
 
     @Override
     public ResponseContent register(UserEntity userEntity) {
+        if (userEntity.getEmail().equals("admin")) {
+            return ResponseContent.error(100, "创建用户失败");
+        }
         int salt = new SecureRandom().nextInt(100000);
         String md5Password = Md5Util.md5(Constant.DEFAULT_PASSWORD + salt);
         Date now = new Date();

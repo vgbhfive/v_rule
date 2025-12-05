@@ -120,7 +120,15 @@ public class DeployServiceImpl implements DeployService {
         SceneParams lastSceneParams = gson.fromJson(lastDeployEntity.getParams(), SceneParams.class);
         deployVersionDiff.setDeployStatus(0);
         deployVersionDiff.setDivide(divideService.queryDeployDiff(sceneParams.getDivideList(), lastSceneParams.getDivideList()));
-        // TODO
+        deployVersionDiff.setStrategy(strategyService.queryDeployDiff(sceneParams.getStrategyList(), lastSceneParams.getStrategyList()));
+        deployVersionDiff.setInterest(productInterestService.queryDeployDiff(sceneParams.getInterestList(), lastSceneParams.getInterestList()));
+        deployVersionDiff.setPeriod(productPeriodService.queryDeployDiff(sceneParams.getPeriodList(), lastSceneParams.getPeriodList()));
+        deployVersionDiff.setLimit(productLimitService.queryDeployDiff(sceneParams.getLimitList(), lastSceneParams.getLimitList()));
+        deployVersionDiff.setCustom(productCustomService.queryDeployDiff(sceneParams.getCustomList(), lastSceneParams.getCustomList()));
+        deployVersionDiff.setRule(ruleService.queryDeployDiff(sceneParams.getRuleList(), lastSceneParams.getRuleList()));
+        deployVersionDiff.setRuleSet(ruleSetService.queryDeployDiff(sceneParams.getRuleSetList(), lastSceneParams.getRuleSetList()));
+        deployVersionDiff.setDataSource(dataSourceService.queryDeployDiff(sceneParams.getDataSourceList(), lastSceneParams.getDataSourceList()));
+        deployVersionDiff.setDataCategory(dataCategoryService.queryDeployDiff(sceneParams.getDataCategoryList(), lastSceneParams.getDataCategoryList()));
 
         redisUtil.setAndExpire(diffRedisKey, deployVersionDiff);
         return ResponseContent.success("success", deployVersionDiff, DeployVersionDiff.class);
@@ -151,17 +159,19 @@ public class DeployServiceImpl implements DeployService {
         SceneType type = SceneType.getInstance(deployEntity.getDeployType());
         switch (type) {
             case SCENE:
-                // 构建场景
+                // build scene
                 SceneParams params = buildSceneParams(deployEntity.getDeployNo());
                 deployEntity.setField(params.getSceneList().get(0).getField());
                 deployEntity.setName(params.getSceneList().get(0).getSceneName());
                 deployEntity.setParams(gson.toJson(params));
                 deployEntity.setDivideList(params.getDivideList().stream().map(SceneStruct.Divide::getDivideName).collect(Collectors.joining(",")));
 
-                // diff TODO
-                deployEntity.setDiff("");
+                // diff
+                String diffRedisKey = String.format("%s:%s:%s", Constant.REDIS_PREFIX_DEPLOY_DIFF, params.getLineList().get(0).getLineNo(), deployEntity.getDeployNo());
+                DeployVersionDiff versionDiff = redisUtil.getObject(diffRedisKey, DeployVersionDiff.class);
+                deployEntity.setDiff(gson.toJson(versionDiff));
 
-                // 推送core TODO
+                // push core TODO
                 deployEntity.setVersion(deployMapper.selectMaxVersion(deployEntity.getLineNo(), deployEntity.getDeployNo()) + 1);
                 LineEntity line = lineMapper.selectByLineNo(deployEntity.getLineNo());
                 String url = line.getUrl() + "/deploy/scene/setRedis";
@@ -276,7 +286,7 @@ public class DeployServiceImpl implements DeployService {
         });
         List<SceneStruct.DataCategory> dataCategoryList = dataCategoryService.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
 
-        return new SceneParams(lineList, sceneList, divideList, strategyList, interestList, periodList, limitList,
+        return new SceneParams(lineList, sceneList, divideList, strategyList, interestList, periodList, limitList, customList,
                 ruleSetList, ruleList, dataSourceList, dataCategoryList);
     }
 

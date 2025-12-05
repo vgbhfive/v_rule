@@ -3,12 +3,15 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceListDto;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.entity.DataSourceEntity;
 import com.vgbhfive.v_rule.mapper.DataSourceMapper;
 import com.vgbhfive.v_rule.service.DataSourceService;
@@ -82,6 +85,36 @@ public class DataSourceServiceImpl implements DataSourceService {
             return new ArrayList<>();
         }
         return dataSourceMapper.queryDataSourceByDataSourceNos(dataSourceNoSet);
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataSource> dataSourceList, List<SceneStruct.DataSource> lastDataSourceList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.DataSource> lastDataSourceMap = new HashMap<>();
+        lastDataSourceList.forEach(lastDataSource -> lastDataSourceMap.put(lastDataSource.getDataSourceNo(), lastDataSource));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        ignoreList.add("isValid");
+        for (SceneStruct.DataSource dataSource : dataSourceList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastDataSourceMap.containsKey(dataSource.getDataSourceNo())) {
+                SceneStruct.DataSource lastDataSource = lastDataSourceMap.get(dataSource.getDataSourceNo());
+                detailCompareResultList = CompareUtil.compare(lastDataSource, dataSource, ignoreList);
+                lastDataSourceList.remove(lastDataSource);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, dataSource, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(dataSource.getDataSourceNo(), dataSource.getDataSourceName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.DataSource lastDataSource : lastDataSourceList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDataSource, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastDataSource.getDataSourceNo(), lastDataSource.getDataSourceName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

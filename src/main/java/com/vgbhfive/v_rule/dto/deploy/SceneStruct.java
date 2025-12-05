@@ -82,6 +82,7 @@ public class SceneStruct {
     @Data
     public static class ProductInterest {
         private String productNo;
+        private String productName;
         private String valueType;
         private String value;
         private String unit;
@@ -95,6 +96,7 @@ public class SceneStruct {
     @Data
     public static class ProductPeriod {
         private String productNo;
+        private String productName;
         private String valueType;
         private String value;
         private String periodType;
@@ -108,6 +110,7 @@ public class SceneStruct {
     @Data
     public static class ProductLimit {
         private String productNo;
+        private String productName;
         private String valueType;
         private String value;
         private String remark;
@@ -120,6 +123,7 @@ public class SceneStruct {
     @Data
     public static class ProductCustom {
         private String productNo;
+        private String productName;
         private String remark;
         private List<ProductCustomDetail> productCustomDetailList;
     }

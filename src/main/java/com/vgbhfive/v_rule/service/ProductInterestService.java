@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 
@@ -22,5 +23,7 @@ public interface ProductInterestService {
     ResponseContent update(ProductInterestEntity productInterestEntity);
 
     List<SceneStruct.ProductInterest> queryInterestByProductNos(Set<String> productInterestNoSet);
+
+    List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductInterest> productInterestList, List<SceneStruct.ProductInterest> lastProductInterestList) throws Exception;
 
 }

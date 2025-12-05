@@ -4,10 +4,14 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.RuleType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DeployVersionDiff;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.strategy.StrategyListDto;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
@@ -128,6 +132,36 @@ public class StrategyServiceImpl implements StrategyService {
             strategy.setStrategyDetailList(strategyRuleDetailMapper.queryStrategyDetailByStrategyNo(strategy.getStrategyNo()));
         });
         return strategyList;
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Strategy> strategyList, List<SceneStruct.Strategy> lastStrategyList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.Strategy> lastStrategyMap = new HashMap<>();
+        lastStrategyList.forEach(strategy -> lastStrategyMap.put(strategy.getStrategyNo(), strategy));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        ignoreList.add("isValid");
+        for (SceneStruct.Strategy strategy : strategyList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastStrategyMap.containsKey(strategy.getStrategyNo())) {
+                SceneStruct.Strategy lastStrategy = lastStrategyMap.get(strategy.getStrategyNo());
+                detailCompareResultList = CompareUtil.compare(lastStrategy, strategy, ignoreList);
+                lastStrategyList.remove(lastStrategy);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, strategy, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(strategy.getStrategyNo(), strategy.getStrategyName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.Strategy lastStrategy : lastStrategyList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastStrategy, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastStrategy.getStrategyNo(), lastStrategy.getStrategyName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

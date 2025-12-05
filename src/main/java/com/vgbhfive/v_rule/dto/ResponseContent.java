@@ -42,7 +42,7 @@ public class ResponseContent<T> {
 
     public static <T> ResponseContent<T> success(String msg, T object, Class<T> dataClazz) {
         ResponseContent<T> result = new ResponseContent<>();
-        result.setStatus(0);
+        result.setStatus(200);
         result.setMsg(msg);
         result.setData(object);
         return result;

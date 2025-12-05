@@ -79,6 +79,8 @@ public class DivideEntity {
 
     private Date updateAt;
 
+    private String orderRand3;
+
     @TableField(exist = false)
     private List<DivideProductEntity> productEntityList;
 

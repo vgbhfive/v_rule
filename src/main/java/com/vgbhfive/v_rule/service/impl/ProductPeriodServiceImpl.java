@@ -4,10 +4,13 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.product.ProductPeriodListDto;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
@@ -19,10 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @Author vgbhfive
@@ -120,4 +120,34 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
         }
         return productPeriodMapper.queryPeriodByProductNos(productNos);
     }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductPeriod> productPeriodList, List<SceneStruct.ProductPeriod> lastProductPeriodList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.ProductPeriod> lastProductPeriodMap = new HashMap<>();
+        lastProductPeriodList.forEach(productPeriod -> lastProductPeriodMap.put(productPeriod.getProductNo(), productPeriod));
+
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("version");
+        for (SceneStruct.ProductPeriod productPeriod : productPeriodList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastProductPeriodMap.containsKey(productPeriod.getProductNo())) {
+                SceneStruct.ProductPeriod lastProductPeriod = lastProductPeriodMap.get(productPeriod.getProductNo());
+                detailCompareResultList = CompareUtil.compare(lastProductPeriod, productPeriod, ignoreList);
+                lastProductPeriodList.remove(lastProductPeriod);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, productPeriod, null);
+            }
+            if (!detailCompareResultList.isEmpty()) {
+                versionDiffDetailList.add(new VersionDiffDetail(productPeriod.getProductNo(), productPeriod.getProductName(), detailCompareResultList));
+            }
+        }
+
+        for (SceneStruct.ProductPeriod lastProductPeriod : lastProductPeriodList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductPeriod, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductPeriod.getProductNo(), lastProductPeriod.getProductName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
+    }
+
 }
