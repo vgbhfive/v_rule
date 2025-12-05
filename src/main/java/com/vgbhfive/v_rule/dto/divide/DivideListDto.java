@@ -34,8 +34,6 @@ public class DivideListDto {
 
     private Integer isValid;
 
-    private Integer isDelete;
-
     private Date createAt;
 
     private List<DivideProductDto> productDtoList;

@@ -8,6 +8,7 @@ import com.vgbhfive.v_rule.common.utils.RedisUtil;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
 import com.vgbhfive.v_rule.dto.user.LoginReq;
+import com.vgbhfive.v_rule.dto.user.LoginResp;
 import com.vgbhfive.v_rule.dto.user.UserInfo;
 import com.vgbhfive.v_rule.entity.UserEntity;
 import com.vgbhfive.v_rule.mapper.UserMapper;
@@ -49,7 +50,7 @@ public class UserServiceImpl implements UserService {
                 String token = UUID.randomUUID().toString().replace("-", "");
                 UserInfo userInfo = buildUserInfo(entity);
                 redisUtil.set(Constant.REDIS_PREFIX + token, userInfo, 15, TimeUnit.MINUTES);
-                return ResponseContent.success(token);
+                return ResponseContent.success(new LoginResp(entity.getEmail(), entity.getName(), entity.getMobile(), token));
             }
         }
         return ResponseContent.error(500, "用户名或密码错误");

@@ -2,13 +2,15 @@ package com.vgbhfive.v_rule.dto.user;
 
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
  * @date: 2025/12/5 0:21
  */
 @Data
-public class UserInfo {
+public class UserInfo implements Serializable {
 
     private Integer id;
 

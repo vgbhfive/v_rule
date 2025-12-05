@@ -6,10 +6,7 @@ import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.SceneEntity;
 import com.vgbhfive.v_rule.service.SceneService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 
@@ -25,7 +22,7 @@ public class SceneController {
     @Resource
     private SceneService sceneService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@RequestBody SceneQueryParam param) {

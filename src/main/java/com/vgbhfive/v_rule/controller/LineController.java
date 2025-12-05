@@ -6,10 +6,7 @@ import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineQueryParam;
 import com.vgbhfive.v_rule.entity.LineEntity;
 import com.vgbhfive.v_rule.service.LineService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -26,7 +23,7 @@ public class LineController {
     @Resource
     private LineService lineService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@RequestBody LineQueryParam param) {
