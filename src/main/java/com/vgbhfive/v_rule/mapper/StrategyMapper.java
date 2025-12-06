@@ -8,6 +8,7 @@ import com.vgbhfive.v_rule.entity.StrategyEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -27,5 +28,7 @@ public interface StrategyMapper extends BaseMapper<StrategyEntity> {
     List<SceneStruct.Strategy> queryStrategyByStrategyNos(@Param("strategyNos") Set<String> strategyNos);
 
     List<String> queryStrategyDetailRuleNoByStrategyNo(@Param("strategyNo") String strategyNo, @Param("ruleType") String ruleType);
+
+    Integer updateDeployTimeBatch(@Param("strategyList") List<SceneStruct.Strategy> strategyList, @Param("deployTime") Date deployTime);
 
 }

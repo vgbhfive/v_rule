@@ -1,13 +1,12 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
-import com.vgbhfive.v_rule.dto.deploy.DeployVersionDiff;
-import com.vgbhfive.v_rule.dto.deploy.SceneParams;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -28,5 +27,7 @@ public interface StrategyService {
     List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Strategy> strategyList, List<SceneStruct.Strategy> lastStrategyList) throws Exception;
+
+    ResponseContent updateStrategyDeployTime(List<SceneStruct.Strategy> strategyList, Date deployTime);
 
 }

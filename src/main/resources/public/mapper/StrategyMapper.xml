@@ -92,4 +92,14 @@
         WHERE strategy_no = #{strategyNo} AND rule_type = #{ruleType} AND is_delete = 0
     </select>
 
+    <update id="updateDeployTimeBatch">
+        UPDATE strategy
+        SET deploy_at = #{deployTime}
+        WHERE strategy_no IN
+        <foreach collection="strategyList" item="strategy" open="(" separator="," close=")">
+            #{strategy.strategyNo}
+        </foreach>
+        AND is_delete = 0
+    </update>
+
 </mapper>

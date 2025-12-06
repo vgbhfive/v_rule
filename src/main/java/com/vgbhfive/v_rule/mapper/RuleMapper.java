@@ -8,6 +8,7 @@ import com.vgbhfive.v_rule.entity.RuleEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -23,5 +24,7 @@ public interface RuleMapper extends BaseMapper<RuleEntity> {
     Integer queryTotalCount(@Param("param") RuleQueryParam param);
 
     List<SceneStruct.Rule> queryRuleByRuleNos(@Param("ruleNos") Set<String> ruleNos);
+
+    Integer updateDeployTimeBatch(@Param("ruleList") List<SceneStruct.Rule> ruleList, @Param("deployTime") Date deployTime);
 
 }

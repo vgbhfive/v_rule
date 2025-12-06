@@ -6,6 +6,7 @@ import com.google.gson.Gson;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.util.Map;
 
@@ -13,12 +14,21 @@ import java.util.Map;
  * @Author vgbhfive
  * @Date 2025/12/2 10:50
  */
+@Component
 public class HttpUtil {
 
     private static final Logger logger = LoggerFactory.getLogger(HttpUtil.class);
 
     @Autowired
     private Gson gson;
+
+    public String post(String url, String data) {
+        HttpRequest request = HttpRequest.
+                post(url).
+                header(Header.CONTENT_TYPE, "application/json; charset=utf-8").
+                body(data);
+        return request.execute().body();
+    }
 
     public String post(String url, String data, boolean isPrint) {
         HttpRequest request = HttpRequest.

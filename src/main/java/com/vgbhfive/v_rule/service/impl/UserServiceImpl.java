@@ -49,7 +49,7 @@ public class UserServiceImpl implements UserService {
             if (isEqual) {
                 String token = UUID.randomUUID().toString().replace("-", "");
                 UserInfo userInfo = buildUserInfo(entity);
-                redisUtil.set(Constant.REDIS_PREFIX + token, userInfo, 15, TimeUnit.MINUTES);
+                redisUtil.set(Constant.REDIS_PREFIX + token, userInfo, 30, TimeUnit.MINUTES);
                 return ResponseContent.success(new LoginResp(entity.getEmail(), entity.getName(), entity.getMobile(), token));
             }
         }

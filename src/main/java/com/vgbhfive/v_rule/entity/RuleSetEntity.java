@@ -46,6 +46,7 @@ public class RuleSetEntity {
 
     /**
      * 第一个规则/规则集类型
+     * @see com.vgbhfive.v_rule.common.enums.RuleType
      */
     private String firstType;
 
@@ -56,6 +57,7 @@ public class RuleSetEntity {
 
     /**
      * 第二个规则/规则集类型
+     * @see com.vgbhfive.v_rule.common.enums.RuleType
      */
     private String secondType;
 

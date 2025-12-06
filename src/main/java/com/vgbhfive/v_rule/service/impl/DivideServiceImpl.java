@@ -167,4 +167,13 @@ public class DivideServiceImpl implements DivideService {
         return versionDiffDetailList;
     }
 
+    @Override
+    public ResponseContent updateDivideDeployTime(List<SceneStruct.Divide> divideList, Date deployTime) {
+        Integer update = divideMapper.updateDeployTimeBatch(divideList, deployTime);
+        if (update != divideList.size()) {
+            throw new DataBaseException("更新分流器上线时间失败");
+        }
+        return ResponseContent.success();
+    }
+
 }

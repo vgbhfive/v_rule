@@ -8,6 +8,7 @@ import com.vgbhfive.v_rule.entity.DivideEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -24,5 +25,7 @@ public interface DivideMapper extends BaseMapper<DivideEntity> {
     DivideEntity queryDetailById(@Param("id") Integer id);
 
     List<SceneStruct.Divide> queryDivideBySceneNo(@Param("sceneNo") String sceneNo);
+
+    Integer updateDeployTimeBatch(@Param("divideList") List<SceneStruct.Divide> divideList, @Param("deployTime") Date deployTime);
 
 }

@@ -3,6 +3,10 @@ package com.vgbhfive.v_rule.mapper;
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import com.vgbhfive.v_rule.entity.ProductEntity;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * @projectName: v_rule
@@ -11,4 +15,7 @@ import org.apache.ibatis.annotations.Mapper;
  */
 @Mapper
 public interface ProductMapper extends BaseMapper<ProductEntity> {
+
+    Integer updateDeployTimeBatch(@Param("productNos") List<String> productNoList, @Param("deployTime") Date deployTime);
+
 }

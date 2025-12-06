@@ -117,4 +117,13 @@ public class RuleServiceImpl implements RuleService {
         return versionDiffDetailList;
     }
 
+    @Override
+    public ResponseContent updateRuleDeployTime(List<SceneStruct.Rule> ruleList, Date deployTime) {
+        Integer update = ruleMapper.updateDeployTimeBatch(ruleList, deployTime);
+        if (update != ruleList.size()) {
+            throw new DataBaseException("更新规则上线时间异常");
+        }
+        return ResponseContent.success();
+    }
+
 }

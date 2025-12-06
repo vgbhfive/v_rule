@@ -8,7 +8,6 @@ import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
-import com.vgbhfive.v_rule.dto.deploy.DeployVersionDiff;
 import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
@@ -162,6 +161,15 @@ public class StrategyServiceImpl implements StrategyService {
             versionDiffDetailList.add(new VersionDiffDetail(lastStrategy.getStrategyNo(), lastStrategy.getStrategyName(), detailCompareResultList));
         }
         return versionDiffDetailList;
+    }
+
+    @Override
+    public ResponseContent updateStrategyDeployTime(List<SceneStruct.Strategy> strategyList, Date deployTime) {
+        Integer update = strategyMapper.updateDeployTimeBatch(strategyList, deployTime);
+        if (update != strategyList.size()) {
+            throw new DataBaseException("更新策略集上线时间失败");
+        }
+        return ResponseContent.success();
     }
 
 }

@@ -3,21 +3,22 @@ package com.vgbhfive.v_rule.service.impl;
 import com.google.gson.Gson;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.DeployStatusCode;
+import com.vgbhfive.v_rule.common.enums.RuleType;
 import com.vgbhfive.v_rule.common.enums.SceneType;
 import com.vgbhfive.v_rule.common.enums.ValueType;
 import com.vgbhfive.v_rule.common.exception.ParamException;
+import com.vgbhfive.v_rule.common.utils.HttpUtil;
 import com.vgbhfive.v_rule.common.utils.RedisUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
-import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
-import com.vgbhfive.v_rule.dto.deploy.DeployVersionDiff;
-import com.vgbhfive.v_rule.dto.deploy.SceneParams;
-import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.*;
 import com.vgbhfive.v_rule.dto.scene.SceneListDto;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.DeployEntity;
 import com.vgbhfive.v_rule.entity.LineEntity;
-import com.vgbhfive.v_rule.mapper.*;
+import com.vgbhfive.v_rule.mapper.DeployMapper;
+import com.vgbhfive.v_rule.mapper.LineMapper;
+import com.vgbhfive.v_rule.mapper.SceneMapper;
 import com.vgbhfive.v_rule.service.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -60,6 +61,8 @@ public class DeployServiceImpl implements DeployService {
     @Resource
     private ProductCustomService productCustomService;
     @Resource
+    private ProductService productService;
+    @Resource
     private RuleSetService ruleSetService;
     @Resource
     private RuleService ruleService;
@@ -71,6 +74,8 @@ public class DeployServiceImpl implements DeployService {
     private Gson gson;
     @Resource
     private RedisUtil redisUtil;
+    @Resource
+    private HttpUtil httpUtil;
 
     @Override
     public ResponseContent queryList(DeployQueryParam param) {
@@ -167,15 +172,21 @@ public class DeployServiceImpl implements DeployService {
                 deployEntity.setDivideList(params.getDivideList().stream().map(SceneStruct.Divide::getDivideName).collect(Collectors.joining(",")));
 
                 // diff
-                String diffRedisKey = String.format("%s:%s:%s", Constant.REDIS_PREFIX_DEPLOY_DIFF, params.getLineList().get(0).getLineNo(), deployEntity.getDeployNo());
+                String diffRedisKey = String.format("%s:%s:%s", Constant.REDIS_PREFIX_DEPLOY_DIFF, deployEntity.getLineNo(), deployEntity.getDeployNo());
                 DeployVersionDiff versionDiff = redisUtil.getObject(diffRedisKey, DeployVersionDiff.class);
                 deployEntity.setDiff(gson.toJson(versionDiff));
 
-                // push core TODO
+                // update deployTime
+                updateDeployTime(params);
+
+                // push core
                 deployEntity.setVersion(deployMapper.selectMaxVersion(deployEntity.getLineNo(), deployEntity.getDeployNo()) + 1);
                 LineEntity line = lineMapper.selectByLineNo(deployEntity.getLineNo());
-                String url = line.getUrl() + "/deploy/scene/setRedis";
-                deployEntity.setCoreVersion(url);
+                DeploySceneStruct deploySceneStruct = new DeploySceneStruct(
+                        Constant.REDIS_PREFIX_CORE_VERSION, buildDeployKv(params, deployEntity.getLineNo(), deployEntity.getField()), deployEntity.getLineNo(), deployEntity.getDeployNo());
+                String url = line.getUrl() + "/deploy/scene";
+                String resp = httpUtil.post(url, gson.toJson(deploySceneStruct));
+                deployEntity.setCoreVersion((String) gson.fromJson(resp, ResponseContent.class).getData());
                 break;
             default:
                 return ResponseContent.error("error deploy type!");
@@ -244,7 +255,7 @@ public class DeployServiceImpl implements DeployService {
         });
 
         List<SceneStruct.RuleSet> ruleSetList = ruleSetService.queryRuleSetByRuleSetNos(ruleSetNoSet);
-        this.getRuleSetList();
+        this.getRuleSetList(ruleSetList, ruleSetList, ruleNoSet, ruleSetNoSet);
         List<SceneStruct.Rule> ruleList = ruleService.queryRuleByRuleNos(ruleNoSet);
 
         interestList.forEach(interest -> {
@@ -291,10 +302,129 @@ public class DeployServiceImpl implements DeployService {
     }
 
     /**
-     * 递归查询所有规则集引用的规则和规则集 TODO
+     * 更新所有上线的deployTime
      */
-    private void getRuleSetList() {
+    @Transactional(propagation = Propagation.SUPPORTS)
+    private void updateDeployTime(SceneParams params) {
+        Date now = new Date();
+        if (!params.getRuleList().isEmpty()) {
+            ruleService.updateRuleDeployTime(params.getRuleList(), now);
+        }
+        if (!params.getRuleSetList().isEmpty()) {
+            ruleSetService.updateRuleSetDeployTime(params.getRuleSetList(), now);
+        }
+        List<String> productNos = new ArrayList<>();
+        if (!params.getInterestList().isEmpty()) {
+            productNos.addAll(params.getInterestList().stream().map(SceneStruct.ProductInterest::getProductNo).collect(Collectors.toList()));
+        }
+        if (!params.getPeriodList().isEmpty()) {
+            productNos.addAll(params.getPeriodList().stream().map(SceneStruct.ProductPeriod::getProductNo).collect(Collectors.toList()));
+        }
+        if (!params.getLimitList().isEmpty()) {
+            productNos.addAll(params.getLimitList().stream().map(SceneStruct.ProductLimit::getProductNo).collect(Collectors.toList()));
+        }
+        if (!params.getCustomList().isEmpty()) {
+            productNos.addAll(params.getCustomList().stream().map(SceneStruct.ProductCustom::getProductNo).collect(Collectors.toList()));
+        }
+        productService.updateProductDeployTime(productNos, now);
+        if (!params.getStrategyList().isEmpty()) {
+            strategyService.updateStrategyDeployTime(params.getStrategyList(), now);
+        }
+        if (!params.getDivideList().isEmpty()) {
+            divideService.updateDivideDeployTime(params.getDivideList(), now);
+        }
+    }
 
+    /**
+     * 构建SceneParams 的kv 键值对
+     * @param params 场景
+     * @param lineNo 业务线编码
+     * @param field 场景字段
+     *  @return
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    private Map<String, String> buildDeployKv(SceneParams params, String lineNo, String field) {
+        String corePrefix = Constant.REDIS_PREFIX_CORE_VERSION;
+        Map<String, String> kv = new HashMap<>();
+        params.getDivideList().forEach(divide -> {
+            String key = String.format(corePrefix, lineNo, field, "divide", divide.getDivideNo());
+            kv.put(key, gson.toJson(divide));
+        });
+        params.getStrategyList().forEach(strategy -> {
+            String key = String.format(corePrefix, lineNo, field, "strategy", strategy.getStrategyNo());
+            kv.put(key, gson.toJson(strategy));
+        });
+        params.getInterestList().forEach(interest -> {
+            String key = String.format(corePrefix, lineNo, field, "interest", interest.getProductNo());
+            kv.put(key, gson.toJson(interest));
+        });
+        params.getPeriodList().forEach(period -> {
+            String key = String.format(corePrefix, lineNo, field, "period", period.getProductNo());
+            kv.put(key, gson.toJson(period));
+        });
+        params.getLimitList().forEach(limit -> {
+            String key = String.format(corePrefix, lineNo, field, "limit", limit.getProductNo());
+            kv.put(key, gson.toJson(limit));
+        });
+        params.getCustomList().forEach(custom -> {
+            String key = String.format(corePrefix, lineNo, field, "custom", custom.getProductNo());
+            kv.put(key, gson.toJson(custom));
+        });
+        params.getRuleSetList().forEach(ruleSet -> {
+            String key = String.format(corePrefix, lineNo, field, "ruleSet", ruleSet.getRuleSetNo());
+            kv.put(key, gson.toJson(ruleSet));
+        });
+        params.getRuleList().forEach(rule -> {
+            String key = String.format(corePrefix, lineNo, field, "rule", rule.getRuleNo());
+            kv.put(key, gson.toJson(rule));
+        });
+        params.getDataSourceList().forEach(dataSource -> {
+            String key = String.format(corePrefix, lineNo, field, "dataSource", dataSource.getDataSourceNo());
+            kv.put(key, gson.toJson(dataSource));
+        });
+        params.getDataCategoryList().forEach(dataCategory -> {
+            String key = String.format(corePrefix, lineNo, field, "dataCategory", dataCategory.getDataCategoryNo());
+            kv.put(key, gson.toJson(dataCategory));
+        });
+        return kv;
+    }
+
+    /**
+     * 递归查询所有规则集引用的规则和规则集
+     * @param ruleSetList 汇总所有的ruleSet
+     * @param tmpRuleSetList 本次查询的ruleSet
+     * @param ruleNoSet 汇总所有的ruleNoSet
+     * @param ruleSetNoSet 汇总所有的ruleSetNoSet
+     */
+    @Transactional(propagation = Propagation.SUPPORTS)
+    private void getRuleSetList(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> tmpRuleSetList,
+                                Set<String> ruleNoSet, Set<String> ruleSetNoSet) {
+        Set<String> tmpRuleSetNoSet = new HashSet<>();
+        tmpRuleSetList.forEach(ruleSet -> {
+            String no1 = ruleSet.getFirstNo();
+            String type1 = ruleSet.getFirstType();
+            if (type1.equals(RuleType.RULE.getKey())) {
+                ruleNoSet.add(no1);
+            }
+            if (type1.equals(RuleType.RULE_SET.getKey()) && !ruleSetNoSet.contains(no1)) {
+                ruleSetNoSet.add(no1);
+                tmpRuleSetNoSet.add(no1);
+            }
+            String no2 = ruleSet.getSecondNo();
+            String type2 = ruleSet.getSecondType();
+            if (type2.equals(RuleType.RULE.getKey())) {
+                ruleNoSet.add(no2);
+            }
+            if (type2.equals(RuleType.RULE_SET.getKey()) && !ruleSetNoSet.contains(no1)) {
+                ruleSetNoSet.add(no2);
+                tmpRuleSetNoSet.add(no2);
+            }
+        });
+        if (tmpRuleSetNoSet.size() > 0) {
+            List<SceneStruct.RuleSet> nextRuleSetList = ruleSetService.queryRuleSetByRuleSetNos(tmpRuleSetNoSet);
+            ruleSetList.addAll(nextRuleSetList);
+            getRuleSetList(ruleSetList, nextRuleSetList, ruleNoSet, ruleSetNoSet);
+        }
     }
 
     @Override

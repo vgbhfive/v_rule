@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetQueryParam;
 import com.vgbhfive.v_rule.entity.RuleSetEntity;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -24,5 +25,7 @@ public interface RuleSetService {
     List<SceneStruct.RuleSet> queryRuleSetByRuleSetNos(Set<String> ruleSetNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> lastRuleSetList) throws Exception;
+
+    ResponseContent updateRuleSetDeployTime(List<SceneStruct.RuleSet> ruleSetList, Date deployTime);
 
 }
