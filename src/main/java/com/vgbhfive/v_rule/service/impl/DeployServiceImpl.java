@@ -346,6 +346,10 @@ public class DeployServiceImpl implements DeployService {
     private Map<String, String> buildDeployKv(SceneParams params, String lineNo, String field) {
         String corePrefix = Constant.REDIS_PREFIX_CORE_VERSION;
         Map<String, String> kv = new HashMap<>();
+        params.getSceneList().forEach(scene -> {
+            String key = String.format(corePrefix, lineNo, field, "scene", scene.getField());
+            kv.put(key, gson.toJson(scene));
+        });
         params.getDivideList().forEach(divide -> {
             String key = String.format(corePrefix, lineNo, field, "divide", divide.getDivideNo());
             kv.put(key, gson.toJson(divide));
