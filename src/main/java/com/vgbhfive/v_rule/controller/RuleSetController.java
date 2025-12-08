@@ -6,10 +6,7 @@ import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetQueryParam;
 import com.vgbhfive.v_rule.entity.RuleSetEntity;
 import com.vgbhfive.v_rule.service.RuleSetService;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.validation.Valid;
@@ -25,7 +22,7 @@ public class RuleSetController {
     @Resource
     private RuleSetService ruleSetService;
 
-    @PostMapping("/list")
+    @GetMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody RuleSetQueryParam param) {
