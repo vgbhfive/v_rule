@@ -183,7 +183,7 @@ public class DeployServiceImpl implements DeployService {
                 deployEntity.setVersion(deployMapper.selectMaxVersion(deployEntity.getLineNo(), deployEntity.getDeployNo()) + 1);
                 LineEntity line = lineMapper.selectByLineNo(deployEntity.getLineNo());
                 DeploySceneStruct deploySceneStruct = new DeploySceneStruct(
-                        Constant.REDIS_PREFIX_CORE_VERSION, buildDeployKv(params, deployEntity.getLineNo(), deployEntity.getField()), deployEntity.getLineNo(), deployEntity.getDeployNo());
+                        Constant.CORE_VERSION, buildDeployKv(params, deployEntity.getLineNo(), deployEntity.getField()), deployEntity.getLineNo(), deployEntity.getDeployNo());
                 String url = line.getUrl() + "/deploy/scene";
                 String resp = httpUtil.post(url, gson.toJson(deploySceneStruct));
                 deployEntity.setCoreVersion((String) gson.fromJson(resp, ResponseContent.class).getData());
@@ -344,7 +344,7 @@ public class DeployServiceImpl implements DeployService {
      */
     @Transactional(propagation = Propagation.SUPPORTS)
     private Map<String, String> buildDeployKv(SceneParams params, String lineNo, String field) {
-        String corePrefix = Constant.REDIS_PREFIX_CORE_VERSION;
+        String corePrefix = Constant.CORE_PREFIX;
         Map<String, String> kv = new HashMap<>();
         params.getSceneList().forEach(scene -> {
             String key = String.format(corePrefix, lineNo, field, "scene", scene.getField());

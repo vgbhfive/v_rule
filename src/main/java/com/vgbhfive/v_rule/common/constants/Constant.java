@@ -11,7 +11,9 @@ public interface Constant {
 
     String REDIS_PREFIX_DEPLOY_DIFF = "v_rule:deploy:diff";
 
-    String REDIS_PREFIX_CORE_VERSION = "v_rule:%s:%s:%s_%s";
+    String CORE_PREFIX = "v_rule:%s:%s:%s_%s";
+
+    String CORE_VERSION = "v_rule:%s:%s:version";
 
     String DEFAULT_PASSWORD = "v_rule";
 
