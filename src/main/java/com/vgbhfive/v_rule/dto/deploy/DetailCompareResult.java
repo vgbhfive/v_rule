@@ -3,6 +3,8 @@ package com.vgbhfive.v_rule.dto.deploy;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
+import java.io.Serializable;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
@@ -10,7 +12,7 @@ import lombok.Data;
  */
 @Data
 @AllArgsConstructor
-public class DetailCompareResult {
+public class DetailCompareResult implements Serializable {
 
     private String name;
 

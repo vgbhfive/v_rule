@@ -98,11 +98,8 @@ public class DivideServiceImpl implements DivideService {
         DivideProductEntity oldDivideProductEntity = new DivideProductEntity();
         oldDivideProductEntity.setIsDelete(1);
         oldDivideProductEntity.setUpdateAt(new Date());
-        Integer updateProduct = divideProductMapper.update(oldDivideProductEntity,
+        divideProductMapper.update(oldDivideProductEntity,
                 new UpdateWrapper<DivideProductEntity>().eq("divide_no", divideEntity.getDivideNo()).eq("is_delete", 0));
-        if (updateProduct < divideEntity.getProductEntityList().size()) {
-            throw new DataBaseException("修改分流器失败");
-        }
         return this.create(divideEntity, true);
     }
 

@@ -48,7 +48,9 @@ public class DeployServiceImpl implements DeployService {
     private SceneMapper sceneMapper;
     @Autowired
     private LineMapper lineMapper;
-    @Autowired
+    @Resource
+    private SceneService sceneService;
+    @Resource
     private DivideService divideService;
     @Resource
     private StrategyService strategyService;
@@ -124,6 +126,7 @@ public class DeployServiceImpl implements DeployService {
 
         SceneParams lastSceneParams = gson.fromJson(lastDeployEntity.getParams(), SceneParams.class);
         deployVersionDiff.setDeployStatus(0);
+        deployVersionDiff.setScene(sceneService.queryDeployDiff(sceneParams.getSceneList(), lastSceneParams.getSceneList()));
         deployVersionDiff.setDivide(divideService.queryDeployDiff(sceneParams.getDivideList(), lastSceneParams.getDivideList()));
         deployVersionDiff.setStrategy(strategyService.queryDeployDiff(sceneParams.getStrategyList(), lastSceneParams.getStrategyList()));
         deployVersionDiff.setInterest(productInterestService.queryDeployDiff(sceneParams.getInterestList(), lastSceneParams.getInterestList()));

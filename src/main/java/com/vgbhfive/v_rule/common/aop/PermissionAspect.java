@@ -1,7 +1,6 @@
 package com.vgbhfive.v_rule.common.aop;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
-import com.vgbhfive.v_rule.dto.user.UserInfo;
 import com.vgbhfive.v_rule.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;

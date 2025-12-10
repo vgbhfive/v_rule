@@ -3,9 +3,13 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
+import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
+import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.dto.scene.SceneListDto;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.SceneEntity;
@@ -16,8 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @projectName: v_rule
@@ -76,6 +79,31 @@ public class SceneServiceImpl implements SceneService {
             throw new DataBaseException("更新场景失败");
         }
         return this.create(sceneEntity, true);
+    }
+
+    @Override
+    public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Scene> sceneList, List<SceneStruct.Scene> lastSceneList) throws Exception {
+        List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
+        Map<String, SceneStruct.Scene> lastSceneMap = new HashMap<>();
+        lastSceneList.forEach(lastScene -> lastSceneMap.put(lastScene.getSceneNo(), lastScene));
+
+        for (SceneStruct.Scene scene : sceneList) {
+            List<DetailCompareResult> detailCompareResultList;
+            if (lastSceneMap.containsKey(scene.getSceneNo())) {
+                SceneStruct.Scene lastScene = lastSceneMap.get(scene.getSceneNo());
+                detailCompareResultList = CompareUtil.compare(lastScene, scene, null);
+                lastSceneList.remove(lastScene);
+            } else {
+                detailCompareResultList = CompareUtil.compare(null, scene, null);
+            }
+            versionDiffDetailList.add(new VersionDiffDetail(scene.getSceneNo(), scene.getSceneName(), detailCompareResultList));
+        }
+
+        for (SceneStruct.Scene lastScene : lastSceneList) {
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastScene, null, null);
+            versionDiffDetailList.add(new VersionDiffDetail(lastScene.getSceneNo(), lastScene.getSceneName(), detailCompareResultList));
+        }
+        return versionDiffDetailList;
     }
 
 }

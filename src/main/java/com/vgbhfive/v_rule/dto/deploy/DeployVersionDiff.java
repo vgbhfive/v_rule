@@ -16,6 +16,8 @@ public class DeployVersionDiff implements Serializable {
     // 1-首次上线、0-正常上线
     private Integer deployStatus;
 
+    private List<VersionDiffDetail> scene;
+
     private List<VersionDiffDetail> divide;
 
     private List<VersionDiffDetail> strategy;

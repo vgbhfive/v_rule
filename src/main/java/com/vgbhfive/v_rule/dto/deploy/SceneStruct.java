@@ -1,7 +1,5 @@
 package com.vgbhfive.v_rule.dto.deploy;
 
-import com.vgbhfive.v_rule.common.enums.PeriodType;
-import com.vgbhfive.v_rule.common.enums.ValueType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

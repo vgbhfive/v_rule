@@ -10,6 +10,7 @@
         <result property="divideNo" column="divide_no"/>
         <result property="accessStrategyNo" column="access_strategy_no"/>
         <result property="riskStrategyNo" column="risk_strategy_no"/>
+        <result property="priority" column="priority"/>
         <result property="isValid" column="is_valid"/>
         <result property="isDelete" column="is_delete"/>
         <result property="version" column="version"/>
@@ -67,7 +68,7 @@
         SELECT d.*, dp.divide_no, dp.product_no, dp.type
         FROM divide d
         LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
-        WHERE d.id = #{id}
+        WHERE d.id = #{id} AND d.is_delete = 0
     </select>
 
     <select id="queryDivideBySceneNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Divide">
