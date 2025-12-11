@@ -34,7 +34,7 @@ public class LineController {
     @Log
     @Permission
     public ResponseContent create(@Valid @RequestBody LineEntity lineEntity) {
-        return lineService.create(lineEntity);
+        return lineService.create(lineEntity, false);
     }
 
     @PostMapping("/update")

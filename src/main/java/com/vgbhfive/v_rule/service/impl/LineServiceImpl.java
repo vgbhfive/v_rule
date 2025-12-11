@@ -44,10 +44,14 @@ public class LineServiceImpl implements LineService {
     }
 
     @Override
-    public ResponseContent create(LineEntity lineEntity) {
-        lineEntity.setId(null);
+    public ResponseContent create(LineEntity lineEntity, boolean isUpdate) {
         Date now = new Date();
-        lineEntity.setCreateAt(now);
+        if (!isUpdate) {
+            lineEntity.setCreateAt(now);
+        }
+        lineEntity.setId(null);
+        lineEntity.setIsValid(1);
+        lineEntity.setIsDelete(0);
         lineEntity.setUpdateAt(now);
         Integer insert = lineMapper.insert(lineEntity);
         if (insert < 1) {
@@ -66,7 +70,7 @@ public class LineServiceImpl implements LineService {
         if (update < 1) {
             throw new DataBaseException("更新业务线失败");
         }
-        return this.create(lineEntity);
+        return this.create(lineEntity, true);
     }
 
 }

@@ -13,7 +13,7 @@ public interface LineService {
 
     ResponseContent queryList(LineQueryParam param);
 
-    ResponseContent create(LineEntity lineEntity);
+    ResponseContent create(LineEntity lineEntity, boolean isUpdate);
 
     ResponseContent update(LineEntity lineEntity);
 
