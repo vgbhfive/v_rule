@@ -29,6 +29,7 @@ public class SceneStruct {
         private String sceneNo;
         private String sceneName;
         private String field;
+        private List<String> divideNoList;
     }
 
     /**

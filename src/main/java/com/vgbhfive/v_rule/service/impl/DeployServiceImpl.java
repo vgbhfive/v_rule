@@ -210,6 +210,7 @@ public class DeployServiceImpl implements DeployService {
     @Override
     @Transactional(propagation = Propagation.SUPPORTS)
     public SceneParams buildSceneParams(String sceneNo) {
+        List<String> divideNoList = new ArrayList<>();
         Set<String> strategyNoSet = new HashSet<>();
         Set<String> productInterestNoSet = new HashSet<>();
         Set<String> productPeriodNoSet = new HashSet<>();
@@ -238,6 +239,7 @@ public class DeployServiceImpl implements DeployService {
             throw new ParamException("scene non divide!");
         }
         divideList.forEach(divide -> {
+            divideNoList.add(divide.getDivideNo());
             strategyNoSet.add(divide.getAccessStrategyNo());
             strategyNoSet.add(divide.getRiskStrategyNo());
             productInterestNoSet.addAll(divide.getProductInterestNoList());
@@ -245,6 +247,7 @@ public class DeployServiceImpl implements DeployService {
             productLimitNoSet.addAll(divide.getProductLimitNoList());
             productCustomNoSet.addAll(divide.getProductCustomNoList());
         });
+        sceneList.get(0).setDivideNoList(divideNoList);
 
         List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
         List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productInterestNoSet);
