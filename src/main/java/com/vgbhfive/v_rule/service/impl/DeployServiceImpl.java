@@ -182,6 +182,8 @@ public class DeployServiceImpl implements DeployService {
                 // update deployTime
                 updateDeployTime(params);
 
+                System.out.println(params);
+
                 // push core
                 deployEntity.setVersion(deployMapper.selectMaxVersion(deployEntity.getLineNo(), deployEntity.getDeployNo()) + 1);
                 LineEntity line = lineMapper.selectByLineNo(deployEntity.getLineNo());
@@ -430,7 +432,7 @@ public class DeployServiceImpl implements DeployService {
                 tmpRuleSetNoSet.add(no2);
             }
         });
-        if (tmpRuleSetNoSet.size() > 0) {
+        if (!tmpRuleSetNoSet.isEmpty()) {
             List<SceneStruct.RuleSet> nextRuleSetList = ruleSetService.queryRuleSetByRuleSetNos(tmpRuleSetNoSet);
             ruleSetList.addAll(nextRuleSetList);
             getRuleSetList(ruleSetList, nextRuleSetList, ruleNoSet, ruleSetNoSet);
