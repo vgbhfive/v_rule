@@ -25,7 +25,9 @@
 | 自动入黑插件     |         | &check; | &check; |
 | 模型调用       |         | &check; | &check; |
 | 历史版本回滚     |         | &check; | &check; |
+| 上线关键指标观测   |         | &check; | &check; |
 | 流量重放       |         | &check; | &check; |
+| 重放关键指标观测   |         | &check; | &check; |
 | 用户流程标识     |         | &check; | &check; |
 | 场景指标监控     |         | &check; | &check; |
 | 场景分析报告     |         | &check; | &check; |
