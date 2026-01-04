@@ -148,6 +148,7 @@ public class DeployServiceImpl implements DeployService {
      * @return
      */
     @Override
+    @Transactional(propagation = Propagation.SUPPORTS)
     public ResponseContent pass(DeployEntity deployEntity) {
         if (StringUtils.isBlank(deployEntity.getDeployNo())) {
             return ResponseContent.error("上线场景编码不能为空");
@@ -170,9 +171,9 @@ public class DeployServiceImpl implements DeployService {
                 // build scene
                 SceneParams params = buildSceneParams(deployEntity.getDeployNo());
                 deployEntity.setField(params.getSceneList().get(0).getField());
-                deployEntity.setName(params.getSceneList().get(0).getSceneName());
+                deployEntity.setName(params.getSceneList().get(0).getName());
                 deployEntity.setParams(gson.toJson(params));
-                deployEntity.setDivideList(params.getDivideList().stream().map(SceneStruct.Divide::getDivideName).collect(Collectors.joining(",")));
+                deployEntity.setDivideList(params.getDivideList().stream().map(SceneStruct.Divide::getName).collect(Collectors.joining(",")));
 
                 // diff
                 String diffRedisKey = String.format("%s:%s:%s", Constant.REDIS_PREFIX_DEPLOY_DIFF, deployEntity.getLineNo(), deployEntity.getDeployNo());
@@ -205,7 +206,7 @@ public class DeployServiceImpl implements DeployService {
     }
 
     /**
-     * 构建场景的策略数据
+     * 构建场景的策略数据 TODO
      * @param sceneNo
      * @return
      */
@@ -214,10 +215,7 @@ public class DeployServiceImpl implements DeployService {
     public SceneParams buildSceneParams(String sceneNo) {
         List<String> divideNoList = new ArrayList<>();
         Set<String> strategyNoSet = new HashSet<>();
-        Set<String> productInterestNoSet = new HashSet<>();
-        Set<String> productPeriodNoSet = new HashSet<>();
-        Set<String> productLimitNoSet = new HashSet<>();
-        Set<String> productCustomNoSet = new HashSet<>();
+        Set<String> productNoSet = new HashSet<>();
         Set<String> ruleNoSet = new HashSet<>(32);
         Set<String> ruleSetNoSet = new HashSet<>(32);
         Set<String> dataSourceNoSet = new HashSet<>(32);
@@ -241,21 +239,18 @@ public class DeployServiceImpl implements DeployService {
             throw new ParamException("scene non divide!");
         }
         divideList.forEach(divide -> {
-            divideNoList.add(divide.getDivideNo());
+            divideNoList.add(divide.getNo());
             strategyNoSet.add(divide.getAccessStrategyNo());
             strategyNoSet.add(divide.getRiskStrategyNo());
-            productInterestNoSet.addAll(divide.getProductInterestNoList());
-            productPeriodNoSet.addAll(divide.getProductPeriodNoList());
-            productLimitNoSet.addAll(divide.getProductLimitNoList());
-            productCustomNoSet.addAll(divide.getProductCustomNoList());
+            productNoSet.addAll(divide.getProductNoList());
         });
         sceneList.get(0).setDivideNoList(divideNoList);
 
         List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
-        List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productInterestNoSet);
-        List<SceneStruct.ProductPeriod> periodList = productPeriodService.queryPeriodByProductNos(productPeriodNoSet);
-        List<SceneStruct.ProductLimit> limitList = productLimitService.queryLimitByProductNos(productLimitNoSet);
-        List<SceneStruct.ProductCustom> customList = productCustomService.queryCustomByProductNos(productCustomNoSet);
+        List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productNoSet);
+        List<SceneStruct.ProductPeriod> periodList = productPeriodService.queryPeriodByProductNos(productNoSet);
+        List<SceneStruct.ProductLimit> limitList = productLimitService.queryLimitByProductNos(productNoSet);
+        List<SceneStruct.ProductCustom> customList = productCustomService.queryCustomByProductNos(productNoSet);
 
         strategyList.forEach(strategy -> {
             ruleNoSet.addAll(strategy.getRuleNoList());
@@ -313,7 +308,7 @@ public class DeployServiceImpl implements DeployService {
      * 更新所有上线的deployTime
      */
     @Transactional(propagation = Propagation.SUPPORTS)
-    private void updateDeployTime(SceneParams params) {
+    public void updateDeployTime(SceneParams params) {
         Date now = new Date();
         if (!params.getRuleList().isEmpty()) {
             ruleService.updateRuleDeployTime(params.getRuleList(), now);
@@ -351,7 +346,7 @@ public class DeployServiceImpl implements DeployService {
      *  @return
      */
     @Transactional(propagation = Propagation.SUPPORTS)
-    private Map<String, String> buildDeployKv(SceneParams params, String lineNo, String field) {
+    public Map<String, String> buildDeployKv(SceneParams params, String lineNo, String field) {
         String corePrefix = Constant.CORE_PREFIX;
         Map<String, String> kv = new HashMap<>();
         params.getSceneList().forEach(scene -> {
@@ -359,11 +354,11 @@ public class DeployServiceImpl implements DeployService {
             kv.put(key, gson.toJson(scene));
         });
         params.getDivideList().forEach(divide -> {
-            String key = String.format(corePrefix, lineNo, field, "divide", divide.getDivideNo());
+            String key = String.format(corePrefix, lineNo, field, "divide", divide.getNo());
             kv.put(key, gson.toJson(divide));
         });
         params.getStrategyList().forEach(strategy -> {
-            String key = String.format(corePrefix, lineNo, field, "strategy", strategy.getStrategyNo());
+            String key = String.format(corePrefix, lineNo, field, "strategy", strategy.getNo());
             kv.put(key, gson.toJson(strategy));
         });
         params.getInterestList().forEach(interest -> {
@@ -383,19 +378,19 @@ public class DeployServiceImpl implements DeployService {
             kv.put(key, gson.toJson(custom));
         });
         params.getRuleSetList().forEach(ruleSet -> {
-            String key = String.format(corePrefix, lineNo, field, "ruleSet", ruleSet.getRuleSetNo());
+            String key = String.format(corePrefix, lineNo, field, "ruleSet", ruleSet.getNo());
             kv.put(key, gson.toJson(ruleSet));
         });
         params.getRuleList().forEach(rule -> {
-            String key = String.format(corePrefix, lineNo, field, "rule", rule.getRuleNo());
+            String key = String.format(corePrefix, lineNo, field, "rule", rule.getNo());
             kv.put(key, gson.toJson(rule));
         });
         params.getDataSourceList().forEach(dataSource -> {
-            String key = String.format(corePrefix, lineNo, field, "dataSource", dataSource.getDataSourceNo());
+            String key = String.format(corePrefix, lineNo, field, "dataSource", dataSource.getNo());
             kv.put(key, gson.toJson(dataSource));
         });
         params.getDataCategoryList().forEach(dataCategory -> {
-            String key = String.format(corePrefix, lineNo, field, "dataCategory", dataCategory.getDataCategoryNo());
+            String key = String.format(corePrefix, lineNo, field, "dataCategory", dataCategory.getNo());
             kv.put(key, gson.toJson(dataCategory));
         });
         return kv;
@@ -409,8 +404,8 @@ public class DeployServiceImpl implements DeployService {
      * @param ruleSetNoSet 汇总所有的ruleSetNoSet
      */
     @Transactional(propagation = Propagation.SUPPORTS)
-    private void getRuleSetList(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> tmpRuleSetList,
-                                Set<String> ruleNoSet, Set<String> ruleSetNoSet) {
+    public void getRuleSetList(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> tmpRuleSetList,
+                               Set<String> ruleNoSet, Set<String> ruleSetNoSet) {
         Set<String> tmpRuleSetNoSet = new HashSet<>();
         tmpRuleSetList.forEach(ruleSet -> {
             String no1 = ruleSet.getFirstNo();

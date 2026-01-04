@@ -26,10 +26,16 @@ public class SceneStruct {
     @Data
     public static class Scene {
         private String lineNo;
-        private String sceneNo;
-        private String sceneName;
-        private String field;
-        private List<String> divideNoList;
+        private String no; // 编码
+        private String name; // 名称
+        private String type; // 类型 scene
+        private String field; // 字段
+        private String entry; // 起始分流器
+        private List<String> divideNoList; // 分流器
+        private List<String> productNoList; // 产品
+        private List<String> ruleNoList; // 规则
+        private List<String> dataSourceNoList; // 数据源
+        private List<String> dataCategoryNoList; // 数据分类
     }
 
     /**
@@ -37,18 +43,33 @@ public class SceneStruct {
      */
     @Data
     public static class Divide {
-        private String divideNo;
-        private String divideName;
+        private String no;
+        private String name;
+        private String type; // 类型 divide
         private String sceneNo;
-        private Integer priority;
-        private String accessStrategyNo;
-        private String riskStrategyNo;
-        private Integer version;
-        private Integer isValid;
-        private List<String> productInterestNoList;
-        private List<String> productPeriodNoList;
-        private List<String> productLimitNoList;
-        private List<String> productCustomNoList;
+        private Integer priority; // 优先级
+        private String accessStrategyNo; // accept -> riskStrategyNo / review、reject -> nextDivide
+        private String riskStrategyNo; // review、accept -> product review、accept
+        private List<String> productNoList; // 产品
+        private List<DivideNode> nodeList; // 节点
+        private List<DivideDiversion> diversionItem; // 分流连线
+    }
+
+    @Data
+    public static class DivideNode {
+        private String no;
+        private String name;
+        private String type; // value、product、diversion
+        private String value;
+        private List<String> productNoList;
+        private String calcType;
+    }
+
+    @Data
+    public static class DivideDiversion {
+        private String source;
+        private String value;
+        private String target;
     }
 
     /**
@@ -56,13 +77,12 @@ public class SceneStruct {
      */
     @Data
     public static class Strategy {
-        private String strategyNo;
-        private String strategyName;
-        private String model;
-        private List<String> ruleNoList;
-        private List<String> ruleSetNoList;
-        private Integer version;
-        private Integer isValid;
+        private String no;
+        private String name;
+        private String type; // 类型 strategy
+        private String model; // 运行模式
+        private List<String> ruleNoList; // 规则
+        private List<String> ruleSetNoList; // 规则集
         private List<StrategyDetail> strategyDetailList;
     }
 
@@ -71,8 +91,10 @@ public class SceneStruct {
         private String strategyNo;
         private String detailNo;
         private String ruleType;
+        private String threshold;
+        private String thresholdType;
         private Integer priority;
-        private Integer version;
+        private String finalDecision;
     }
 
     /**
@@ -140,15 +162,14 @@ public class SceneStruct {
      */
     @Data
     public static class Rule {
-        private String ruleNo;
-        private String ruleName;
+        private String no;
+        private String name;
+        private String type; // 类型 rule
         private String dataSourceNo;
         private String cond;
         private String threshold;
         private String thresholdType;
         private String result;
-        private Integer version;
-        private Integer isValid;
     }
 
     /**
@@ -156,8 +177,9 @@ public class SceneStruct {
      */
     @Data
     public static class RuleSet {
-        private String ruleSetNo;
-        private String ruleSetName;
+        private String no;
+        private String name;
+        private String type; // 类型 ruleSet
         private String firstNo;
         private String firstType;
         private String secondNo;
@@ -167,8 +189,6 @@ public class SceneStruct {
         private String threshold;
         private String thresholdType;
         private String result;
-        private Integer version;
-        private Integer isValid;
     }
 
     /**
@@ -176,14 +196,12 @@ public class SceneStruct {
      */
     @Data
     public static class DataSource {
-        private String dataSourceNo;
-        private String dataSourceName;
+        private String no;
+        private String name;
         private String dataCategoryNo;
         private String field;
         private String type;
         private String format;
-        private Integer version;
-        private Integer isValid;
     }
 
     /**
@@ -191,14 +209,12 @@ public class SceneStruct {
      */
     @Data
     public static class DataCategory {
-        private String dataCategoryNo;
-        private String dataCategoryName;
+        private String no;
+        private String name;
         private String sourceFrom;
         private String sourceType;
         private Integer categoryType;
         private Integer priority;
-        private Integer version;
-        private Integer isValid;
     }
 
 }

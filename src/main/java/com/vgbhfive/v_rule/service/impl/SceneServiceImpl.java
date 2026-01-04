@@ -85,23 +85,23 @@ public class SceneServiceImpl implements SceneService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Scene> sceneList, List<SceneStruct.Scene> lastSceneList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.Scene> lastSceneMap = new HashMap<>();
-        lastSceneList.forEach(lastScene -> lastSceneMap.put(lastScene.getSceneNo(), lastScene));
+        lastSceneList.forEach(lastScene -> lastSceneMap.put(lastScene.getNo(), lastScene));
 
         for (SceneStruct.Scene scene : sceneList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastSceneMap.containsKey(scene.getSceneNo())) {
-                SceneStruct.Scene lastScene = lastSceneMap.get(scene.getSceneNo());
+            if (lastSceneMap.containsKey(scene.getNo())) {
+                SceneStruct.Scene lastScene = lastSceneMap.get(scene.getNo());
                 detailCompareResultList = CompareUtil.compare(lastScene, scene, null);
                 lastSceneList.remove(lastScene);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, scene, null);
             }
-            versionDiffDetailList.add(new VersionDiffDetail(scene.getSceneNo(), scene.getSceneName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(scene.getNo(), scene.getName(), detailCompareResultList));
         }
 
         for (SceneStruct.Scene lastScene : lastSceneList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastScene, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastScene.getSceneNo(), lastScene.getSceneName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastScene.getNo(), lastScene.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

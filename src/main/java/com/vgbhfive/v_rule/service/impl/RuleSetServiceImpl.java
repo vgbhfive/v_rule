@@ -91,28 +91,28 @@ public class RuleSetServiceImpl implements RuleSetService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> lastRuleSetList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.RuleSet> lastRuleSetMap = new HashMap<>();
-        lastRuleSetList.forEach(lastRuleSet -> lastRuleSetMap.put(lastRuleSet.getRuleSetNo(), lastRuleSet));
+        lastRuleSetList.forEach(lastRuleSet -> lastRuleSetMap.put(lastRuleSet.getNo(), lastRuleSet));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.RuleSet ruleSet : ruleSetList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastRuleSetMap.containsKey(ruleSet.getRuleSetNo())) {
-                SceneStruct.RuleSet lastRuleSet = lastRuleSetMap.get(ruleSet.getRuleSetNo());
+            if (lastRuleSetMap.containsKey(ruleSet.getNo())) {
+                SceneStruct.RuleSet lastRuleSet = lastRuleSetMap.get(ruleSet.getNo());
                 detailCompareResultList = CompareUtil.compare(lastRuleSet, ruleSet, ignoreList);
                 lastRuleSetList.remove(lastRuleSet);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, ruleSet, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(ruleSet.getRuleSetNo(), ruleSet.getRuleSetName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(ruleSet.getNo(), ruleSet.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.RuleSet lastRuleSet : lastRuleSetList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastRuleSet, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastRuleSet.getRuleSetNo(), lastRuleSet.getRuleSetName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastRuleSet.getNo(), lastRuleSet.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

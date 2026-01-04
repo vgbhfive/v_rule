@@ -91,28 +91,28 @@ public class DataCategoryServiceImpl implements DataCategoryService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataCategory> dataCategoryList, List<SceneStruct.DataCategory> lastDataCategoryList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.DataCategory> lastDataCategoryMap = new HashMap<>();
-        lastDataCategoryList.forEach(lastDataCategory -> lastDataCategoryMap.put(lastDataCategory.getDataCategoryNo(), lastDataCategory));
+        lastDataCategoryList.forEach(lastDataCategory -> lastDataCategoryMap.put(lastDataCategory.getNo(), lastDataCategory));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.DataCategory dataCategory : dataCategoryList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastDataCategoryMap.containsKey(dataCategory.getDataCategoryNo())) {
-                SceneStruct.DataCategory lastDataCategory = lastDataCategoryMap.get(dataCategory.getDataCategoryNo());
+            if (lastDataCategoryMap.containsKey(dataCategory.getNo())) {
+                SceneStruct.DataCategory lastDataCategory = lastDataCategoryMap.get(dataCategory.getNo());
                 detailCompareResultList = CompareUtil.compare(lastDataCategory, dataCategory, ignoreList);
                 lastDataCategoryList.remove(lastDataCategory);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, dataCategory, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(dataCategory.getDataCategoryNo(), dataCategory.getDataCategoryName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(dataCategory.getNo(), dataCategory.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.DataCategory lastDataCategory : lastDataCategoryList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDataCategory, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastDataCategory.getDataCategoryNo(), lastDataCategory.getDataCategoryName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastDataCategory.getNo(), lastDataCategory.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

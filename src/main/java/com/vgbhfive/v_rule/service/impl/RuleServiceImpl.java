@@ -91,28 +91,28 @@ public class RuleServiceImpl implements RuleService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Rule> ruleList, List<SceneStruct.Rule> lastRuleList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.Rule> lastRuleMap = new HashMap<>();
-        lastRuleList.forEach(lastRule -> lastRuleMap.put(lastRule.getRuleNo(), lastRule));
+        lastRuleList.forEach(lastRule -> lastRuleMap.put(lastRule.getNo(), lastRule));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.Rule rule : ruleList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastRuleMap.containsKey(rule.getRuleNo())) {
-                SceneStruct.Rule lastRule = lastRuleMap.get(rule.getRuleNo());
+            if (lastRuleMap.containsKey(rule.getNo())) {
+                SceneStruct.Rule lastRule = lastRuleMap.get(rule.getNo());
                 detailCompareResultList = CompareUtil.compare(lastRule, rule, ignoreList);
                 lastRuleList.remove(lastRule);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, rule, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(rule.getRuleNo(), rule.getRuleName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(rule.getNo(), rule.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.Rule lastRule : lastRuleList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastRule, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastRule.getRuleNo(), lastRule.getRuleName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastRule.getNo(), lastRule.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

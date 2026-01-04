@@ -91,28 +91,28 @@ public class DataSourceServiceImpl implements DataSourceService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataSource> dataSourceList, List<SceneStruct.DataSource> lastDataSourceList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.DataSource> lastDataSourceMap = new HashMap<>();
-        lastDataSourceList.forEach(lastDataSource -> lastDataSourceMap.put(lastDataSource.getDataSourceNo(), lastDataSource));
+        lastDataSourceList.forEach(lastDataSource -> lastDataSourceMap.put(lastDataSource.getNo(), lastDataSource));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.DataSource dataSource : dataSourceList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastDataSourceMap.containsKey(dataSource.getDataSourceNo())) {
-                SceneStruct.DataSource lastDataSource = lastDataSourceMap.get(dataSource.getDataSourceNo());
+            if (lastDataSourceMap.containsKey(dataSource.getNo())) {
+                SceneStruct.DataSource lastDataSource = lastDataSourceMap.get(dataSource.getNo());
                 detailCompareResultList = CompareUtil.compare(lastDataSource, dataSource, ignoreList);
                 lastDataSourceList.remove(lastDataSource);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, dataSource, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(dataSource.getDataSourceNo(), dataSource.getDataSourceName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(dataSource.getNo(), dataSource.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.DataSource lastDataSource : lastDataSourceList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDataSource, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastDataSource.getDataSourceNo(), lastDataSource.getDataSourceName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastDataSource.getNo(), lastDataSource.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

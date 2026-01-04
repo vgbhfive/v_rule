@@ -2,7 +2,6 @@ package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
-import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
@@ -122,10 +121,7 @@ public class DivideServiceImpl implements DivideService {
     public List<SceneStruct.Divide> queryDivideBySceneNo(String sceneNo) {
         List<SceneStruct.Divide> divideList = divideMapper.queryDivideBySceneNo(sceneNo);
         divideList.forEach(divide -> {
-            divide.setProductInterestNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.INTEREST.getType()));
-            divide.setProductPeriodNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.PERIOD.getType()));
-            divide.setProductLimitNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.LIMIT.getType()));
-            divide.setProductCustomNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getDivideNo(), ProductType.CUSTOM.getType()));
+            divide.setProductNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getNo()));
         });
         return divideList;
     }
@@ -135,7 +131,7 @@ public class DivideServiceImpl implements DivideService {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         // 上次发布分流器
         Map<String, SceneStruct.Divide> lastDivideMap = new HashMap<>();
-        lastDivideList.forEach(divide -> lastDivideMap.put(divide.getDivideNo(), divide));
+        lastDivideList.forEach(divide -> lastDivideMap.put(divide.getNo(), divide));
 
         // 与最近一次上线版本分流器对比
         List<String> ignoreList = new ArrayList<>();
@@ -143,8 +139,8 @@ public class DivideServiceImpl implements DivideService {
         ignoreList.add("isValid");
         for (SceneStruct.Divide divide : divideList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastDivideMap.containsKey(divide.getDivideNo())) {
-                SceneStruct.Divide lastDivide = lastDivideMap.get(divide.getDivideNo());
+            if (lastDivideMap.containsKey(divide.getNo())) {
+                SceneStruct.Divide lastDivide = lastDivideMap.get(divide.getNo());
                 detailCompareResultList = CompareUtil.compare(lastDivide, divide, ignoreList);
                 lastDivideList.remove(lastDivide);
             } else {
@@ -152,14 +148,14 @@ public class DivideServiceImpl implements DivideService {
                 detailCompareResultList = CompareUtil.compare(null, divide, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(divide.getDivideNo(), divide.getDivideName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(divide.getNo(), divide.getName(), detailCompareResultList));
             }
         }
 
         // 相比现在多配置的分流器
         for (SceneStruct.Divide lastDeployDivide : lastDivideList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDeployDivide, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastDeployDivide.getDivideNo(), lastDeployDivide.getDivideName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastDeployDivide.getNo(), lastDeployDivide.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

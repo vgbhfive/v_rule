@@ -126,9 +126,9 @@ public class StrategyServiceImpl implements StrategyService {
     public List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet) {
         List<SceneStruct.Strategy> strategyList = strategyMapper.queryStrategyByStrategyNos(strategyNoSet);
         strategyList.forEach(strategy -> {
-            strategy.setRuleNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getStrategyNo(), RuleType.RULE.getKey()));
-            strategy.setRuleSetNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getStrategyNo(), RuleType.RULE_SET.getKey()));
-            strategy.setStrategyDetailList(strategyRuleDetailMapper.queryStrategyDetailByStrategyNo(strategy.getStrategyNo()));
+            strategy.setRuleNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getNo(), RuleType.RULE.getKey()));
+            strategy.setRuleSetNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getNo(), RuleType.RULE_SET.getKey()));
+            strategy.setStrategyDetailList(strategyRuleDetailMapper.queryStrategyDetailByStrategyNo(strategy.getNo()));
         });
         return strategyList;
     }
@@ -137,28 +137,28 @@ public class StrategyServiceImpl implements StrategyService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Strategy> strategyList, List<SceneStruct.Strategy> lastStrategyList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.Strategy> lastStrategyMap = new HashMap<>();
-        lastStrategyList.forEach(strategy -> lastStrategyMap.put(strategy.getStrategyNo(), strategy));
+        lastStrategyList.forEach(strategy -> lastStrategyMap.put(strategy.getNo(), strategy));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.Strategy strategy : strategyList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastStrategyMap.containsKey(strategy.getStrategyNo())) {
-                SceneStruct.Strategy lastStrategy = lastStrategyMap.get(strategy.getStrategyNo());
+            if (lastStrategyMap.containsKey(strategy.getNo())) {
+                SceneStruct.Strategy lastStrategy = lastStrategyMap.get(strategy.getNo());
                 detailCompareResultList = CompareUtil.compare(lastStrategy, strategy, ignoreList);
                 lastStrategyList.remove(lastStrategy);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, strategy, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(strategy.getStrategyNo(), strategy.getStrategyName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(strategy.getNo(), strategy.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.Strategy lastStrategy : lastStrategyList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastStrategy, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastStrategy.getStrategyNo(), lastStrategy.getStrategyName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastStrategy.getNo(), lastStrategy.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }
