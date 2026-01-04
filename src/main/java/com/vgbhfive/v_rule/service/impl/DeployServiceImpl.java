@@ -226,25 +226,20 @@ public class DeployServiceImpl implements DeployService {
             logger.error("build scene non exists! sceneNo: {}", sceneNo);
             throw new ParamException("build scene non exists!");
         }
-        ArrayList<SceneStruct.Scene> sceneList = new ArrayList<SceneStruct.Scene>() {{
-            add(scene);
-        }};
         SceneStruct.Line line = new SceneStruct.Line(scene.getLineNo());
         List<SceneStruct.Line> lineList = new ArrayList<SceneStruct.Line>() {{
             add(line);
         }};
-        List<SceneStruct.Divide> divideList = divideService.queryDivideBySceneNo(sceneNo);
-        if (divideList.isEmpty()) {
-            logger.error("scene non divide! sceneNo: {}", sceneNo);
-            throw new ParamException("scene non divide!");
-        }
+        List<SceneStruct.Divide> divideList = buildDivide(sceneNo);
         divideList.forEach(divide -> {
             divideNoList.add(divide.getNo());
             strategyNoSet.add(divide.getAccessStrategyNo());
             strategyNoSet.add(divide.getRiskStrategyNo());
             productNoSet.addAll(divide.getProductNoList());
         });
-        sceneList.get(0).setDivideNoList(divideNoList);
+        scene.setEntry(divideList.stream().min(Comparator.comparing(SceneStruct.Divide::getPriority)).get().getNo());
+        scene.setDivideNoList(divideNoList);
+        scene.setProductNoList(new ArrayList<>(productNoSet));
 
         List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
         List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productNoSet);
@@ -295,13 +290,108 @@ public class DeployServiceImpl implements DeployService {
             }
         });
         List<SceneStruct.DataSource> dataSourceList = dataSourceService.queryDataSourceByDataSourceNos(dataSourceNoSet);
+        scene.setDataSourceNoList(new ArrayList<>(dataSourceNoSet));
         dataSourceList.forEach(dataSource -> {
             dataCategoryNoSet.add(dataSource.getDataCategoryNo());
         });
         List<SceneStruct.DataCategory> dataCategoryList = dataCategoryService.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
+        scene.setDataCategoryNoList(new ArrayList<>(dataCategoryNoSet));
+
+        ArrayList<SceneStruct.Scene> sceneList = new ArrayList<SceneStruct.Scene>() {{
+            add(scene);
+        }};
 
         return new SceneParams(lineList, sceneList, divideList, strategyList, interestList, periodList, limitList, customList,
                 ruleSetList, ruleList, dataSourceList, dataCategoryList);
+    }
+
+    private List<SceneStruct.Divide> buildDivide(String sceneNo) {
+        List<SceneStruct.Divide> divideList = divideService.queryDivideBySceneNo(sceneNo);
+        if (divideList.isEmpty()) {
+            logger.error("scene non divide! sceneNo: {}", sceneNo);
+            throw new ParamException("scene no divide!");
+        }
+
+        SceneStruct.Divide prevDivide = null;
+        List<SceneStruct.DivideDiversion> prevDiversionList = new ArrayList<>();
+
+        // node
+        for (SceneStruct.Divide divide : divideList) {
+            // diversionItem
+            if (Objects.nonNull(prevDivide)) {
+                prevDiversionList.add(new SceneStruct.DivideDiversion(String.format("divide[%s]->accessStrategyNo[%s]", prevDivide.getNo(), prevDivide.getAccessStrategyNo()),
+                        "reject", divide.getNo()));
+                prevDiversionList.add(new SceneStruct.DivideDiversion(String.format("divide[%s]->accessStrategyNo[%s]", prevDivide.getNo(), prevDivide.getAccessStrategyNo()),
+                        "review", divide.getNo()));
+                prevDivide.setDiversionItem(prevDiversionList);
+                prevDiversionList.clear();
+            }
+
+            List<SceneStruct.DivideNode> nodeList = new ArrayList<>();
+
+            // accessStrategyNo
+            SceneStruct.DivideNode accessNode = new SceneStruct.DivideNode();
+            String accessName = String.format("divide[%s]->accessStrategyNo[%s]", divide.getNo(), divide.getAccessStrategyNo());
+            accessNode.setNo(divide.getAccessStrategyNo());
+            accessNode.setName(accessName);
+            accessNode.setType("diversion");
+            accessNode.setCalcType("1");
+
+            // riskStrategyNo
+            SceneStruct.DivideNode riskNode = new SceneStruct.DivideNode();
+            String riskName = String.format("divide[%s]->riskStrategyNo[%s]", divide.getNo(), divide.getRiskStrategyNo());
+            riskNode.setNo(divide.getRiskStrategyNo());
+            riskNode.setName(riskName);
+            riskNode.setType("diversion");
+
+            nodeList.add(accessNode);
+            nodeList.add(riskNode);
+            prevDiversionList.add(new SceneStruct.DivideDiversion(accessName, "accept", riskName));
+
+            // value
+            SceneStruct.DivideNode finalDecisionAcceptNode = new SceneStruct.DivideNode();
+            String finalDecisionAcceptName = String.format("divide[%s]->ACCEPT", divide.getNo());
+            finalDecisionAcceptNode.setName(finalDecisionAcceptName);
+            finalDecisionAcceptNode.setType("value");
+            finalDecisionAcceptNode.setValue("accept");
+            SceneStruct.DivideNode finalDecisionReviewNode = new SceneStruct.DivideNode();
+            String finalDecisionReviewName = String.format("divide[%s]->REVIEW", divide.getNo());
+            finalDecisionReviewNode.setName(finalDecisionReviewName);
+            finalDecisionReviewNode.setType("value");
+            finalDecisionReviewNode.setValue("review");
+
+            nodeList.add(finalDecisionReviewNode);
+            nodeList.add(finalDecisionAcceptNode);
+
+            // product
+            for (String productNo : divide.getProductNoList()) {
+                SceneStruct.DivideNode productAcceptNode = new SceneStruct.DivideNode();
+                String productAcceptName = String.format("divide[%s]->product[ACCEPT]", divide.getNo());
+                productAcceptNode.setNo(productNo);
+                productAcceptNode.setName(productAcceptName);
+                productAcceptNode.setType("product");
+                SceneStruct.DivideNode productReviewNode = new SceneStruct.DivideNode();
+                String productReviewName = String.format("divide[%s]->product[REVIEW]", divide.getNo());
+                productReviewNode.setNo(productNo);
+                productReviewNode.setName(productReviewName);
+                productReviewNode.setType("product");
+
+                nodeList.add(productAcceptNode);
+                nodeList.add(productReviewNode);
+                prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "accept", productAcceptName));
+                prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "review", productReviewName));
+                prevDiversionList.add(new SceneStruct.DivideDiversion(productAcceptName, "accept", finalDecisionAcceptName));
+                prevDiversionList.add(new SceneStruct.DivideDiversion(productReviewName, "review", finalDecisionReviewName));
+            }
+
+            // all
+            divide.setNodeList(nodeList);
+
+            // diversionItem
+            prevDivide = divide;
+            divide.setDiversionItem(prevDiversionList);
+        }
+        return divideList;
     }
 
     /**

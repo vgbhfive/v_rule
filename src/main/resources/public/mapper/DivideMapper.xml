@@ -72,7 +72,7 @@
     </select>
 
     <select id="queryDivideBySceneNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Divide">
-        SELECT divide_no, divide_name, scene_no, priority, access_strategy_no, risk_strategy_no, version, is_valid
+        SELECT divide_no as no, divide_name as name, scene_no, priority, access_strategy_no, risk_strategy_no
         FROM divide
         WHERE scene_no = #{sceneNo} AND is_delete = 0
     </select>

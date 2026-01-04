@@ -28,7 +28,6 @@ public class SceneStruct {
         private String lineNo;
         private String no; // 编码
         private String name; // 名称
-        private String type; // 类型 scene
         private String field; // 字段
         private String entry; // 起始分流器
         private List<String> divideNoList; // 分流器
@@ -45,11 +44,10 @@ public class SceneStruct {
     public static class Divide {
         private String no;
         private String name;
-        private String type; // 类型 divide
         private String sceneNo;
         private Integer priority; // 优先级
-        private String accessStrategyNo; // accept -> riskStrategyNo / review、reject -> nextDivide
-        private String riskStrategyNo; // review、accept -> product review、accept
+        private String accessStrategyNo;
+        private String riskStrategyNo;
         private List<String> productNoList; // 产品
         private List<DivideNode> nodeList; // 节点
         private List<DivideDiversion> diversionItem; // 分流连线
@@ -66,6 +64,7 @@ public class SceneStruct {
     }
 
     @Data
+    @AllArgsConstructor
     public static class DivideDiversion {
         private String source;
         private String value;
@@ -79,7 +78,6 @@ public class SceneStruct {
     public static class Strategy {
         private String no;
         private String name;
-        private String type; // 类型 strategy
         private String model; // 运行模式
         private List<String> ruleNoList; // 规则
         private List<String> ruleSetNoList; // 规则集
@@ -164,7 +162,6 @@ public class SceneStruct {
     public static class Rule {
         private String no;
         private String name;
-        private String type; // 类型 rule
         private String dataSourceNo;
         private String cond;
         private String threshold;
@@ -179,7 +176,6 @@ public class SceneStruct {
     public static class RuleSet {
         private String no;
         private String name;
-        private String type; // 类型 ruleSet
         private String firstNo;
         private String firstType;
         private String secondNo;
