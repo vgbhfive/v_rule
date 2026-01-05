@@ -61,6 +61,7 @@ public class StrategyServiceImpl implements StrategyService {
             strategyEntity.setVersion(strategyEntity.getVersion() + 1);
         } else {
             strategyEntity.setStrategyNo(noGenerateUtil.generateNo(Constant.NO_CL));
+            strategyEntity.setVersion(1);
             strategyEntity.setCreateAt(now);
         }
         strategyEntity.setId(null);

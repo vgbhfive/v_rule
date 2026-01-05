@@ -60,6 +60,7 @@ public class ProductCustomServiceImpl implements ProductCustomService {
             productEntity.setVersion(productEntity.getVersion() + 1);
         } else {
             productEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_ZDY));
+            productEntity.setVersion(1);
             productEntity.setCreateAt(now);
         }
         productEntity.setId(null);

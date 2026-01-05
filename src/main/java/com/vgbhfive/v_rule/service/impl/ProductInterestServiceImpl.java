@@ -62,6 +62,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
             productInterestEntity.setVersion(productInterestEntity.getVersion() + 1);
         } else {
             productInterestEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_LL));
+            productInterestEntity.setVersion(1);
             productInterestEntity.setCreateAt(now);
         }
         productInterestEntity.setId(null);

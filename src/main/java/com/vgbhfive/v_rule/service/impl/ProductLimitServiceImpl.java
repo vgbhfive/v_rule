@@ -58,6 +58,7 @@ public class ProductLimitServiceImpl implements ProductLimitService {
             productLimitEntity.setVersion(productLimitEntity.getVersion() + 1);
         } else {
             productLimitEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_ED));
+            productLimitEntity.setVersion(1);
             productLimitEntity.setCreateAt(now);
         }
         productLimitEntity.setId(null);

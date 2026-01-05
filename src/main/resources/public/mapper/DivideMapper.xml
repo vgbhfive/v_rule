@@ -82,7 +82,7 @@
         SET deploy_at = #{deployTime}
         WHERE divide_no IN
         <foreach collection="divideList" item="divide" open="(" separator="," close=")">
-            #{divide.divideNo}
+            #{divide.no}
         </foreach>
         AND is_delete = 0
     </update>

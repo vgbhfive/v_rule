@@ -58,6 +58,7 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
             productPeriodEntity.setVersion(productPeriodEntity.getVersion() + 1);
         } else {
             productPeriodEntity.setProductNo(noGenerateUtil.generateNo(Constant.NO_ZQ));
+            productPeriodEntity.setVersion(1);
             productPeriodEntity.setCreateAt(now);
         }
         productPeriodEntity.setId(null);

@@ -183,8 +183,6 @@ public class DeployServiceImpl implements DeployService {
                 // update deployTime
                 updateDeployTime(params);
 
-                System.out.println(params);
-
                 // push core
                 deployEntity.setVersion(deployMapper.selectMaxVersion(deployEntity.getLineNo(), deployEntity.getDeployNo()) + 1);
                 LineEntity line = lineMapper.selectByLineNo(deployEntity.getLineNo());
@@ -206,7 +204,7 @@ public class DeployServiceImpl implements DeployService {
     }
 
     /**
-     * 构建场景的策略数据 TODO
+     * 构建场景的策略数据
      * @param sceneNo
      * @return
      */

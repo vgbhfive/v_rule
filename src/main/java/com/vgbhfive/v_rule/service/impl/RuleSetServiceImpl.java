@@ -53,6 +53,7 @@ public class RuleSetServiceImpl implements RuleSetService {
             ruleSetEntity.setVersion(ruleSetEntity.getVersion() + 1);
         } else {
             ruleSetEntity.setRuleSetNo(noGenerateUtil.generateNo(Constant.NO_GZJ));
+            ruleSetEntity.setVersion(1);
             ruleSetEntity.setCreateAt(now);
         }
         ruleSetEntity.setId(null);

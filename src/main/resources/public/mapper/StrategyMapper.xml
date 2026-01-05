@@ -77,7 +77,7 @@
     </select>
 
     <select id="queryStrategyByStrategyNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Strategy">
-        SELECT strategy_no, strategy_name, model, version, is_valid
+        SELECT strategy_no as no, strategy_name as name, model, version, is_valid
         FROM strategy
         WHERE strategy_no IN
         <foreach collection="strategyNos" item="no" open="(" separator="," close=")">
@@ -97,7 +97,7 @@
         SET deploy_at = #{deployTime}
         WHERE strategy_no IN
         <foreach collection="strategyList" item="strategy" open="(" separator="," close=")">
-            #{strategy.strategyNo}
+            #{strategy.no}
         </foreach>
         AND is_delete = 0
     </update>

@@ -60,6 +60,7 @@ public class DivideServiceImpl implements DivideService {
             divideEntity.setVersion(divideEntity.getVersion() + 1);
         } else {
             divideEntity.setDivideNo(noGenerateUtil.generateNo(Constant.NO_FLQ));
+            divideEntity.setVersion(1);
             divideEntity.setCreateAt(now);
         }
         List<DivideProductEntity> productEntityList = buildProductEntityList(divideEntity);

@@ -53,6 +53,7 @@ public class DataSourceServiceImpl implements DataSourceService {
             dataSourceEntity.setVersion(dataSourceEntity.getVersion() + 1);
         } else {
             dataSourceEntity.setDataSourceNo(noGenerateUtil.generateNo(Constant.NO_SJY));
+            dataSourceEntity.setVersion(1);
             dataSourceEntity.setCreateAt(now);
         }
         dataSourceEntity.setId(null);

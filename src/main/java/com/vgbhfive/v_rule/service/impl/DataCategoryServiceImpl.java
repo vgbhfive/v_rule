@@ -53,6 +53,7 @@ public class DataCategoryServiceImpl implements DataCategoryService {
             dataCategoryEntity.setVersion(dataCategoryEntity.getVersion() + 1);
         } else {
             dataCategoryEntity.setDataCategoryNo(noGenerateUtil.generateNo(Constant.NO_SJYFL));
+            dataCategoryEntity.setVersion(1);
             dataCategoryEntity.setCreateAt(now);
         }
         dataCategoryEntity.setId(null);

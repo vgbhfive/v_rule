@@ -57,7 +57,7 @@
     </select>
 
     <select id="queryDataSourceByDataSourceNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$DataSource">
-        SELECT data_source_no, data_source_name, data_category_no, field, type, format, version, is_valid
+        SELECT data_source_no as no, data_source_name as name, data_category_no, field, type, format, version, is_valid
         FROM data_source
         WHERE data_source_no IN
         <foreach collection="dataSourceNos" item="no" open="(" separator="," close=")">

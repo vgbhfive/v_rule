@@ -45,7 +45,7 @@
     </select>
 
     <select id="queryDataCategoryByDataCategoryNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$DataCategory">
-        SELECT data_category_no, data_category_name, source_from, source_type, category_type, priority, version, is_valid
+        SELECT data_category_no as no, data_category_name as name, source_from, source_type, category_type, priority, version, is_valid
         FROM data_category
         WHERE data_category_no IN
         <foreach collection="dataCategoryNos" item="no" open="(" separator="," close=")">

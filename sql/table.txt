@@ -12,6 +12,8 @@ CREATE TABLE `user` (
   KEY `email` (`email`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户表';
 
+INSERT INTO user (email, password, salt, status, name, mobile, create_at, update_at)VALUES('admin', 'c466d84fd47d2a2f3b1276447eec62fc', 1, 0, 'admin', 'admin', now(), now());
+
 CREATE TABLE `line` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_name` varchar(64) NOT NULL COMMENT '业务线名称',
