@@ -122,7 +122,20 @@ public class DivideServiceImpl implements DivideService {
     public List<SceneStruct.Divide> queryDivideBySceneNo(String sceneNo) {
         List<SceneStruct.Divide> divideList = divideMapper.queryDivideBySceneNo(sceneNo);
         divideList.forEach(divide -> {
-            divide.setProductNoList(divideProductMapper.queryProductNoListByDivideNo(divide.getNo()));
+            List<String> interestNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "interest");
+            List<String> periodNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "period");
+            List<String> limitNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "limit");
+            List<String> customNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "custom");
+            divide.setProductInterestNoList(interestNoList);
+            divide.setProductPeriodNoList(periodNoList);
+            divide.setProductLimitNoList(limitNoList);
+            divide.setProductCustomNoList(customNoList);
+            divide.setProductNoList(new ArrayList<String>(){{
+                addAll(interestNoList);
+                addAll(periodNoList);
+                addAll(limitNoList);
+                addAll(customNoList);
+            }});
         });
         return divideList;
     }

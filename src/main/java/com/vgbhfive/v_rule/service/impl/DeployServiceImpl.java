@@ -351,38 +351,36 @@ public class DeployServiceImpl implements DeployService {
             // value
             SceneStruct.DivideNode finalDecisionAcceptNode = new SceneStruct.DivideNode();
             String finalDecisionAcceptName = String.format("divide[%s]->ACCEPT", divide.getNo());
+            finalDecisionAcceptNode.setNo("accept");
             finalDecisionAcceptNode.setName(finalDecisionAcceptName);
             finalDecisionAcceptNode.setType("value");
-            finalDecisionAcceptNode.setValue("accept");
             SceneStruct.DivideNode finalDecisionReviewNode = new SceneStruct.DivideNode();
             String finalDecisionReviewName = String.format("divide[%s]->REVIEW", divide.getNo());
+            finalDecisionReviewNode.setNo("review");
             finalDecisionReviewNode.setName(finalDecisionReviewName);
             finalDecisionReviewNode.setType("value");
-            finalDecisionReviewNode.setValue("review");
 
             nodeList.add(finalDecisionReviewNode);
             nodeList.add(finalDecisionAcceptNode);
 
             // product
-            for (String productNo : divide.getProductNoList()) {
-                SceneStruct.DivideNode productAcceptNode = new SceneStruct.DivideNode();
-                String productAcceptName = String.format("divide[%s]->product[ACCEPT]", divide.getNo());
-                productAcceptNode.setNo(productNo);
-                productAcceptNode.setName(productAcceptName);
-                productAcceptNode.setType("product");
-                SceneStruct.DivideNode productReviewNode = new SceneStruct.DivideNode();
-                String productReviewName = String.format("divide[%s]->product[REVIEW]", divide.getNo());
-                productReviewNode.setNo(productNo);
-                productReviewNode.setName(productReviewName);
-                productReviewNode.setType("product");
+            SceneStruct.DivideNode productAcceptNode = new SceneStruct.DivideNode();
+            String productAcceptName = String.format("divide[%s]->product[ACCEPT]", divide.getNo());
+            productAcceptNode.setNo(String.join(",", divide.getProductNoList()));
+            productAcceptNode.setName(productAcceptName);
+            productAcceptNode.setType("product");
+            SceneStruct.DivideNode productReviewNode = new SceneStruct.DivideNode();
+            String productReviewName = String.format("divide[%s]->product[REVIEW]", divide.getNo());
+            productReviewNode.setNo(String.join(",", divide.getProductNoList()));
+            productReviewNode.setName(productReviewName);
+            productReviewNode.setType("product");
 
-                nodeList.add(productAcceptNode);
-                nodeList.add(productReviewNode);
-                prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "accept", productAcceptName));
-                prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "review", productReviewName));
-                prevDiversionList.add(new SceneStruct.DivideDiversion(productAcceptName, "accept", finalDecisionAcceptName));
-                prevDiversionList.add(new SceneStruct.DivideDiversion(productReviewName, "review", finalDecisionReviewName));
-            }
+            nodeList.add(productAcceptNode);
+            nodeList.add(productReviewNode);
+            prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "accept", productAcceptName));
+            prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "review", productReviewName));
+            prevDiversionList.add(new SceneStruct.DivideDiversion(productAcceptName, "accept", finalDecisionAcceptName));
+            prevDiversionList.add(new SceneStruct.DivideDiversion(productReviewName, "review", finalDecisionReviewName));
 
             // all
             divide.setNodeList(nodeList);

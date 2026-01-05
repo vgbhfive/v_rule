@@ -50,6 +50,10 @@ public class SceneStruct {
         private String accessStrategyNo;
         private String riskStrategyNo;
         private List<String> productNoList; // 产品
+        private List<String> productInterestNoList; // 利率
+        private List<String> productPeriodNoList; // 账期
+        private List<String> productLimitNoList; // 额度
+        private List<String> productCustomNoList; // 自定义
         private List<DivideNode> nodeList; // 节点
         private List<DivideDiversion> diversionItem; // 分流连线
     }

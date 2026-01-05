@@ -22,7 +22,7 @@
     <select id="queryProductNoListByDivideNo" resultType="java.lang.String">
         SELECT distinct product_no
         FROM divide_product
-        WHERE divide_no = #{divideNo} AND is_delete = 0
+        WHERE divide_no = #{divideNo} AND type = #{type} AND is_delete = 0
     </select>
 
 </mapper>
