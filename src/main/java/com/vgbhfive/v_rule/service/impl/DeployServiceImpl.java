@@ -253,6 +253,8 @@ public class DeployServiceImpl implements DeployService {
         List<SceneStruct.RuleSet> ruleSetList = ruleSetService.queryRuleSetByRuleSetNos(ruleSetNoSet);
         this.getRuleSetList(ruleSetList, ruleSetList, ruleNoSet, ruleSetNoSet);
         List<SceneStruct.Rule> ruleList = ruleService.queryRuleByRuleNos(ruleNoSet);
+        scene.setRuleSetNoList(new ArrayList<>(ruleSetNoSet));
+        scene.setRuleNoList(new ArrayList<>(ruleNoSet));
 
         interestList.forEach(interest -> {
             if (interest.getValueType().equals(ValueType.DATASOURCE.getType())) {

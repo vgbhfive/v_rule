@@ -33,6 +33,7 @@ public class SceneStruct {
         private List<String> divideNoList; // 分流器
         private List<String> productNoList; // 产品
         private List<String> ruleNoList; // 规则
+        private List<String> ruleSetNoList; // 规则集
         private List<String> dataSourceNoList; // 数据源
         private List<String> dataCategoryNoList; // 数据分类
     }
