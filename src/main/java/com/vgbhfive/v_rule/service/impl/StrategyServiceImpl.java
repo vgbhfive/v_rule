@@ -124,9 +124,10 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet) {
+    public List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet, String type) {
         List<SceneStruct.Strategy> strategyList = strategyMapper.queryStrategyByStrategyNos(strategyNoSet);
         strategyList.forEach(strategy -> {
+            strategy.setType(type);
             strategy.setRuleNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getNo(), RuleType.RULE.getKey()));
             strategy.setRuleSetNoList(strategyMapper.queryStrategyDetailRuleNoByStrategyNo(strategy.getNo(), RuleType.RULE_SET.getKey()));
             strategy.setStrategyDetailList(strategyRuleDetailMapper.queryStrategyDetailByStrategyNo(strategy.getNo()));

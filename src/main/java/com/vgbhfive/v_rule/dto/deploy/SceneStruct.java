@@ -83,6 +83,7 @@ public class SceneStruct {
     public static class Strategy {
         private String no;
         private String name;
+        private String type;
         private String model; // 运行模式
         private List<String> ruleNoList; // 规则
         private List<String> ruleSetNoList; // 规则集

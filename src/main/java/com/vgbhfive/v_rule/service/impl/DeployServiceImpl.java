@@ -212,7 +212,8 @@ public class DeployServiceImpl implements DeployService {
     @Transactional(propagation = Propagation.SUPPORTS)
     public SceneParams buildSceneParams(String sceneNo) {
         List<String> divideNoList = new ArrayList<>();
-        Set<String> strategyNoSet = new HashSet<>();
+        Set<String> accessStrategyNoSet = new HashSet<>();
+        Set<String> riskStrategyNoSet = new HashSet<>();
         Set<String> productNoSet = new HashSet<>();
         Set<String> ruleNoSet = new HashSet<>(32);
         Set<String> ruleSetNoSet = new HashSet<>(32);
@@ -231,20 +232,24 @@ public class DeployServiceImpl implements DeployService {
         List<SceneStruct.Divide> divideList = buildDivide(sceneNo);
         divideList.forEach(divide -> {
             divideNoList.add(divide.getNo());
-            strategyNoSet.add(divide.getAccessStrategyNo());
-            strategyNoSet.add(divide.getRiskStrategyNo());
+            accessStrategyNoSet.add(divide.getAccessStrategyNo());
+            riskStrategyNoSet.add(divide.getRiskStrategyNo());
             productNoSet.addAll(divide.getProductNoList());
         });
         scene.setEntry(divideList.stream().min(Comparator.comparing(SceneStruct.Divide::getPriority)).get().getNo());
         scene.setDivideNoList(divideNoList);
         scene.setProductNoList(new ArrayList<>(productNoSet));
 
-        List<SceneStruct.Strategy> strategyList = strategyService.queryStrategyByStrategyNos(strategyNoSet);
+        List<SceneStruct.Strategy> accessStrategyList = strategyService.queryStrategyByStrategyNos(accessStrategyNoSet, "access");
+        List<SceneStruct.Strategy> riskStrategyList = strategyService.queryStrategyByStrategyNos(riskStrategyNoSet, "risk");
         List<SceneStruct.ProductInterest> interestList = productInterestService.queryInterestByProductNos(productNoSet);
         List<SceneStruct.ProductPeriod> periodList = productPeriodService.queryPeriodByProductNos(productNoSet);
         List<SceneStruct.ProductLimit> limitList = productLimitService.queryLimitByProductNos(productNoSet);
         List<SceneStruct.ProductCustom> customList = productCustomService.queryCustomByProductNos(productNoSet);
 
+        List<SceneStruct.Strategy> strategyList = new ArrayList<>();
+        strategyList.addAll(accessStrategyList);
+        strategyList.addAll(riskStrategyList);
         strategyList.forEach(strategy -> {
             ruleNoSet.addAll(strategy.getRuleNoList());
             ruleSetNoSet.addAll(strategy.getRuleSetNoList());
@@ -314,7 +319,7 @@ public class DeployServiceImpl implements DeployService {
 
         SceneStruct.Divide prevDivide = null;
         List<SceneStruct.DivideDiversion> prevDiversionList = new ArrayList<>();
-
+        List<SceneStruct.DivideNode> preNodeList = new ArrayList<>();
         // node
         for (SceneStruct.Divide divide : divideList) {
             // diversionItem
@@ -324,10 +329,15 @@ public class DeployServiceImpl implements DeployService {
                 prevDiversionList.add(new SceneStruct.DivideDiversion(String.format("divide[%s]->accessStrategyNo[%s]", prevDivide.getNo(), prevDivide.getAccessStrategyNo()),
                         "review", divide.getNo()));
                 prevDivide.setDiversionItem(prevDiversionList);
+                SceneStruct.DivideNode nextNode = new SceneStruct.DivideNode();
+                nextNode.setNo(prevDivide.getNo());
+                nextNode.setName(prevDivide.getName());
+                nextNode.setType("diversion");
+                preNodeList.add(nextNode);
+                prevDivide.setNodeList(preNodeList);
                 prevDiversionList.clear();
+                preNodeList.clear();
             }
-
-            List<SceneStruct.DivideNode> nodeList = new ArrayList<>();
 
             // accessStrategyNo
             SceneStruct.DivideNode accessNode = new SceneStruct.DivideNode();
@@ -344,8 +354,8 @@ public class DeployServiceImpl implements DeployService {
             riskNode.setName(riskName);
             riskNode.setType("diversion");
 
-            nodeList.add(accessNode);
-            nodeList.add(riskNode);
+            preNodeList.add(accessNode);
+            preNodeList.add(riskNode);
             prevDiversionList.add(new SceneStruct.DivideDiversion(accessName, "accept", riskName));
 
             // value
@@ -360,8 +370,8 @@ public class DeployServiceImpl implements DeployService {
             finalDecisionReviewNode.setName(finalDecisionReviewName);
             finalDecisionReviewNode.setType("value");
 
-            nodeList.add(finalDecisionReviewNode);
-            nodeList.add(finalDecisionAcceptNode);
+            preNodeList.add(finalDecisionReviewNode);
+            preNodeList.add(finalDecisionAcceptNode);
 
             // product
             SceneStruct.DivideNode productAcceptNode = new SceneStruct.DivideNode();
@@ -375,18 +385,16 @@ public class DeployServiceImpl implements DeployService {
             productReviewNode.setName(productReviewName);
             productReviewNode.setType("product");
 
-            nodeList.add(productAcceptNode);
-            nodeList.add(productReviewNode);
+            preNodeList.add(productAcceptNode);
+            preNodeList.add(productReviewNode);
             prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "accept", productAcceptName));
             prevDiversionList.add(new SceneStruct.DivideDiversion(riskName, "review", productReviewName));
             prevDiversionList.add(new SceneStruct.DivideDiversion(productAcceptName, "accept", finalDecisionAcceptName));
             prevDiversionList.add(new SceneStruct.DivideDiversion(productReviewName, "review", finalDecisionReviewName));
 
-            // all
-            divide.setNodeList(nodeList);
-
-            // diversionItem
+            // all diversionItem
             prevDivide = divide;
+            divide.setNodeList(preNodeList);
             divide.setDiversionItem(prevDiversionList);
         }
         return divideList;

@@ -24,7 +24,7 @@ public interface StrategyService {
 
     ResponseContent update(StrategyEntity strategyEntity);
 
-    List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet);
+    List<SceneStruct.Strategy> queryStrategyByStrategyNos(Set<String> strategyNoSet, String type);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Strategy> strategyList, List<SceneStruct.Strategy> lastStrategyList) throws Exception;
 
