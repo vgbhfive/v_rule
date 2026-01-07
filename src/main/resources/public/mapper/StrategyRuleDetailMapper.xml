@@ -24,6 +24,7 @@
         SELECT strategy_no, detail_no, rule_type, priority, version
         FROM strategy_rule_detail
         WHERE strategy_no = #{strategyNo}
+        ORDER BY priority ASC
     </select>
 
 </mapper>

@@ -88,6 +88,7 @@ public class SceneStruct {
         private List<String> ruleNoList; // 规则
         private List<String> ruleSetNoList; // 规则集
         private List<StrategyDetail> strategyDetailList;
+        private List<String> productNoList; // 产品
     }
 
     @Data
