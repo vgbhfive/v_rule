@@ -54,7 +54,7 @@
     </select>
 
     <select id="queryPeriodByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductPeriod">
-        SELECT p.product_no, p.product_name, p.remark, pe.value_type, pe.value, pe.period_type, pe.version
+        SELECT p.product_no as no, p.product_name as name, p.type, p.remark, pe.value_type, pe.value, pe.period_type, pe.version
         FROM product p
         LEFT JOIN product_period pe ON p.product_no = pe.product_no
         WHERE p.product_no IN

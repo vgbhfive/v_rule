@@ -123,7 +123,7 @@ public class ProductCustomServiceImpl implements ProductCustomService {
         }
         List<SceneStruct.ProductCustom> customList = productCustomMapper.queryCustomByProductNos(productNos);
         customList.forEach(custom -> {
-            custom.setProductCustomDetailList(productCustomMapper.queryCustomDetailByProductNo(custom.getProductNo()));
+            custom.setDetailList(productCustomMapper.queryCustomDetailByProductNo(custom.getNo()));
         });
         return customList;
     }
@@ -132,27 +132,27 @@ public class ProductCustomServiceImpl implements ProductCustomService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductCustom> productCustomList, List<SceneStruct.ProductCustom> lastProductCustomList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.ProductCustom> lastProductCustomMap = new HashMap<>();
-        lastProductCustomList.forEach(lastProductCustom -> lastProductCustomMap.put(lastProductCustom.getProductNo(), lastProductCustom));
+        lastProductCustomList.forEach(lastProductCustom -> lastProductCustomMap.put(lastProductCustom.getNo(), lastProductCustom));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         for (SceneStruct.ProductCustom productCustom : productCustomList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastProductCustomMap.containsKey(productCustom.getProductNo())) {
-                SceneStruct.ProductCustom lastProductCustom = lastProductCustomMap.get(productCustom.getProductNo());
+            if (lastProductCustomMap.containsKey(productCustom.getNo())) {
+                SceneStruct.ProductCustom lastProductCustom = lastProductCustomMap.get(productCustom.getNo());
                 detailCompareResultList = CompareUtil.compare(lastProductCustom, productCustom, ignoreList);
                 lastProductCustomList.remove(lastProductCustom);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, productCustom, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(productCustom.getProductNo(), productCustom.getProductName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(productCustom.getNo(), productCustom.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.ProductCustom lastProductCustom : lastProductCustomList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductCustom, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastProductCustom.getProductNo(), lastProductCustom.getProductName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductCustom.getNo(), lastProductCustom.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

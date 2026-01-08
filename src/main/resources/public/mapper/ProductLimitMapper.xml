@@ -54,7 +54,7 @@
     </select>
 
     <select id="queryLimitByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductLimit">
-        SELECT p.product_no, p.product_name, p.remark, pl.value_type, pl.value, pl.version
+        SELECT p.product_no as no, p.product_name as name, p.type, p.remark, pl.value_type, pl.value, pl.version
         FROM product p
         LEFT JOIN product_limit pl ON p.product_no = pl.product_no
         WHERE p.product_no IN

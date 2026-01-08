@@ -103,55 +103,51 @@ public class SceneStruct {
     }
 
     /**
+     * 产品
+     */
+    @Data
+    public static class Product {
+        private String no;
+        private String name;
+        private String type;
+        private String remark;
+    }
+
+    /**
      * 利率产品
      */
     @Data
-    public static class ProductInterest {
-        private String productNo;
-        private String productName;
+    public static class ProductInterest extends Product {
         private String valueType;
         private String value;
         private String unit;
-        private String remark;
-        private Integer version;
     }
 
     /**
      * 账期产品
      */
     @Data
-    public static class ProductPeriod {
-        private String productNo;
-        private String productName;
+    public static class ProductPeriod  extends Product {
         private String valueType;
         private String value;
         private String periodType;
-        private String remark;
-        private Integer version;
     }
 
     /**
      * 额度产品
      */
     @Data
-    public static class ProductLimit {
-        private String productNo;
-        private String productName;
+    public static class ProductLimit extends Product {
         private String valueType;
         private String value;
-        private String remark;
-        private Integer version;
     }
 
     /**
      * 自定义产品
      */
     @Data
-    public static class ProductCustom {
-        private String productNo;
-        private String productName;
-        private String remark;
-        private List<ProductCustomDetail> productCustomDetailList;
+    public static class ProductCustom extends Product {
+        private List<ProductCustomDetail> detailList;
     }
 
     @Data
@@ -159,7 +155,6 @@ public class SceneStruct {
         private String key;
         private String valueType;
         private String value;
-        private String version;
     }
 
     /**

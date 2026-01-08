@@ -128,27 +128,27 @@ public class ProductInterestServiceImpl implements ProductInterestService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductInterest> productInterestList, List<SceneStruct.ProductInterest> lastProductInterestList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.ProductInterest> lastProductInterestMap = new HashMap<>();
-        lastProductInterestList.forEach(lastProductInterest -> lastProductInterestMap.put(lastProductInterest.getProductNo(), lastProductInterest));
+        lastProductInterestList.forEach(lastProductInterest -> lastProductInterestMap.put(lastProductInterest.getNo(), lastProductInterest));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         for (SceneStruct.ProductInterest productInterest : productInterestList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastProductInterestMap.containsKey(productInterest.getProductNo())) {
-                SceneStruct.ProductInterest lastProductInterest = lastProductInterestMap.get(productInterest.getProductNo());
+            if (lastProductInterestMap.containsKey(productInterest.getNo())) {
+                SceneStruct.ProductInterest lastProductInterest = lastProductInterestMap.get(productInterest.getNo());
                 detailCompareResultList = CompareUtil.compare(lastProductInterest, productInterest, ignoreList);
                 lastProductInterestList.remove(lastProductInterest);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, productInterest, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(productInterest.getProductNo(), productInterest.getProductName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(productInterest.getNo(), productInterest.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.ProductInterest lastProductInterest : lastProductInterestList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductInterest, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastProductInterest.getProductNo(), lastProductInterest.getProductName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductInterest.getNo(), lastProductInterest.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

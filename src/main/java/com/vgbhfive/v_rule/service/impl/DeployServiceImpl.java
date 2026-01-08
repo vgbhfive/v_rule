@@ -277,7 +277,7 @@ public class DeployServiceImpl implements DeployService {
             }
         });
         customList.forEach(custom -> {
-            custom.getProductCustomDetailList().forEach(customDetail -> {
+            custom.getDetailList().forEach(customDetail -> {
                 if (customDetail.getValueType().equals(ValueType.DATASOURCE.getType())) {
                     dataSourceNoSet.add(customDetail.getValue());
                 }
@@ -333,6 +333,7 @@ public class DeployServiceImpl implements DeployService {
                 nextNode.setNo(prevDivide.getNo());
                 nextNode.setName(prevDivide.getName());
                 nextNode.setType("diversion");
+
                 preNodeList.add(nextNode);
                 prevDivide.setNodeList(preNodeList);
                 prevDiversionList.clear();
@@ -414,16 +415,16 @@ public class DeployServiceImpl implements DeployService {
         }
         List<String> productNos = new ArrayList<>();
         if (!params.getInterestList().isEmpty()) {
-            productNos.addAll(params.getInterestList().stream().map(SceneStruct.ProductInterest::getProductNo).collect(Collectors.toList()));
+            productNos.addAll(params.getInterestList().stream().map(SceneStruct.ProductInterest::getNo).collect(Collectors.toList()));
         }
         if (!params.getPeriodList().isEmpty()) {
-            productNos.addAll(params.getPeriodList().stream().map(SceneStruct.ProductPeriod::getProductNo).collect(Collectors.toList()));
+            productNos.addAll(params.getPeriodList().stream().map(SceneStruct.ProductPeriod::getNo).collect(Collectors.toList()));
         }
         if (!params.getLimitList().isEmpty()) {
-            productNos.addAll(params.getLimitList().stream().map(SceneStruct.ProductLimit::getProductNo).collect(Collectors.toList()));
+            productNos.addAll(params.getLimitList().stream().map(SceneStruct.ProductLimit::getNo).collect(Collectors.toList()));
         }
         if (!params.getCustomList().isEmpty()) {
-            productNos.addAll(params.getCustomList().stream().map(SceneStruct.ProductCustom::getProductNo).collect(Collectors.toList()));
+            productNos.addAll(params.getCustomList().stream().map(SceneStruct.ProductCustom::getNo).collect(Collectors.toList()));
         }
         productService.updateProductDeployTime(productNos, now);
         if (!params.getStrategyList().isEmpty()) {
@@ -458,19 +459,19 @@ public class DeployServiceImpl implements DeployService {
             kv.put(key, gson.toJson(strategy));
         });
         params.getInterestList().forEach(interest -> {
-            String key = String.format(corePrefix, lineNo, field, "interest", interest.getProductNo());
+            String key = String.format(corePrefix, lineNo, field, "interest", interest.getNo());
             kv.put(key, gson.toJson(interest));
         });
         params.getPeriodList().forEach(period -> {
-            String key = String.format(corePrefix, lineNo, field, "period", period.getProductNo());
+            String key = String.format(corePrefix, lineNo, field, "period", period.getNo());
             kv.put(key, gson.toJson(period));
         });
         params.getLimitList().forEach(limit -> {
-            String key = String.format(corePrefix, lineNo, field, "limit", limit.getProductNo());
+            String key = String.format(corePrefix, lineNo, field, "limit", limit.getNo());
             kv.put(key, gson.toJson(limit));
         });
         params.getCustomList().forEach(custom -> {
-            String key = String.format(corePrefix, lineNo, field, "custom", custom.getProductNo());
+            String key = String.format(corePrefix, lineNo, field, "custom", custom.getNo());
             kv.put(key, gson.toJson(custom));
         });
         params.getRuleSetList().forEach(ruleSet -> {

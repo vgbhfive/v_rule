@@ -126,27 +126,27 @@ public class ProductLimitServiceImpl implements ProductLimitService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductLimit> productLimitList, List<SceneStruct.ProductLimit> lastProductLimitList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.ProductLimit> lastProductLimitMap = new HashMap<>();
-        lastProductLimitList.forEach(lastProductLimit -> lastProductLimitMap.put(lastProductLimit.getProductNo(), lastProductLimit));
+        lastProductLimitList.forEach(lastProductLimit -> lastProductLimitMap.put(lastProductLimit.getNo(), lastProductLimit));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         for (SceneStruct.ProductLimit productLimit : productLimitList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastProductLimitMap.containsKey(productLimit.getProductNo())) {
-                SceneStruct.ProductLimit lastProductLimit = lastProductLimitMap.get(productLimit.getProductNo());
+            if (lastProductLimitMap.containsKey(productLimit.getNo())) {
+                SceneStruct.ProductLimit lastProductLimit = lastProductLimitMap.get(productLimit.getNo());
                 detailCompareResultList = CompareUtil.compare(lastProductLimit, productLimit, ignoreList);
                 lastProductLimitList.remove(lastProductLimit);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, productLimit, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(productLimit.getProductNo(), productLimit.getProductName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(productLimit.getNo(), productLimit.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.ProductLimit lastProductLimit : lastProductLimitList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductLimit, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastProductLimit.getProductNo(), lastProductLimit.getProductName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductLimit.getNo(), lastProductLimit.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }

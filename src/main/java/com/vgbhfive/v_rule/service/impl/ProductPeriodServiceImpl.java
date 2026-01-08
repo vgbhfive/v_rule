@@ -126,27 +126,27 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
     public List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.ProductPeriod> productPeriodList, List<SceneStruct.ProductPeriod> lastProductPeriodList) throws Exception {
         List<VersionDiffDetail> versionDiffDetailList = new ArrayList<>();
         Map<String, SceneStruct.ProductPeriod> lastProductPeriodMap = new HashMap<>();
-        lastProductPeriodList.forEach(productPeriod -> lastProductPeriodMap.put(productPeriod.getProductNo(), productPeriod));
+        lastProductPeriodList.forEach(productPeriod -> lastProductPeriodMap.put(productPeriod.getNo(), productPeriod));
 
         List<String> ignoreList = new ArrayList<>();
         ignoreList.add("version");
         for (SceneStruct.ProductPeriod productPeriod : productPeriodList) {
             List<DetailCompareResult> detailCompareResultList;
-            if (lastProductPeriodMap.containsKey(productPeriod.getProductNo())) {
-                SceneStruct.ProductPeriod lastProductPeriod = lastProductPeriodMap.get(productPeriod.getProductNo());
+            if (lastProductPeriodMap.containsKey(productPeriod.getNo())) {
+                SceneStruct.ProductPeriod lastProductPeriod = lastProductPeriodMap.get(productPeriod.getNo());
                 detailCompareResultList = CompareUtil.compare(lastProductPeriod, productPeriod, ignoreList);
                 lastProductPeriodList.remove(lastProductPeriod);
             } else {
                 detailCompareResultList = CompareUtil.compare(null, productPeriod, null);
             }
             if (!detailCompareResultList.isEmpty()) {
-                versionDiffDetailList.add(new VersionDiffDetail(productPeriod.getProductNo(), productPeriod.getProductName(), detailCompareResultList));
+                versionDiffDetailList.add(new VersionDiffDetail(productPeriod.getNo(), productPeriod.getName(), detailCompareResultList));
             }
         }
 
         for (SceneStruct.ProductPeriod lastProductPeriod : lastProductPeriodList) {
             List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastProductPeriod, null, null);
-            versionDiffDetailList.add(new VersionDiffDetail(lastProductPeriod.getProductNo(), lastProductPeriod.getProductName(), detailCompareResultList));
+            versionDiffDetailList.add(new VersionDiffDetail(lastProductPeriod.getNo(), lastProductPeriod.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;
     }
