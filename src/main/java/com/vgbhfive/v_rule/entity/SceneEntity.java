@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -28,16 +29,19 @@ public class SceneEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
      * 场景名称
      */
+    @NotBlank(message = "场景名称不能为空")
     private String sceneName;
 
     /**
      * 场景字段
      */
+    @NotBlank(message = "场景标识不能为空")
     private String field;
 
     /**

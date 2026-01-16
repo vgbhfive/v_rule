@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -28,16 +29,19 @@ public class LineEntity {
     /**
      * 业务线名称
      */
+    @NotBlank(message = "业务线名称不能为空")
     private String lineName;
 
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
      * 引擎url
      */
+    @NotBlank(message = "业务线所属 URL 不能为空")
     private String url;
 
     private Integer isValid;

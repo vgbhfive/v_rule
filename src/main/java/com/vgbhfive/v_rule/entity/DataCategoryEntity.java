@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -28,11 +29,13 @@ public class DataCategoryEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
      * 数据源分类名称
      */
+    @NotBlank(message = "数据源分类不能为空")
     private String dataCategoryName;
 
     /**

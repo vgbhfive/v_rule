@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableName;
 import com.vgbhfive.v_rule.common.enums.FieldType;
 import lombok.*;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -25,11 +26,13 @@ public class DataSourceEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
      * 数据源名称
      */
+    @NotBlank(message = "数据源名称不能为空")
     private String dataSourceName;
 
     /**

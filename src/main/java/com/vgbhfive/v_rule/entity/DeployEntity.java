@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -30,6 +31,7 @@ public class DeployEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
@@ -41,11 +43,13 @@ public class DeployEntity {
     /**
      * 编码
      */
+    @NotBlank(message = "发布编码不能为空")
     private String deployNo;
 
     /**
      * 字段
      */
+    @NotBlank(message = "发布所属场景标识不能为空")
     private String field;
 
     /**

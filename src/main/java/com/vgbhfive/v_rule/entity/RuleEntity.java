@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 
 /**
@@ -27,11 +28,13 @@ public class RuleEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
      * 规则名称
      */
+    @NotBlank(message = "规则名称不能为空")
     private String ruleName;
 
     /**

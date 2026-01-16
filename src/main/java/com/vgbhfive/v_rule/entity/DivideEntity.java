@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -29,16 +30,19 @@ public class DivideEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线标识不能为空")
     private String lineNo;
 
     /**
      * 场景编码
      */
+    @NotBlank(message = "分流器所属场景不能为空")
     private String sceneNo;
 
     /**
      * 分流器名称
      */
+    @NotBlank(message = "分流器名称不能为空")
     private String divideName;
 
     /**

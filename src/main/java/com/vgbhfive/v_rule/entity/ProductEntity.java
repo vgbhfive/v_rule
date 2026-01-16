@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.validation.constraints.NotBlank;
 import java.util.Date;
 import java.util.List;
 
@@ -31,11 +32,13 @@ public class ProductEntity {
     /**
      * 业务线编码
      */
+    @NotBlank(message = "业务线编码不能为空")
     private String lineNo;
 
     /**
      * 产品名称
      */
+    @NotBlank(message = "产品名称不能为空")
     private String productName;
 
     /**
