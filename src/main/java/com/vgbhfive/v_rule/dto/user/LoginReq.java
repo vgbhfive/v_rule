@@ -13,4 +13,7 @@ public class LoginReq {
 
     private String password;
 
+    // 是否验证
+    private Boolean captcha;
+
 }

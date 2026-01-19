@@ -29,6 +29,12 @@ public class UserController {
         return userService.login(loginReq);
     }
 
+    @PostMapping("/logout")
+    @Log
+    public ResponseContent logout(@RequestBody LoginReq loginReq) {
+        return ResponseContent.success();
+    }
+
     @PostMapping("/register")
     @Log
     @Permission
