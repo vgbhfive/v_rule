@@ -10,6 +10,7 @@ import com.vgbhfive.v_rule.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletRequest;
 
 /**
  * @projectName: v_rule
@@ -29,10 +30,11 @@ public class UserController {
         return userService.login(loginReq);
     }
 
-    @PostMapping("/logout")
+    @GetMapping("/info")
     @Log
-    public ResponseContent logout(@RequestBody LoginReq loginReq) {
-        return ResponseContent.success();
+    @Permission
+    public ResponseContent info(HttpServletRequest httpServletRequest) {
+        return userService.info(httpServletRequest);
     }
 
     @PostMapping("/register")
@@ -53,6 +55,13 @@ public class UserController {
     @Log
     public ResponseContent changePassword(@RequestBody ChangePasswordParam param) {
         return userService.changePassword(param);
+    }
+
+    @PostMapping("/refreshToken")
+    @Log
+    @Permission
+    public ResponseContent refreshToken(HttpServletRequest httpServletRequest) {
+        return userService.refreshToken(httpServletRequest);
     }
 
 }
