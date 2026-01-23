@@ -53,6 +53,7 @@ public class UserController {
 
     @PostMapping("/changePassword")
     @Log
+    @Permission
     public ResponseContent changePassword(@RequestBody ChangePasswordParam param) {
         return userService.changePassword(param);
     }

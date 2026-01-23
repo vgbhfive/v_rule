@@ -16,6 +16,7 @@ import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.Objects;
 
@@ -45,13 +46,16 @@ public class PermissionAspect {
         if (Objects.nonNull(permission)) {
             ServletRequestAttributes servletRequestAttributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
             HttpServletRequest request = servletRequestAttributes.getRequest();
+            HttpServletResponse response = servletRequestAttributes.getResponse();
             String token = request.getHeader("token");
 
             if (Objects.isNull(token)) {
+                response.setStatus(401);
                 return ResponseContent.error(100, "token不能为空");
             }
             ResponseContent resp = userService.verifyLogin(token);
             if (!resp.getStatus().equals(200)) {
+                response.setStatus(401);
                 return ResponseContent.error(100, "登陆失效");
             }
         }
