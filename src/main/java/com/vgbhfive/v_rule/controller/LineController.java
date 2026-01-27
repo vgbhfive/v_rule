@@ -23,7 +23,7 @@ public class LineController {
     @Resource
     private LineService lineService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@RequestBody LineQueryParam param) {

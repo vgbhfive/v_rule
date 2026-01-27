@@ -23,7 +23,7 @@ public class DataCategoryController {
     @Resource
     private DataCategoryService dataCategoryService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody DataCategoryQueryParam param) {

@@ -22,7 +22,7 @@ public class DivideController {
     @Resource
     private DivideService divideService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody DivideQueryParam param) {

@@ -22,7 +22,7 @@ public class StrategyController {
     @Resource
     private StrategyService strategyService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody StrategyQueryParam param) {

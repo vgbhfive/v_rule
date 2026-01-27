@@ -22,7 +22,7 @@ public class DataSourceController {
     @Resource
     private DataSourceService dataSourceService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody DataSourceQueryParam param) {

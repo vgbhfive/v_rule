@@ -22,7 +22,7 @@ public class RuleSetController {
     @Resource
     private RuleSetService ruleSetService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody RuleSetQueryParam param) {
