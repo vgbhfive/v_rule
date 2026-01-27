@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.strategy.StrategyListDto;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
@@ -30,5 +31,7 @@ public interface StrategyMapper extends BaseMapper<StrategyEntity> {
     List<String> queryStrategyDetailRuleNoByStrategyNo(@Param("strategyNo") String strategyNo, @Param("ruleType") String ruleType);
 
     Integer updateDeployTimeBatch(@Param("strategyList") List<SceneStruct.Strategy> strategyList, @Param("deployTime") Date deployTime);
+
+    List<DropdownList> selectDropdownList();
 
 }

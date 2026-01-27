@@ -66,4 +66,10 @@
         AND is_delete = 0
     </select>
 
+    <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
+        SELECT data_source_no as value, data_source_name as `key`
+        FROM data_source
+        WHERE is_valid = 1 AND is_delete = 0
+    </select>
+
 </mapper>

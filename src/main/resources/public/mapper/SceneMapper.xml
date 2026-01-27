@@ -63,4 +63,10 @@
         WHERE scene_no = #{sceneNo} AND is_delete = 0
     </select>
 
+    <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
+        SELECT scene_no as value, scene_name as `key`
+        FROM scene
+        WHERE is_valid = 1 AND is_delete = 0
+    </select>
+
 </mapper>

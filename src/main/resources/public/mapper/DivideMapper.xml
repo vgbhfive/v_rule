@@ -87,4 +87,10 @@
         AND is_delete = 0
     </update>
 
+    <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
+        SELECT divide_no as value, divide_name as `key`
+        FROM divide
+        WHERE is_valid = 1 AND is_delete = 0
+    </select>
+
 </mapper>

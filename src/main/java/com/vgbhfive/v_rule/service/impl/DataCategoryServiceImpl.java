@@ -118,4 +118,9 @@ public class DataCategoryServiceImpl implements DataCategoryService {
         return versionDiffDetailList;
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(dataCategoryMapper.selectDropdownList());
+    }
+
 }

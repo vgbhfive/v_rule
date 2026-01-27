@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceListDto;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
@@ -23,5 +24,7 @@ public interface DataSourceMapper extends BaseMapper<DataSourceEntity> {
     Integer queryTotalCount(@Param("param") DataSourceQueryParam param);
 
     List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(@Param("dataSourceNos") Set<String> dataSourceNos);
+
+    List<DropdownList> selectDropdownList();
 
 }

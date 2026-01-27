@@ -102,4 +102,10 @@
         AND is_delete = 0
     </update>
 
+    <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
+        SELECT strategy_no as value, strategy_name as `key`
+        FROM strategy
+        WHERE is_valid = 1 AND is_delete = 0
+    </select>
+
 </mapper>

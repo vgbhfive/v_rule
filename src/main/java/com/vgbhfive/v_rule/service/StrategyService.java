@@ -30,4 +30,6 @@ public interface StrategyService {
 
     ResponseContent updateStrategyDeployTime(List<SceneStruct.Strategy> strategyList, Date deployTime);
 
+    ResponseContent dropdownList();
+
 }

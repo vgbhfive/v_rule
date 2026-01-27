@@ -43,4 +43,11 @@ public class DataSourceController {
         return dataSourceService.update(dataSourceEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return dataSourceService.dropdownList();
+    }
+
 }

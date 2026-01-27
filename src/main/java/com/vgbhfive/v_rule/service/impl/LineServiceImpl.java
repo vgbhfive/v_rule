@@ -73,4 +73,9 @@ public class LineServiceImpl implements LineService {
         return this.create(lineEntity, true);
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(lineMapper.selectDropdownList());
+    }
+
 }

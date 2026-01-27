@@ -50,4 +50,11 @@ public class StrategyController {
         return strategyService.update(strategyEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return strategyService.dropdownList();
+    }
+
 }

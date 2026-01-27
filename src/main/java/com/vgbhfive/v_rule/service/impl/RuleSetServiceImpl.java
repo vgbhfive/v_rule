@@ -127,4 +127,9 @@ public class RuleSetServiceImpl implements RuleSetService {
         return ResponseContent.success();
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(ruleSetMapper.selectDropdownList());
+    }
+
 }

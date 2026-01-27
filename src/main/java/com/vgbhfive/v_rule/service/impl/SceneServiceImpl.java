@@ -106,4 +106,9 @@ public class SceneServiceImpl implements SceneService {
         return versionDiffDetailList;
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(sceneMapper.selectDropdownList());
+    }
+
 }

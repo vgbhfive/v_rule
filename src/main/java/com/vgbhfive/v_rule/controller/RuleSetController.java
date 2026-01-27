@@ -43,5 +43,11 @@ public class RuleSetController {
         return ruleSetService.update(ruleSetEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return ruleSetService.dropdownList();
+    }
 
 }

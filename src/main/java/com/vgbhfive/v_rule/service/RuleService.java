@@ -28,4 +28,6 @@ public interface RuleService {
 
     ResponseContent updateRuleDeployTime(List<SceneStruct.Rule> ruleList, Date deployTime);
 
+    ResponseContent dropdownList();
+
 }

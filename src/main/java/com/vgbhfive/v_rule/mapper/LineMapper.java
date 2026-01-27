@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.dto.line.LineListDto;
 import com.vgbhfive.v_rule.dto.line.LineQueryParam;
 import com.vgbhfive.v_rule.entity.LineEntity;
@@ -22,5 +23,7 @@ public interface LineMapper extends BaseMapper<LineEntity> {
     Integer queryTotalCount(@Param("param") LineQueryParam param);
 
     LineEntity selectByLineNo(@Param("lineNo") String lineNo);
+
+    List<DropdownList> selectDropdownList();
 
 }

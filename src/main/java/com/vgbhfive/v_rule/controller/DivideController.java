@@ -50,4 +50,11 @@ public class DivideController {
         return divideService.update(divideEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return divideService.dropdownList();
+    }
+
 }

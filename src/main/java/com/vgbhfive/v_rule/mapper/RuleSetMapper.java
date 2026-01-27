@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetListDto;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetQueryParam;
@@ -26,5 +27,7 @@ public interface RuleSetMapper extends BaseMapper<RuleSetEntity> {
     List<SceneStruct.RuleSet> queryRuleSetByRuleSetNos(@Param("ruleSetNos") Set<String> ruleSetNos);
 
     Integer updateDeployTimeBatch(@Param("ruleSetList") List<SceneStruct.RuleSet> ruleSetList, @Param("deployTime") Date deployTime);
+
+    List<DropdownList> selectDropdownList();
 
 }

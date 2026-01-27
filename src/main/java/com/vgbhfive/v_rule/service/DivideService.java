@@ -29,4 +29,6 @@ public interface DivideService {
 
     ResponseContent updateDivideDeployTime(List<SceneStruct.Divide> divideList, Date deployTime);
 
+    ResponseContent dropdownList();
+
 }

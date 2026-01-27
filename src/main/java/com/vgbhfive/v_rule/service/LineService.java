@@ -17,4 +17,6 @@ public interface LineService {
 
     ResponseContent update(LineEntity lineEntity);
 
+    ResponseContent dropdownList();
+
 }

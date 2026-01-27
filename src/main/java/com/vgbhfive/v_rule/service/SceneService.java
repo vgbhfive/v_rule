@@ -23,4 +23,6 @@ public interface SceneService {
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Scene> sceneList, List<SceneStruct.Scene> lastSceneList) throws Exception;
 
+    ResponseContent dropdownList();
+
 }

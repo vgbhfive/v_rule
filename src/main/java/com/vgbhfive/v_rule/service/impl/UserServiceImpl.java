@@ -131,7 +131,7 @@ public class UserServiceImpl implements UserService {
             return ResponseContent.error(500, "账户已冻结");
         }
         if (entity.getStatus() != 2) {
-            return ResponseContent.error(500, "初始密码已修改");
+            return ResponseContent.error(500, "初始密码不允许修改");
         }
 
         String oldPassword = param.getOldPassword();

@@ -118,4 +118,9 @@ public class DataSourceServiceImpl implements DataSourceService {
         return versionDiffDetailList;
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(dataSourceMapper.selectDropdownList());
+    }
+
 }

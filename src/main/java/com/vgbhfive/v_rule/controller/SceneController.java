@@ -22,7 +22,7 @@ public class SceneController {
     @Resource
     private SceneService sceneService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@RequestBody SceneQueryParam param) {
@@ -43,5 +43,11 @@ public class SceneController {
         return sceneService.update(sceneEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return sceneService.dropdownList();
+    }
 
 }

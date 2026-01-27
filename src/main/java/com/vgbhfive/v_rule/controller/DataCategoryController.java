@@ -44,4 +44,11 @@ public class DataCategoryController {
         return dataCategoryService.update(dataCategoryEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return dataCategoryService.dropdownList();
+    }
+
 }

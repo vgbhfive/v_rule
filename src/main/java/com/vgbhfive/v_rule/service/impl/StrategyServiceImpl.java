@@ -174,4 +174,9 @@ public class StrategyServiceImpl implements StrategyService {
         return ResponseContent.success();
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(strategyMapper.selectDropdownList());
+    }
+
 }

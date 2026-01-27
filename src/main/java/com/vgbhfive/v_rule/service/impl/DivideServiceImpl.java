@@ -183,4 +183,10 @@ public class DivideServiceImpl implements DivideService {
         return ResponseContent.success();
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(divideMapper.selectDropdownList());
+    }
+
+
 }

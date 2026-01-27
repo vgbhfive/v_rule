@@ -44,4 +44,11 @@ public class LineController {
         return lineService.update(lineEntity);
     }
 
+    @GetMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return lineService.dropdownList();
+    }
+
 }

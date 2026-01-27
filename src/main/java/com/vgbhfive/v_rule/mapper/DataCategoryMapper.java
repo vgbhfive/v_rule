@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryListDto;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
@@ -24,5 +25,7 @@ public interface DataCategoryMapper extends BaseMapper<DataCategoryEntity> {
     Integer queryTotalCount(@Param("param") DataCategoryQueryParam param);
 
     List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(@Param("dataCategoryNos") Set<String> dataCategoryNos);
+
+    List<DropdownList> selectDropdownList();
 
 }

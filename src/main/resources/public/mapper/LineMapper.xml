@@ -44,4 +44,10 @@
         WHERE line_no = #{lineNo} AND is_valid = 1 AND is_delete = 0
     </select>
 
+    <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
+        SELECT line_no as value, line_name as `key`
+        FROM line
+        WHERE is_valid = 1 AND is_delete = 0
+    </select>
+
 </mapper>
