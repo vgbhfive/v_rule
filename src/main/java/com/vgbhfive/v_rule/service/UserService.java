@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
 import com.vgbhfive.v_rule.dto.user.LoginReq;
+import com.vgbhfive.v_rule.dto.user.UserQueryParam;
 import com.vgbhfive.v_rule.entity.UserEntity;
 
 import javax.servlet.http.HttpServletRequest;
@@ -26,5 +27,7 @@ public interface UserService {
     ResponseContent verifyLogin(String token);
 
     ResponseContent refreshToken(HttpServletRequest httpServletRequest);
+
+    ResponseContent list(UserQueryParam param);
 
 }

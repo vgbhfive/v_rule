@@ -5,11 +5,9 @@ import com.vgbhfive.v_rule.common.enums.UserStatus;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.Md5Util;
 import com.vgbhfive.v_rule.common.utils.RedisUtil;
+import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
-import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
-import com.vgbhfive.v_rule.dto.user.LoginReq;
-import com.vgbhfive.v_rule.dto.user.LoginResp;
-import com.vgbhfive.v_rule.dto.user.UserInfo;
+import com.vgbhfive.v_rule.dto.user.*;
 import com.vgbhfive.v_rule.entity.UserEntity;
 import com.vgbhfive.v_rule.mapper.UserMapper;
 import com.vgbhfive.v_rule.service.UserService;
@@ -21,6 +19,7 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
@@ -182,6 +181,19 @@ public class UserServiceImpl implements UserService {
             return ResponseContent.success(new LoginResp("", "", "", token));
         }
         return ResponseContent.error("token已失效");
+    }
+
+    @Override
+    public ResponseContent list(UserQueryParam param) {
+        int start = (param.getCurrPage() - 1) * param.getLimit();
+        int limit = param.getLimit();
+
+        List<UserListDto> userListDtoList = userMapper.queryList(param, start, limit);
+        int totalCount = userMapper.queryTotalCount(param);
+
+        int totalPage = (totalCount - 1) / limit + 1;
+        PageResponse<UserListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, userListDtoList);
+        return ResponseContent.success(result);
     }
 
 }

@@ -5,12 +5,14 @@ import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
 import com.vgbhfive.v_rule.dto.user.LoginReq;
+import com.vgbhfive.v_rule.dto.user.UserQueryParam;
 import com.vgbhfive.v_rule.entity.UserEntity;
 import com.vgbhfive.v_rule.service.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.Valid;
 
 /**
  * @projectName: v_rule
@@ -63,6 +65,13 @@ public class UserController {
     @Permission
     public ResponseContent refreshToken(HttpServletRequest httpServletRequest) {
         return userService.refreshToken(httpServletRequest);
+    }
+
+    @PostMapping("/list")
+    @Log
+    @Permission
+    public ResponseContent list(@Valid @RequestBody UserQueryParam param) {
+        return userService.list(param);
     }
 
 }

@@ -13,4 +13,45 @@
         WHERE email = #{entity.email}
     </update>
 
+    <select id="queryList" resultType="com.vgbhfive.v_rule.dto.user.UserListDto">
+        SELECT id, name, mobile, email, status, create_at, update_at
+        FROM user
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.name != null and param.name != ''">
+                AND name like CONCAT(#{param.name}, '%')
+            </if>
+            <if test="param.mobile != null and param.mobile != ''">
+                AND mobile = #{param.mobile}
+            </if>
+            <if test="param.email != null and param.email != ''">
+                AND email = #{param.email}
+            </if>
+            <if test="param.status != null">
+                AND status = #{param.status}
+            </if>
+            AND name != 'admin'
+        </trim>
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="queryTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM user
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.name != null and param.name != ''">
+                AND name like CONCAT(#{param.name}, '%')
+            </if>
+            <if test="param.mobile != null and param.mobile != ''">
+                AND mobile = #{param.mobile}
+            </if>
+            <if test="param.email != null and param.email != ''">
+                AND email = #{param.email}
+            </if>
+            <if test="param.status != null">
+                AND status = #{param.status}
+            </if>
+            AND name != 'admin'
+        </trim>
+    </select>
+
 </mapper>
