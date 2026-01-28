@@ -16,7 +16,7 @@ import javax.validation.Valid;
  * @Date 2025/11/26 12:12
  */
 @RestController
-@RequestMapping("/data/source")
+@RequestMapping("/dataSource")
 public class DataSourceController {
 
     @Resource
@@ -41,6 +41,13 @@ public class DataSourceController {
     @Permission
     public ResponseContent update(@RequestBody DataSourceEntity dataSourceEntity) {
         return dataSourceService.update(dataSourceEntity);
+    }
+
+    @PostMapping("/valid")
+    @Log
+    @Permission
+    public ResponseContent valid(@RequestBody DataSourceEntity dataSourceEntity) {
+        return dataSourceService.updateValid(dataSourceEntity.getId(), dataSourceEntity.getIsValid());
     }
 
     @GetMapping("/dropdown/list")

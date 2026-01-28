@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -78,6 +79,22 @@ public class DataCategoryServiceImpl implements DataCategoryService {
             throw new DataBaseException("更新数据源分类失败");
         }
         return this.create(dataCategoryEntity, true);
+    }
+
+    @Override
+    public ResponseContent updateValid(Integer id, Integer status) {
+        if (Objects.isNull(id)) {
+            throw new ParamException("无效参数");
+        }
+        DataCategoryEntity oldDataCategoryEntity = new DataCategoryEntity();
+        oldDataCategoryEntity.setIsValid(status);
+        oldDataCategoryEntity.setUpdateAt(new Date());
+        int update = dataCategoryMapper.update(oldDataCategoryEntity,
+                new UpdateWrapper<DataCategoryEntity>().eq("id", id));
+        if (update < 1) {
+            throw new DataBaseException("更新数据源分类状态失败");
+        }
+        return ResponseContent.success("更新数据源分类状态成功");
     }
 
     @Override

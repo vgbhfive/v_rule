@@ -22,6 +22,8 @@ public interface DataCategoryService {
 
     ResponseContent update(DataCategoryEntity dataCategoryEntity);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
     List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(Set<String> dataCategoryNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataCategory> dataCategoryList, List<SceneStruct.DataCategory> lastDataCategoryList) throws Exception;

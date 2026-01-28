@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -58,27 +59,42 @@ public class SceneServiceImpl implements SceneService {
             sceneEntity.setCreateAt(now);
         }
         sceneEntity.setId(null);
-        sceneEntity.setIsValid(1);
         sceneEntity.setIsDelete(0);
         sceneEntity.setUpdateAt(now);
         Integer insert = sceneMapper.insert(sceneEntity);
         if (insert < 1) {
             throw new DataBaseException("创建场景失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s场景成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
     public ResponseContent update(SceneEntity sceneEntity) {
-        SceneEntity oldLineEntity = new SceneEntity();
-        oldLineEntity.setIsDelete(1);
-        oldLineEntity.setUpdateAt(new Date());
-        Integer update = sceneMapper.update(oldLineEntity,
+        SceneEntity oldSceneEntity = new SceneEntity();
+        oldSceneEntity.setIsDelete(1);
+        oldSceneEntity.setUpdateAt(new Date());
+        int update = sceneMapper.update(oldSceneEntity,
                 new UpdateWrapper<SceneEntity>().eq("id", sceneEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("更新场景失败");
         }
         return this.create(sceneEntity, true);
+    }
+
+    @Override
+    public ResponseContent updateValid(Integer id, Integer status) {
+        if (Objects.isNull(id)) {
+            throw new ParamException("无效参数");
+        }
+        SceneEntity oldSceneEntity = new SceneEntity();
+        oldSceneEntity.setIsValid(status);
+        oldSceneEntity.setUpdateAt(new Date());
+        int update = sceneMapper.update(oldSceneEntity,
+                new UpdateWrapper<SceneEntity>().eq("id", id));
+        if (update < 1) {
+            throw new DataBaseException("更新场景状态失败");
+        }
+        return ResponseContent.success("更新场景状态成功");
     }
 
     @Override

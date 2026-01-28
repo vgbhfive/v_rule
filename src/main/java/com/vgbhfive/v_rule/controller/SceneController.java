@@ -43,6 +43,13 @@ public class SceneController {
         return sceneService.update(sceneEntity);
     }
 
+    @PostMapping("/valid")
+    @Log
+    @Permission
+    public ResponseContent valid(@RequestBody SceneEntity sceneEntity) {
+        return sceneService.updateValid(sceneEntity.getId(), sceneEntity.getIsValid());
+    }
+
     @GetMapping("/dropdown/list")
     @Log
     @Permission

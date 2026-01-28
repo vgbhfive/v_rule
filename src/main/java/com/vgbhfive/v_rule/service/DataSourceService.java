@@ -21,6 +21,8 @@ public interface DataSourceService {
 
     ResponseContent update(DataSourceEntity dataSourceEntity);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
     List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(Set<String> dataSourceNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataSource> dataSourceList, List<SceneStruct.DataSource> lastDataSourceList) throws Exception;

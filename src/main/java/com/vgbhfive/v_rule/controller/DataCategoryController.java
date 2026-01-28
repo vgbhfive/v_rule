@@ -17,7 +17,7 @@ import javax.validation.Valid;
  * @date: 2025/11/26 21:27
  */
 @RestController
-@RequestMapping("/data/category")
+@RequestMapping("/dataCategory")
 public class DataCategoryController {
 
     @Resource
@@ -42,6 +42,13 @@ public class DataCategoryController {
     @Permission
     public ResponseContent update(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.update(dataCategoryEntity);
+    }
+
+    @PostMapping("/valid")
+    @Log
+    @Permission
+    public ResponseContent valid(@RequestBody DataCategoryEntity dataCategoryEntity) {
+        return dataCategoryService.updateValid(dataCategoryEntity.getId(), dataCategoryEntity.getIsValid());
     }
 
     @GetMapping("/dropdown/list")

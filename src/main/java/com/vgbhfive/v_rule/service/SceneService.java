@@ -21,6 +21,8 @@ public interface SceneService {
 
     ResponseContent update(SceneEntity sceneEntity);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Scene> sceneList, List<SceneStruct.Scene> lastSceneList) throws Exception;
 
     ResponseContent dropdownList();
