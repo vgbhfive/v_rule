@@ -13,7 +13,7 @@
             <if test="param.lineName != null and param.lineName != ''">
                 AND line_name = #{param.lineName}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0

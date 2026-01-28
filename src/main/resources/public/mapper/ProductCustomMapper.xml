@@ -40,7 +40,7 @@
             <if test="param.productNo != null and param.productNo != ''">
                 AND product_no = #{param.productNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0
@@ -64,7 +64,7 @@
             <if test="param.productNo != null and param.productNo != ''">
                 AND product_no = #{param.productNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0

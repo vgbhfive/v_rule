@@ -38,7 +38,7 @@
             <if test="param.strategyNo != null and param.strategyNo != ''">
                 AND strategy_no = #{param.strategyNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0
@@ -62,7 +62,7 @@
             <if test="param.strategyNo != null and param.strategyNo != ''">
                 AND strategy_no = #{param.strategyNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0

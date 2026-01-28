@@ -21,7 +21,7 @@
             <if test="param.productNo != null and param.productNo != ''">
                 AND p.product_no = #{param.productNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND p.is_valid = #{param.isValid}
             </if>
             AND p.is_delete = 0 AND pp.is_delete = 0
@@ -46,7 +46,7 @@
             <if test="param.productNo != null and param.productNo != ''">
                 AND p.product_no = #{param.productNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND p.is_valid = #{param.isValid}
             </if>
             AND p.is_delete = 0 AND pp.is_delete = 0

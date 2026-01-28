@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineListDto;
@@ -45,19 +47,19 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public ResponseContent create(LineEntity lineEntity, boolean isUpdate) {
+        checkParams(lineEntity, isUpdate);
         Date now = new Date();
         if (!isUpdate) {
             lineEntity.setCreateAt(now);
         }
         lineEntity.setId(null);
-        lineEntity.setIsValid(1);
         lineEntity.setIsDelete(0);
         lineEntity.setUpdateAt(now);
         Integer insert = lineMapper.insert(lineEntity);
         if (insert < 1) {
-            throw new DataBaseException("创建业务线失败");
+            throw new DataBaseException("新增业务线失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("业务线%s成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
@@ -68,9 +70,26 @@ public class LineServiceImpl implements LineService {
         Integer update = lineMapper.update(oldLineEntity,
                 new UpdateWrapper<LineEntity>().eq("id", lineEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
-            throw new DataBaseException("更新业务线失败");
+            throw new DataBaseException("修改业务线失败");
         }
         return this.create(lineEntity, true);
+    }
+
+    private void checkParams(LineEntity lineEntity, Boolean isUpdate) {
+        List<LineEntity> objectList = lineMapper.selectList(new QueryWrapper<LineEntity>()
+                .and(wrapper -> wrapper.eq("line_name", lineEntity.getLineName()).or().eq("line_no", lineEntity.getLineNo()))
+                .eq("is_delete", 0));
+        if (isUpdate) {
+            for (LineEntity entity : objectList) {
+                if (!lineEntity.getId().equals(entity.getId())) {
+                    throw new ParamException("不允许名称相同:" + lineEntity.getLineName());
+                }
+            }
+        } else {   // 新增
+            if (null != objectList && objectList.size() > 0) {
+                throw new ParamException("不允许名称相同:" + lineEntity.getLineName());
+            }
+        }
     }
 
     @Override

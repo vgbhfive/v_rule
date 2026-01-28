@@ -16,7 +16,7 @@
             <if test="param.ruleSetNo != null and param.ruleSetNo != ''">
                 AND rule_set_no = #{param.ruleSetNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0
@@ -37,7 +37,7 @@
             <if test="param.ruleSetNo != null and param.ruleSetNo != ''">
                 AND rule_set_no = #{param.ruleSetNo}
             </if>
-            <if test="param.isValid != null and param.isValid != ''">
+            <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
             AND is_delete = 0
