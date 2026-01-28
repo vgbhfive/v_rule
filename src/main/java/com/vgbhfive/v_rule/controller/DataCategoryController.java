@@ -51,11 +51,11 @@ public class DataCategoryController {
         return dataCategoryService.updateValid(dataCategoryEntity.getId(), dataCategoryEntity.getIsValid());
     }
 
-    @GetMapping("/dropdown/list")
+    @PostMapping("/dropdown/list")
     @Log
     @Permission
-    public ResponseContent dropdownList() {
-        return dataCategoryService.dropdownList();
+    public ResponseContent dropdownList(@RequestBody DataCategoryQueryParam param) {
+        return dataCategoryService.dropdownList(param);
     }
 
 }

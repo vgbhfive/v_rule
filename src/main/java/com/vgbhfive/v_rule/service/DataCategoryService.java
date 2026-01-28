@@ -28,6 +28,6 @@ public interface DataCategoryService {
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataCategory> dataCategoryList, List<SceneStruct.DataCategory> lastDataCategoryList) throws Exception;
 
-    ResponseContent dropdownList();
+    ResponseContent dropdownList(DataCategoryQueryParam param);
 
 }

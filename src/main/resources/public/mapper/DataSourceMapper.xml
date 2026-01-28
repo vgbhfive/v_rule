@@ -4,7 +4,7 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.datasource.DataSourceListDto">
         SELECT
-            id, line_no, data_source_name, data_source_no, data_category_no, source_from, source_type, field, type, format, version, is_valid, create_at
+            id, line_no, data_source_name, data_source_no, data_category_no, field, type, format, version, is_valid, create_at
         FROM data_source
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">

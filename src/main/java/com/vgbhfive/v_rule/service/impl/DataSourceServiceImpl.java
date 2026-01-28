@@ -58,14 +58,13 @@ public class DataSourceServiceImpl implements DataSourceService {
             dataSourceEntity.setCreateAt(now);
         }
         dataSourceEntity.setId(null);
-        dataSourceEntity.setIsValid(1);
         dataSourceEntity.setIsDelete(0);
         dataSourceEntity.setUpdateAt(now);
         Integer insert = dataSourceMapper.insert(dataSourceEntity);
         if (insert < 1) {
             throw new DataBaseException("创建数据源失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s数据源成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override

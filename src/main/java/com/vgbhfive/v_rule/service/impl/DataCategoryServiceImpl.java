@@ -136,8 +136,8 @@ public class DataCategoryServiceImpl implements DataCategoryService {
     }
 
     @Override
-    public ResponseContent dropdownList() {
-        return ResponseContent.success(dataCategoryMapper.selectDropdownList());
+    public ResponseContent dropdownList(DataCategoryQueryParam param) {
+        return ResponseContent.success(dataCategoryMapper.selectDropdownList(param.getLineNo()));
     }
 
 }

@@ -47,8 +47,6 @@ CREATE TABLE `data_source` (
   `data_source_name` varchar(32) NOT NULL COMMENT '数据源名称',
   `data_source_no` varchar(32) NOT NULL COMMENT '数据源编码',
   `data_category_no` varchar(32) NOT NULL COMMENT '数据源分类编码',
-  `source_from` varchar(32) NOT NULL COMMENT '一级来源',
-  `source_type` varchar(32) NOT NULL COMMENT '二级分类',
   `field` varchar(128) NOT NULL COMMENT '字段',
   `type` varchar(32) NOT NULL COMMENT '字段类型',
   `format` varchar(32) NOT NULL COMMENT '字段格式',

@@ -46,16 +46,6 @@ public class DataSourceEntity {
     private String dataCategoryNo;
 
     /**
-     * 一级来源
-     */
-    private String sourceFrom;
-
-    /**
-     * 二级来源
-     */
-    private String sourceType;
-
-    /**
      * 字段
      */
     private String field;

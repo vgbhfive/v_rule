@@ -21,10 +21,6 @@ public class DataSourceListDto {
 
     private String dataCategoryNo;
 
-    private String sourceFrom;
-
-    private String sourceType;
-
     private String field;
 
     private String type;
