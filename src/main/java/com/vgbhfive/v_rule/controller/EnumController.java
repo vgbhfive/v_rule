@@ -33,6 +33,12 @@ public class EnumController {
         return ResponseContent.success(CategoryType.allInstance());
     }
 
+    @GetMapping("/conditionType")
+    @Permission
+    public ResponseContent conditionType() {
+        return ResponseContent.success(ConditionType.allInstance());
+    }
+
     @GetMapping("/ruleType")
     @Permission
     public ResponseContent ruleType() {

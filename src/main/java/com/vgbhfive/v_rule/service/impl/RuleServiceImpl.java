@@ -58,14 +58,13 @@ public class RuleServiceImpl implements RuleService {
             ruleEntity.setCreateAt(now);
         }
         ruleEntity.setId(null);
-        ruleEntity.setIsValid(1);
         ruleEntity.setIsDelete(0);
         ruleEntity.setUpdateAt(now);
         Integer insert = ruleMapper.insert(ruleEntity);
         if (insert < 1) {
             throw new DataBaseException("创建规则失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s规则成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
