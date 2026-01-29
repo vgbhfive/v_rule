@@ -60,7 +60,7 @@ public class DataSourceServiceImpl implements DataSourceService {
         dataSourceEntity.setId(null);
         dataSourceEntity.setIsDelete(0);
         dataSourceEntity.setUpdateAt(now);
-        Integer insert = dataSourceMapper.insert(dataSourceEntity);
+        int insert = dataSourceMapper.insert(dataSourceEntity);
         if (insert < 1) {
             throw new DataBaseException("创建数据源失败");
         }
@@ -72,7 +72,7 @@ public class DataSourceServiceImpl implements DataSourceService {
         DataSourceEntity oldDataSourceEntity = new DataSourceEntity();
         oldDataSourceEntity.setIsDelete(1);
         oldDataSourceEntity.setUpdateAt(new Date());
-        Integer update = dataSourceMapper.update(oldDataSourceEntity,
+        int update = dataSourceMapper.update(oldDataSourceEntity,
                 new UpdateWrapper<DataSourceEntity>().eq("id", dataSourceEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("更新数据源失败");
@@ -135,8 +135,8 @@ public class DataSourceServiceImpl implements DataSourceService {
     }
 
     @Override
-    public ResponseContent dropdownList() {
-        return ResponseContent.success(dataSourceMapper.selectDropdownList());
+    public ResponseContent dropdownList(DataSourceQueryParam param) {
+        return ResponseContent.success(dataSourceMapper.selectDropdownList(param.getLineNo()));
     }
 
 }

@@ -49,13 +49,26 @@ public class UserController {
     @PostMapping("/resetPassword")
     @Log
     @Permission
-    public ResponseContent resetPassword(@RequestParam("email") String email) {
-        return userService.resetPassword(email);
+    public ResponseContent resetPassword(@RequestBody UserQueryParam param) {
+        return userService.resetPassword(param.getEmail());
+    }
+
+    @PostMapping("/freeze")
+    @Log
+    @Permission
+    public ResponseContent freeze(@RequestBody UserQueryParam param) {
+        return userService.freeze(param.getEmail());
+    }
+
+    @PostMapping("/normal")
+    @Log
+    @Permission
+    public ResponseContent normal(@RequestBody UserQueryParam param) {
+        return userService.normal(param.getEmail());
     }
 
     @PostMapping("/changePassword")
     @Log
-    @Permission
     public ResponseContent changePassword(@RequestBody ChangePasswordParam param) {
         return userService.changePassword(param);
     }

@@ -27,6 +27,6 @@ public interface DataSourceService {
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataSource> dataSourceList, List<SceneStruct.DataSource> lastDataSourceList) throws Exception;
 
-    ResponseContent dropdownList();
+    ResponseContent dropdownList(DataSourceQueryParam param);
 
 }

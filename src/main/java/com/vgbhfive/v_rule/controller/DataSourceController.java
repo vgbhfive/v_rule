@@ -50,11 +50,11 @@ public class DataSourceController {
         return dataSourceService.updateValid(dataSourceEntity.getId(), dataSourceEntity.getIsValid());
     }
 
-    @GetMapping("/dropdown/list")
+    @PostMapping("/dropdown/list")
     @Log
     @Permission
-    public ResponseContent dropdownList() {
-        return dataSourceService.dropdownList();
+    public ResponseContent dropdownList(@RequestBody DataSourceQueryParam param) {
+        return dataSourceService.dropdownList(param);
     }
 
 }

@@ -22,6 +22,8 @@ public interface RuleService {
 
     ResponseContent update(RuleEntity ruleEntity);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
     List<SceneStruct.Rule> queryRuleByRuleNos(Set<String> ruleNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Rule> ruleList, List<SceneStruct.Rule> lastRuleList) throws Exception;

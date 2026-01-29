@@ -43,6 +43,13 @@ public class RuleController {
         return ruleService.update(ruleEntity);
     }
 
+    @PostMapping("/valid")
+    @Log
+    @Permission
+    public ResponseContent valid(@RequestBody RuleEntity ruleEntity) {
+        return ruleService.updateValid(ruleEntity.getId(), ruleEntity.getIsValid());
+    }
+
     @GetMapping("/dropdown/list")
     @Log
     @Permission

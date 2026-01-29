@@ -1,5 +1,6 @@
 package com.vgbhfive.v_rule.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.UserStatus;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
@@ -41,10 +42,10 @@ public class UserServiceImpl implements UserService {
         UserEntity entity = userMapper.selectByEmail(loginReq.getEmail());
         if (Objects.nonNull(entity)) {
             if (entity.getStatus().equals(UserStatus.FROZEN.getCode())) {
-                return ResponseContent.error(500, "账户已被冻结，请联系管理员");
+                return ResponseContent.success("账户已被冻结，请联系管理员");
             }
             if (entity.getStatus().equals(UserStatus.DEFAULT_PASSWORD.getCode())) {
-                return ResponseContent.error(500, "请修改初始密码后登陆");
+                return ResponseContent.success("请修改初始密码后登陆");
             }
             boolean isEqual = Md5Util.verify(loginReq.getPassword(), entity.getSalt(), entity.getPassword());
             if (isEqual) {
@@ -54,7 +55,7 @@ public class UserServiceImpl implements UserService {
                 return ResponseContent.success(new LoginResp(entity.getEmail(), entity.getName(), entity.getMobile(), token));
             }
         }
-        return ResponseContent.error(500, "用户名或密码错误");
+        return ResponseContent.success("用户名或密码错误");
     }
 
     private UserInfo buildUserInfo(UserEntity entity) {
@@ -71,20 +72,24 @@ public class UserServiceImpl implements UserService {
     public ResponseContent info(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            return ResponseContent.error("未知异常");
+            return ResponseContent.success("未知异常");
         }
         String key = Constant.REDIS_PREFIX + token;
         UserInfo userInfo = redisUtil.getObject(key, UserInfo.class);
         if (Objects.nonNull(userInfo)) {
             return ResponseContent.success(new LoginResp(userInfo.getEmail(), userInfo.getName(), userInfo.getMobile(), token));
         }
-        return ResponseContent.error("token已失效");
+        return ResponseContent.success("token 已失效");
     }
 
     @Override
     public ResponseContent register(UserEntity userEntity) {
         if (userEntity.getEmail().equals("admin")) {
-            return ResponseContent.error(100, "创建用户失败");
+            return ResponseContent.success("创建用户失败");
+        }
+        UserEntity entity = userMapper.selectByEmail(userEntity.getEmail());
+        if (Objects.nonNull(entity)) {
+            return ResponseContent.success("用户已存在");
         }
         int salt = new SecureRandom().nextInt(100000);
         String md5Password = Md5Util.md5(Constant.DEFAULT_PASSWORD + salt);
@@ -99,14 +104,14 @@ public class UserServiceImpl implements UserService {
         if (insert < 1) {
             throw new DataBaseException("创建用户失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success("创建用户成功");
     }
 
     @Override
     public ResponseContent resetPassword(String email) {
         UserEntity entity = userMapper.selectByEmail(email);
         if (Objects.isNull(entity)) {
-            return ResponseContent.error(500, "邮箱不存在");
+            return ResponseContent.success("邮箱不存在");
         }
         int salt = new SecureRandom().nextInt(100000);
         String md5Password = Md5Util.md5(Constant.DEFAULT_PASSWORD + salt);
@@ -121,27 +126,56 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public ResponseContent freeze(String email) {
+        UserEntity entity = userMapper.selectByEmail(email);
+        if (Objects.isNull(entity)) {
+            return ResponseContent.success("邮箱不存在");
+        }
+        UserEntity oldUserEntity = new UserEntity();
+        oldUserEntity.setStatus(1);
+        int update = userMapper.update(oldUserEntity,
+                new QueryWrapper<UserEntity>().eq("email", email));
+        if (update < 1) {
+            return ResponseContent.success("冻结用户失败");
+        }
+        return ResponseContent.success("冻结用户成功");
+    }
+
+    @Override
+    public ResponseContent normal(String email) {
+        UserEntity entity = userMapper.selectByEmail(email);
+        if (Objects.isNull(entity)) {
+            return ResponseContent.success("邮箱不存在");
+        }
+        UserEntity oldUserEntity = new UserEntity();
+        oldUserEntity.setStatus(0);
+        int update = userMapper.update(oldUserEntity,
+                new QueryWrapper<UserEntity>().eq("email", email));
+        if (update < 1) {
+            return ResponseContent.success("操作用户失败");
+        }
+        return ResponseContent.success("用户已恢复");
+    }
+
+    @Override
     public ResponseContent changePassword(ChangePasswordParam param) {
         UserEntity entity = userMapper.selectByEmail(param.getEmail());
         if (Objects.isNull(entity)) {
-            return ResponseContent.error(500, "用户不存在");
+            return ResponseContent.success("用户不存在");
         }
         if (entity.getStatus() == 1) {
-            return ResponseContent.error(500, "账户已冻结");
-        }
-        if (entity.getStatus() != 2) {
-            return ResponseContent.error(500, "初始密码不允许修改");
+            return ResponseContent.success("账户已冻结");
         }
 
         String oldPassword = param.getOldPassword();
         String newPassword = param.getNewPassword();
         String newDupPassword = param.getNewDupPassword();
         if (!newPassword.equals(newDupPassword)) {
-            return ResponseContent.error(500, "两次输入密码不一致");
+            return ResponseContent.success("两次输入密码不一致");
         }
         boolean isEqual = Md5Util.verify(oldPassword, entity.getSalt(), entity.getPassword());
         if (!isEqual) {
-            return ResponseContent.error(500, "原密码错误");
+            return ResponseContent.success("原密码错误");
         }
         int salt = new SecureRandom().nextInt(100000);
         String md5Password = Md5Util.md5(newPassword + salt);
@@ -170,7 +204,7 @@ public class UserServiceImpl implements UserService {
     public ResponseContent refreshToken(HttpServletRequest httpServletRequest) {
         String token = httpServletRequest.getHeader("token");
         if (StringUtils.isBlank(token)) {
-            return ResponseContent.error("未知异常");
+            return ResponseContent.success("未知异常");
         }
         String key = Constant.REDIS_PREFIX + token;
         UserInfo userInfo = redisUtil.getObject(key, UserInfo.class);
@@ -180,7 +214,7 @@ public class UserServiceImpl implements UserService {
             redisUtil.set(Constant.REDIS_PREFIX + tokenNew, userInfo, 30, TimeUnit.MINUTES);
             return ResponseContent.success(new LoginResp("", "", "", token));
         }
-        return ResponseContent.error("token已失效");
+        return ResponseContent.success("token 已失效");
     }
 
     @Override

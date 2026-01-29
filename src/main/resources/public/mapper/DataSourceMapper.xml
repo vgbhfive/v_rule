@@ -69,6 +69,11 @@
     <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
         SELECT data_source_no as value, data_source_name as `key`
         FROM data_source
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="lineNo != null and lineNo != ''">
+                line_no = #{lineNo}
+            </if>
+        </trim>
         WHERE is_valid = 1 AND is_delete = 0
     </select>
 

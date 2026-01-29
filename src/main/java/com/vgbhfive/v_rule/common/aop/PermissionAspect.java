@@ -51,12 +51,12 @@ public class PermissionAspect {
 
             if (Objects.isNull(token)) {
                 response.setStatus(401);
-                return ResponseContent.error(100, "token不能为空");
+                return ResponseContent.success("token 不能为空");
             }
             ResponseContent resp = userService.verifyLogin(token);
             if (!resp.getStatus().equals(200)) {
                 response.setStatus(401);
-                return ResponseContent.error(100, "登陆失效");
+                return ResponseContent.success("登陆失效");
             }
         }
 

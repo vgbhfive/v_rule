@@ -22,6 +22,10 @@ public interface UserService {
 
     ResponseContent resetPassword(String email);
 
+    ResponseContent freeze(String email);
+
+    ResponseContent normal(String email);
+
     ResponseContent changePassword(ChangePasswordParam param);
 
     ResponseContent verifyLogin(String token);

@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -78,6 +79,22 @@ public class RuleServiceImpl implements RuleService {
             throw new DataBaseException("更新规则失败");
         }
         return this.create(ruleEntity, true);
+    }
+
+    @Override
+    public ResponseContent updateValid(Integer id, Integer status) {
+        if (Objects.isNull(id)) {
+            throw new ParamException("无效参数");
+        }
+        RuleEntity oldRuleEntity = new RuleEntity();
+        oldRuleEntity.setIsValid(status);
+        oldRuleEntity.setUpdateAt(new Date());
+        int update = ruleMapper.update(oldRuleEntity,
+                new UpdateWrapper<RuleEntity>().eq("id", id));
+        if (update < 1) {
+            throw new DataBaseException("更新规则状态失败");
+        }
+        return ResponseContent.success("更新规则状态成功");
     }
 
     @Override

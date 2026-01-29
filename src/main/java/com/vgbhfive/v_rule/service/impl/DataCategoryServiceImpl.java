@@ -65,7 +65,7 @@ public class DataCategoryServiceImpl implements DataCategoryService {
         if (insert < 1) {
             throw new DataBaseException("创建数据源分类失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s数据源分类成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
