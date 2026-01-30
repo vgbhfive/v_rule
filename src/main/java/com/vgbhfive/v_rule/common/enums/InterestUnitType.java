@@ -16,9 +16,9 @@ import java.util.Map;
 @AllArgsConstructor
 public enum InterestUnitType {
 
-    HUNDRED(1, "百分位", "%"),
-    THOUSANDTHS(2, "千分位", "‰"),
-    TEN_THOUSANDTHS(3, "万分位", "‱");
+    HUNDRED(1, "百分", "%"),
+    THOUSANDTHS(2, "千分", "‰"),
+    TEN_THOUSANDTHS(3, "万分", "‱");
 
     private Integer id;
 

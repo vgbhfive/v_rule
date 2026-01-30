@@ -9,32 +9,29 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * @projectName: v_rule
- * @author: vgbhfive
- * @date: 2025/11/29 23:04
+ * @Author vgbhfive
+ * @Date 2026/1/30 12:16
  */
 @Getter
 @AllArgsConstructor
-public enum DeployStatusCode {
+public enum CombineType {
 
-    APPROVAL(1, "提交", 1),
-    PASS(2, "通过", 2),
-    REJECT(3, "拒绝", 3),
-    CANCEL(4, "取消", 4);
+    AND(0, "AND", "AND"),
+    OR(1, "OR", "OR");
 
     private Integer id;
 
     private String name;
 
-    private Integer code;
+    private String value;
 
     public static List<Map<String, Object>> allInstance() {
         List<Map<String, Object>> values = new ArrayList<>();
-        for (DeployStatusCode value : DeployStatusCode.values()) {
+        for (CombineType value : CombineType.values()) {
             Map<String, Object> tmp = new HashMap<>();
             tmp.put("id", value.getId());
             tmp.put("name", value.getName());
-            tmp.put("code", value.getCode());
+            tmp.put("value", value.getValue());
             values.add(tmp);
         }
         return values;

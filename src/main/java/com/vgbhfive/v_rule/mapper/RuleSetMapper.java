@@ -28,6 +28,6 @@ public interface RuleSetMapper extends BaseMapper<RuleSetEntity> {
 
     Integer updateDeployTimeBatch(@Param("ruleSetList") List<SceneStruct.RuleSet> ruleSetList, @Param("deployTime") Date deployTime);
 
-    List<DropdownList> selectDropdownList();
+    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo);
 
 }

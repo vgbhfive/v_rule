@@ -4,7 +4,7 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.product.ProductInterestListDto">
         SELECT
-            p.id, p.line_no, p.product_name, p.product_no, p.type, p.remark, p.version, p.deploy_at, p.is_valid, p.is_delete, p.create_at,
+            p.id, p.line_no, p.product_name, p.product_no, p.type, p.remark, p.version, p.deploy_at, p.is_valid, p.create_at,
             pi.value_type, pi.value, pi.unit
         FROM product p
         LEFT JOIN product_interest pi ON p.product_no = pi.product_no

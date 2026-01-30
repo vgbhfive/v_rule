@@ -22,12 +22,14 @@ public interface RuleSetService {
 
     ResponseContent update(RuleSetEntity ruleSetEntity);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
     List<SceneStruct.RuleSet> queryRuleSetByRuleSetNos(Set<String> ruleSetNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.RuleSet> ruleSetList, List<SceneStruct.RuleSet> lastRuleSetList) throws Exception;
 
     ResponseContent updateRuleSetDeployTime(List<SceneStruct.RuleSet> ruleSetList, Date deployTime);
 
-    ResponseContent dropdownList();
+    ResponseContent dropdownList(RuleSetQueryParam param);
 
 }

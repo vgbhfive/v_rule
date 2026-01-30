@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -57,14 +58,13 @@ public class RuleSetServiceImpl implements RuleSetService {
             ruleSetEntity.setCreateAt(now);
         }
         ruleSetEntity.setId(null);
-        ruleSetEntity.setIsValid(1);
         ruleSetEntity.setIsDelete(0);
         ruleSetEntity.setUpdateAt(now);
-        Integer insert = ruleSetMapper.insert(ruleSetEntity);
+        int insert = ruleSetMapper.insert(ruleSetEntity);
         if (insert < 1) {
             throw new DataBaseException("创建规则集失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s规则集成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
@@ -72,12 +72,28 @@ public class RuleSetServiceImpl implements RuleSetService {
         RuleSetEntity oldRuleSetEntity = new RuleSetEntity();
         oldRuleSetEntity.setIsDelete(1);
         oldRuleSetEntity.setUpdateAt(new Date());
-        Integer update = ruleSetMapper.update(oldRuleSetEntity,
+        int update = ruleSetMapper.update(oldRuleSetEntity,
                 new UpdateWrapper<RuleSetEntity>().eq("id", ruleSetEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("更新规则集失败");
         }
         return this.create(ruleSetEntity, true);
+    }
+
+    @Override
+    public ResponseContent updateValid(Integer id, Integer status) {
+        if (Objects.isNull(id)) {
+            throw new ParamException("无效参数");
+        }
+        RuleSetEntity oldRuleSetEntity = new RuleSetEntity();
+        oldRuleSetEntity.setIsValid(status);
+        oldRuleSetEntity.setUpdateAt(new Date());
+        int update = ruleSetMapper.update(oldRuleSetEntity,
+                new UpdateWrapper<RuleSetEntity>().eq("id", id));
+        if (update < 1) {
+            throw new DataBaseException("更新规则集状态失败");
+        }
+        return ResponseContent.success("更新规则集状态成功");
     }
 
     @Override
@@ -128,8 +144,8 @@ public class RuleSetServiceImpl implements RuleSetService {
     }
 
     @Override
-    public ResponseContent dropdownList() {
-        return ResponseContent.success(ruleSetMapper.selectDropdownList());
+    public ResponseContent dropdownList(RuleSetQueryParam param) {
+        return ResponseContent.success(ruleSetMapper.selectDropdownList(param.getLineNo()));
     }
 
 }

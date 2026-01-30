@@ -14,4 +14,6 @@ public interface ProductService {
 
     ResponseContent updateProductDeployTime(List<String> productNoList, Date deployTime);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
 }

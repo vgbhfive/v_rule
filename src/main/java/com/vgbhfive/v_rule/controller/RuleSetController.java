@@ -4,6 +4,7 @@ import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.ruleSet.RuleSetQueryParam;
+import com.vgbhfive.v_rule.entity.RuleEntity;
 import com.vgbhfive.v_rule.entity.RuleSetEntity;
 import com.vgbhfive.v_rule.service.RuleSetService;
 import org.springframework.web.bind.annotation.*;
@@ -43,11 +44,18 @@ public class RuleSetController {
         return ruleSetService.update(ruleSetEntity);
     }
 
-    @GetMapping("/dropdown/list")
+    @PostMapping("/valid")
     @Log
     @Permission
-    public ResponseContent dropdownList() {
-        return ruleSetService.dropdownList();
+    public ResponseContent valid(@RequestBody RuleEntity ruleEntity) {
+        return ruleSetService.updateValid(ruleEntity.getId(), ruleEntity.getIsValid());
+    }
+
+    @PostMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList(@RequestBody RuleSetQueryParam param) {
+        return ruleSetService.dropdownList(param);
     }
 
 }

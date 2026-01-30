@@ -33,8 +33,6 @@ public class RuleSetListDto {
 
     private String threshold;
 
-    private String thresholdType;
-
     private String result;
 
     private Integer version;

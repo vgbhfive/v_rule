@@ -80,12 +80,6 @@ public class RuleSetEntity {
     private String threshold;
 
     /**
-     * 阈值类型
-     * @see com.vgbhfive.v_rule.common.enums.ValueType
-     */
-    private String thresholdType;
-
-    /**
      * 结果
      * @see com.vgbhfive.v_rule.common.enums.ResultType
      */

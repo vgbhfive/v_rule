@@ -4,7 +4,7 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.ruleSet.RuleSetListDto">
         SELECT
-            id, line_no, rule_set_name, rule_set_no, first_no, first_type, second_no, second_type, combine, cond, threshold, threshold_type, result, version, deploy_at, is_valid, create_at
+            id, line_no, rule_set_name, rule_set_no, first_no, first_type, second_no, second_type, combine, cond, threshold, result, version, deploy_at, is_valid, create_at
         FROM rule_set
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
@@ -67,7 +67,12 @@
     <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
         SELECT rule_set_no as value, rule_set_name as `key`
         FROM rule_set
-        WHERE is_valid = 1 AND is_delete = 0
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="lineNo != null and lineNo != ''">
+                line_no = #{lineNo}
+            </if>
+            AND is_valid = 1 AND is_delete = 0
+        </trim>
     </select>
 
 </mapper>

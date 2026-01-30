@@ -50,11 +50,11 @@ public class RuleController {
         return ruleService.updateValid(ruleEntity.getId(), ruleEntity.getIsValid());
     }
 
-    @GetMapping("/dropdown/list")
+    @PostMapping("/dropdown/list")
     @Log
     @Permission
-    public ResponseContent dropdownList() {
-        return ruleService.dropdownList();
+    public ResponseContent dropdownList(@RequestBody RuleQueryParam param) {
+        return ruleService.dropdownList(param);
     }
 
 }

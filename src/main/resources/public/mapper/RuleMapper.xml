@@ -73,7 +73,12 @@
     <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
         SELECT rule_no as value, rule_name as `key`
         FROM rule
-        WHERE is_valid = 1 AND is_delete = 0
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="lineNo != null and lineNo != ''">
+                line_no = #{lineNo}
+            </if>
+            AND is_valid = 1 AND is_delete = 0
+        </trim>
     </select>
 
 </mapper>

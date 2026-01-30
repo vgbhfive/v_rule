@@ -144,8 +144,8 @@ public class RuleServiceImpl implements RuleService {
     }
 
     @Override
-    public ResponseContent dropdownList() {
-        return ResponseContent.success(ruleMapper.selectDropdownList());
+    public ResponseContent dropdownList(RuleQueryParam param) {
+        return ResponseContent.success(ruleMapper.selectDropdownList(param.getLineNo()));
     }
 
 }

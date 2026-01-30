@@ -66,7 +66,6 @@ public class ProductInterestServiceImpl implements ProductInterestService {
             productInterestEntity.setCreateAt(now);
         }
         productInterestEntity.setId(null);
-        productInterestEntity.setIsValid(1);
         productInterestEntity.setIsDelete(0);
         productInterestEntity.setUpdateAt(now);
         Integer insertInterest = productInterestMapper.insert(productInterestEntity);
@@ -78,7 +77,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
         if (insert < 1) {
             throw new DataBaseException("创建利率产品失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s利率产品成功", isUpdate ? "修改" : "新增"));
     }
 
     private ProductEntity buildProductEntity(ProductInterestEntity productInterestEntity) {
@@ -90,7 +89,7 @@ public class ProductInterestServiceImpl implements ProductInterestService {
         productEntity.setType(ProductType.INTEREST.getType());
         productEntity.setRemark(productInterestEntity.getRemark());
         productEntity.setVersion(productInterestEntity.getVersion());
-        productEntity.setIsValid(1);
+        productEntity.setIsValid(productInterestEntity.getIsValid());
         productEntity.setIsDelete(0);
         productEntity.setCreateAt(productInterestEntity.getCreateAt());
         productEntity.setUpdateAt(new Date());

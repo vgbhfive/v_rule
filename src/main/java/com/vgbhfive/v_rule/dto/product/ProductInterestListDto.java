@@ -22,11 +22,9 @@ public class ProductInterestListDto {
 
     private String remark;
 
-    private String version;
+    private Integer version;
 
-    private String isValid;
-
-    private String isDelete;
+    private Integer isValid;
 
     private String valueType;
 
