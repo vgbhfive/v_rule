@@ -62,19 +62,18 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
             productPeriodEntity.setCreateAt(now);
         }
         productPeriodEntity.setId(null);
-        productPeriodEntity.setIsValid(1);
         productPeriodEntity.setIsDelete(0);
         productPeriodEntity.setUpdateAt(now);
-        Integer insertPeriod = productPeriodMapper.insert(productPeriodEntity);
+        int insertPeriod = productPeriodMapper.insert(productPeriodEntity);
         if (insertPeriod < 1) {
             throw new DataBaseException("新增账期产品失败");
         }
         ProductEntity productEntity = buildProductEntity(productPeriodEntity);
-        Integer insert = productMapper.insert(productEntity);
+        int insert = productMapper.insert(productEntity);
         if (insert < 1) {
             throw new DataBaseException("新增账期产品失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s账期产品成功", isUpdate ? "修改" : "新增"));
     }
 
     private ProductEntity buildProductEntity(ProductPeriodEntity productPeriodEntity) {
@@ -86,7 +85,7 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
         entity.setType(ProductType.PERIOD.getType());
         entity.setRemark(productPeriodEntity.getRemark());
         entity.setVersion(productPeriodEntity.getVersion());
-        entity.setIsValid(1);
+        entity.setIsValid(productPeriodEntity.getIsValid());
         entity.setIsDelete(0);
         entity.setCreateAt(productPeriodEntity.getCreateAt());
         entity.setUpdateAt(new Date());
@@ -98,7 +97,7 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
         ProductEntity oldProductEntity = new ProductEntity();
         oldProductEntity.setId(productPeriodEntity.getId());
         oldProductEntity.setIsDelete(1);
-        Integer update = productMapper.update(oldProductEntity,
+        int update = productMapper.update(oldProductEntity,
                 new UpdateWrapper<ProductEntity>().eq("id", productPeriodEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("修改账期产品失败");
@@ -106,7 +105,7 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
         ProductPeriodEntity oldProductPeriodEntity = new ProductPeriodEntity();
         oldProductPeriodEntity.setProductName(productPeriodEntity.getProductName());
         oldProductPeriodEntity.setIsDelete(1);
-        Integer updatePeriod = productPeriodMapper.update(oldProductPeriodEntity,
+        int updatePeriod = productPeriodMapper.update(oldProductPeriodEntity,
                 new UpdateWrapper<ProductPeriodEntity>().eq("product_no", productPeriodEntity.getProductNo()).eq("is_delete", 0));
         if (updatePeriod < 1) {
             throw new DataBaseException("修改账期产品失败");

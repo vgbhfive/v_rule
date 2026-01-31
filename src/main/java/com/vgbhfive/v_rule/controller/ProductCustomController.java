@@ -22,7 +22,7 @@ public class ProductCustomController {
     @Resource
     private ProductCustomService productCustomService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {

@@ -62,19 +62,18 @@ public class ProductLimitServiceImpl implements ProductLimitService {
             productLimitEntity.setCreateAt(now);
         }
         productLimitEntity.setId(null);
-        productLimitEntity.setIsValid(1);
         productLimitEntity.setIsDelete(0);
         productLimitEntity.setUpdateAt(now);
-        Integer insertLimit = productLimitMapper.insert(productLimitEntity);
+        int insertLimit = productLimitMapper.insert(productLimitEntity);
         if (insertLimit < 1) {
             throw new DataBaseException("新增额度产品失败");
         }
         ProductEntity productEntity = buildProductEntity(productLimitEntity);
-        Integer insert = productMapper.insert(productEntity);
+        int insert = productMapper.insert(productEntity);
         if (insert < 1) {
             throw new DataBaseException("新增额度产品失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s额度产品成果", isUpdate ? "修改" : "新增"));
     }
 
     private ProductEntity buildProductEntity(ProductLimitEntity productLimitEntity) {
@@ -86,7 +85,7 @@ public class ProductLimitServiceImpl implements ProductLimitService {
         entity.setType(ProductType.LIMIT.getType());
         entity.setRemark(productLimitEntity.getRemark());
         entity.setVersion(productLimitEntity.getVersion());
-        entity.setIsValid(1);
+        entity.setIsValid(productLimitEntity.getIsValid());
         entity.setIsDelete(0);
         entity.setCreateAt(productLimitEntity.getCreateAt());
         entity.setUpdateAt(new Date());
@@ -98,7 +97,7 @@ public class ProductLimitServiceImpl implements ProductLimitService {
         ProductEntity oldProductEntity = new ProductEntity();
         oldProductEntity.setId(productLimitEntity.getId());
         oldProductEntity.setIsDelete(1);
-        Integer update = productMapper.update(oldProductEntity,
+        int update = productMapper.update(oldProductEntity,
                 new UpdateWrapper<ProductEntity>().eq("id", productLimitEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("修改额度产品失败");
@@ -106,7 +105,7 @@ public class ProductLimitServiceImpl implements ProductLimitService {
         ProductLimitEntity oldProductLimitEntity = new ProductLimitEntity();
         oldProductLimitEntity.setProductNo(productLimitEntity.getProductNo());
         oldProductLimitEntity.setIsDelete(1);
-        Integer updateLimit = productLimitMapper.update(oldProductLimitEntity,
+        int updateLimit = productLimitMapper.update(oldProductLimitEntity,
                 new UpdateWrapper<ProductLimitEntity>().eq("product_no", productLimitEntity.getProductNo()).eq("is_delete", 0));
         if (updateLimit < 1) {
             throw new DataBaseException("修改额度产品失败");

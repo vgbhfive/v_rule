@@ -35,7 +35,7 @@ public interface Constant {
 
     String NO_ZD = "ZD";
 
-    String NO_CL = "CL";
+    String NO_CLJ = "CLJ";
 
     String NO_FLQ = "FLQ";
 

@@ -64,20 +64,19 @@ public class ProductCustomServiceImpl implements ProductCustomService {
             productEntity.setCreateAt(now);
         }
         productEntity.setId(null);
-        productEntity.setIsValid(1);
         productEntity.setIsDelete(0);
         productEntity.setUpdateAt(now);
 
         List<ProductCustomEntity> customEntityList = buildCustomEntityList(productEntity);
         Integer insertCustom = productCustomMapper.batchInsert(customEntityList);
-        if (insertCustom < productEntity.getProductCustomEntityList().size()) {
+        if (insertCustom != productEntity.getProductCustomEntityList().size()) {
             throw new DataBaseException("创建自定义产品失败");
         }
-        Integer insert = productMapper.insert(productEntity);
+        int insert = productMapper.insert(productEntity);
         if (insert < 1) {
             throw new DataBaseException("创建自定义产品失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s自定义产品成果", isUpdate ? "修改" : "新增"));
     }
 
     private List<ProductCustomEntity> buildCustomEntityList(ProductEntity entity) {
@@ -108,7 +107,7 @@ public class ProductCustomServiceImpl implements ProductCustomService {
         ProductEntity oldProductEntity = new ProductEntity();
         oldProductEntity.setProductNo(productEntity.getProductNo());
         oldProductCustomEntity.setIsDelete(1);
-        Integer update = productMapper.update(oldProductEntity,
+        int update = productMapper.update(oldProductEntity,
                 new UpdateWrapper<ProductEntity>().eq("id", productEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("修改自定义产品失败");

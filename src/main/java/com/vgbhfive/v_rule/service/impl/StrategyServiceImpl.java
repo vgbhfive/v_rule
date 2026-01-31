@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.enums.RuleType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -60,25 +61,24 @@ public class StrategyServiceImpl implements StrategyService {
         if (isUpdate) {
             strategyEntity.setVersion(strategyEntity.getVersion() + 1);
         } else {
-            strategyEntity.setStrategyNo(noGenerateUtil.generateNo(Constant.NO_CL));
+            strategyEntity.setStrategyNo(noGenerateUtil.generateNo(Constant.NO_CLJ));
             strategyEntity.setVersion(1);
             strategyEntity.setCreateAt(now);
         }
         strategyEntity.setId(null);
-        strategyEntity.setIsValid(1);
         strategyEntity.setIsDelete(0);
         strategyEntity.setUpdateAt(now);
 
         List<StrategyRuleDetailEntity> ruleDetailEntityList = buildRuleDetailList(strategyEntity);
         Integer insertDetail = strategyRuleDetailMapper.batchInsertDetails(ruleDetailEntityList);
-        if (insertDetail < strategyEntity.getRuleDetailEntityList().size()) {
+        if (insertDetail != strategyEntity.getRuleDetailEntityList().size()) {
             throw new DataBaseException("创建策略集失败");
         }
-        Integer insert = strategyMapper.insert(strategyEntity);
+        int insert = strategyMapper.insert(strategyEntity);
         if (insert < 1) {
             throw new DataBaseException("创建策略集失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s策略集成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
@@ -92,7 +92,7 @@ public class StrategyServiceImpl implements StrategyService {
         StrategyEntity oldStrategyEntity = new StrategyEntity();
         oldStrategyEntity.setIsDelete(1);
         oldStrategyEntity.setUpdateAt(new Date());
-        Integer update = strategyMapper.update(oldStrategyEntity,
+        int update = strategyMapper.update(oldStrategyEntity,
                 new UpdateWrapper<StrategyEntity>().eq("id", strategyEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("更新策略集失败");
@@ -100,12 +100,28 @@ public class StrategyServiceImpl implements StrategyService {
         StrategyRuleDetailEntity oldStrategyRuleDetailEntity = new StrategyRuleDetailEntity();
         oldStrategyRuleDetailEntity.setIsDelete(1);
         oldStrategyRuleDetailEntity.setUpdateAt(new Date());
-        Integer updateInterest = strategyRuleDetailMapper.update(oldStrategyRuleDetailEntity,
+        int updateInterest = strategyRuleDetailMapper.update(oldStrategyRuleDetailEntity,
                 new UpdateWrapper<StrategyRuleDetailEntity>().eq("strategy_no", strategyEntity.getStrategyNo()).eq("is_delete", 0));
-        if (updateInterest < strategyEntity.getRuleDetailEntityList().size()) {
+        if (updateInterest != strategyEntity.getRuleDetailEntityList().size()) {
             throw new DataBaseException("更新策略集失败");
         }
         return this.create(strategyEntity, true);
+    }
+
+    @Override
+    public ResponseContent updateValid(Integer id, Integer status) {
+        if (Objects.isNull(id)) {
+            throw new ParamException("无效参数");
+        }
+        StrategyEntity oldStrategyEntity = new StrategyEntity();
+        oldStrategyEntity.setIsValid(status);
+        oldStrategyEntity.setUpdateAt(new Date());
+        int update = strategyMapper.update(oldStrategyEntity,
+                new UpdateWrapper<StrategyEntity>().eq("id", id));
+        if (update < 1) {
+            throw new DataBaseException("更新规则集状态失败");
+        }
+        return ResponseContent.success("更新规则集状态成功");
     }
 
     private List<StrategyRuleDetailEntity> buildRuleDetailList(StrategyEntity strategyEntity) {

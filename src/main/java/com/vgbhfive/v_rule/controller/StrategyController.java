@@ -50,6 +50,13 @@ public class StrategyController {
         return strategyService.update(strategyEntity);
     }
 
+    @PostMapping("/valid")
+    @Log
+    @Permission
+    public ResponseContent updateValid(@RequestBody StrategyEntity strategyEntity) {
+        return strategyService.updateValid(strategyEntity.getId(), strategyEntity.getIsValid());
+    }
+
     @GetMapping("/dropdown/list")
     @Log
     @Permission

@@ -22,7 +22,7 @@ public class ProductLimitController {
     @Resource
     private ProductLimitService productLimitService;
 
-    @GetMapping("/list")
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody ProductQueryParam param) {
