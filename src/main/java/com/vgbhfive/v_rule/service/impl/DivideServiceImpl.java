@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.service.impl;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -65,18 +66,17 @@ public class DivideServiceImpl implements DivideService {
         }
         List<DivideProductEntity> productEntityList = buildProductEntityList(divideEntity);
         Integer insertProduct = divideProductMapper.batchInsert(productEntityList);
-        if (insertProduct < divideEntity.getProductEntityList().size()) {
+        if (insertProduct != divideEntity.getProductEntityList().size()) {
             throw new DataBaseException("创建分流器失败");
         }
         divideEntity.setId(null);
-        divideEntity.setIsValid(1);
         divideEntity.setIsDelete(0);
         divideEntity.setUpdateAt(now);
-        Integer insert = divideMapper.insert(divideEntity);
+        int insert = divideMapper.insert(divideEntity);
         if (insert < 1) {
             throw new DataBaseException("创建分流器失败");
         }
-        return ResponseContent.success();
+        return ResponseContent.success(String.format("%s分流器成功", isUpdate ? "修改" : "新增"));
     }
 
     @Override
@@ -90,7 +90,7 @@ public class DivideServiceImpl implements DivideService {
         DivideEntity oldDivideEntity = new DivideEntity();
         oldDivideEntity.setIsDelete(1);
         oldDivideEntity.setUpdateAt(new Date());
-        Integer update = divideMapper.update(oldDivideEntity,
+        int update = divideMapper.update(oldDivideEntity,
                 new UpdateWrapper<DivideEntity>().eq("id", divideEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("修改分流器失败");
@@ -101,6 +101,22 @@ public class DivideServiceImpl implements DivideService {
         divideProductMapper.update(oldDivideProductEntity,
                 new UpdateWrapper<DivideProductEntity>().eq("divide_no", divideEntity.getDivideNo()).eq("is_delete", 0));
         return this.create(divideEntity, true);
+    }
+
+    @Override
+    public ResponseContent updateValid(Integer id, Integer status) {
+        if (Objects.isNull(id)) {
+            throw new ParamException("无效参数");
+        }
+        DivideEntity oldDivideEntity = new DivideEntity();
+        oldDivideEntity.setIsValid(status);
+        oldDivideEntity.setUpdateAt(new Date());
+        int update = divideMapper.update(oldDivideEntity,
+                new UpdateWrapper<DivideEntity>().eq("id", id));
+        if (update < 1) {
+            throw new DataBaseException("更新分流器状态失败");
+        }
+        return ResponseContent.success("更新分流器状态成功");
     }
 
     private List<DivideProductEntity> buildProductEntityList(DivideEntity divideEntity) {

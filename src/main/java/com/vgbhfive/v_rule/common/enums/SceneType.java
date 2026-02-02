@@ -17,6 +17,7 @@ import java.util.Map;
 @AllArgsConstructor
 public enum SceneType {
 
+    ALL(-1, "ALL", "ALL"),
     SCENE(1, "场景", "scene");
 
     private Integer id;
@@ -28,6 +29,9 @@ public enum SceneType {
     public static List<Map<String, Object>> allInstance() {
         List<Map<String, Object>> values = new ArrayList<>();
         for (SceneType value : SceneType.values()) {
+            if (value.getId().equals(-1)) {
+                continue;
+            }
             Map<String, Object> tmp = new HashMap<>();
             tmp.put("id", value.getId());
             tmp.put("name", value.getName());
@@ -43,7 +47,7 @@ public enum SceneType {
                 return value;
             }
         }
-        return null;
+        return SceneType.ALL;
     }
 
 }

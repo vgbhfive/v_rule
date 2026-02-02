@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
 import com.vgbhfive.v_rule.mapper.ProductMapper;
 import com.vgbhfive.v_rule.service.ProductService;
@@ -51,6 +52,11 @@ public class ProductServiceImpl implements ProductService {
             throw new DataBaseException("更新利率产品状态失败");
         }
         return ResponseContent.success("更新利率产品状态成功");
+    }
+
+    @Override
+    public ResponseContent dropdownList(ProductQueryParam param) {
+        return ResponseContent.success(productMapper.selectDropdownList(param.getLineNo(), param.getType()));
     }
 
 }

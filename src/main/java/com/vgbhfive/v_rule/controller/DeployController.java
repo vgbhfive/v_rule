@@ -23,11 +23,35 @@ public class DeployController {
     @Resource
     private DeployService deployService;
 
-    @GetMapping("/scene/list")
+    /**
+     * 查询可上线的场景列表
+     * @param param
+     * @return
+     */
+    @PostMapping("/list")
     @Log
     @Permission
     public ResponseContent queryList(@Valid @RequestBody DeployQueryParam param) {
-        return ResponseContent.success();
+        return deployService.queryList(param);
+    }
+
+    /**
+     * 查询已上线的场景记录
+     * @param param
+     * @return
+     */
+    @PostMapping("/done/list")
+    @Log
+    @Permission
+    public ResponseContent queryDeployList(@Valid @RequestBody DeployQueryParam param) {
+        return deployService.queryDoneList(param);
+    }
+
+    @PostMapping("/dropdown/list")
+    @Log
+    @Permission
+    public ResponseContent dropdownList(@RequestBody DeployQueryParam param) {
+        return deployService.dropdownList(param);
     }
 
     /**

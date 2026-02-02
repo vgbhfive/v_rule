@@ -84,8 +84,21 @@ public class DeployServiceImpl implements DeployService {
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        SceneType type = SceneType.valueOf(param.getDeployType());
+        SceneType type = SceneType.getInstance(param.getDeployType());
         switch (type) {
+            case ALL:
+                SceneQueryParam sceneQueryParam = new SceneQueryParam();
+                sceneQueryParam.setLineNo(param.getLineNo());
+                sceneQueryParam.setSceneName(param.getName());
+                sceneQueryParam.setSceneNo(param.getNo());
+                sceneQueryParam.setField(param.getField());
+                sceneQueryParam.setIsValid(param.getIsValid());
+                List<DeployListDto> sceneAllList = getDeployScene(sceneQueryParam, start, limit);
+                int allTotalCount = sceneAllList.size();
+
+                int allTotalPage = (allTotalCount - 1) / limit + 1;
+                PageResponse<DeployListDto> allResult = new PageResponse<>(param.getCurrPage(), limit, allTotalCount, allTotalPage, sceneAllList);
+                return ResponseContent.success(allResult);
             case SCENE:
                 SceneQueryParam queryParam = new SceneQueryParam();
                 queryParam.setLineNo(param.getLineNo());
@@ -94,14 +107,58 @@ public class DeployServiceImpl implements DeployService {
                 queryParam.setField(param.getField());
                 queryParam.setIsValid(param.getIsValid());
 
-                List<SceneListDto> sceneListDtoList = sceneMapper.queryList(queryParam, start, limit);
+                List<DeployListDto> sceneList = getDeployScene(queryParam, start, limit);
                 int totalCount = sceneMapper.queryTotalCount(queryParam);
 
                 int totalPage = (totalCount - 1) / limit + 1;
-                PageResponse<SceneListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, sceneListDtoList);
+                PageResponse<DeployListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, sceneList);
                 return ResponseContent.success(result);
             default:
-                return ResponseContent.error("上线场景类型");
+                return ResponseContent.success("上线场景类型异常");
+        }
+    }
+
+    private List<DeployListDto> getDeployScene(SceneQueryParam param, Integer start, Integer limit) {
+        List<SceneListDto> sceneListDtoList = sceneMapper.queryList(param, start, limit);
+        List<DeployListDto> deployListDtoList = new ArrayList<>();
+        sceneListDtoList.forEach(scene -> {
+            DeployListDto deploy = new DeployListDto();
+            deploy.setLineNo(scene.getLineNo());
+            deploy.setName(scene.getSceneName());
+            deploy.setNo(scene.getSceneNo());
+            deploy.setType(SceneType.SCENE.getType());
+            deploy.setField(scene.getField());
+            deployListDtoList.add(deploy);
+        });
+        return deployListDtoList;
+    }
+
+    /**
+     * 查询已上线的记录
+     * @param param
+     * @return
+     */
+    @Override
+    public ResponseContent queryDoneList(DeployQueryParam param) {
+        int start = (param.getCurrPage() - 1) * param.getLimit();
+        int limit = param.getLimit();
+
+        List<DeployDoneListDto> deployDoneListDtoList = deployMapper.queryList(param, start, limit);
+        int totalCount = deployMapper.queryTotalCount(param);
+
+        int totalPage = (totalCount - 1) / limit + 1;
+        PageResponse<DeployDoneListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, deployDoneListDtoList);
+        return ResponseContent.success(result);
+    }
+
+    @Override
+    public ResponseContent dropdownList(DeployQueryParam param) {
+        SceneType type = SceneType.getInstance(param.getDeployType());
+        switch (type) {
+            case SCENE:
+                return ResponseContent.success(sceneMapper.selectDropdownList(param.getLineNo()));
+            default:
+                return ResponseContent.success();
         }
     }
 
@@ -282,11 +339,6 @@ public class DeployServiceImpl implements DeployService {
                     dataSourceNoSet.add(customDetail.getValue());
                 }
             });
-        });
-        ruleSetList.forEach(ruleSet -> {
-            if (ruleSet.getThresholdType().equals(ValueType.DATASOURCE.getType())) {
-                dataSourceNoSet.add(ruleSet.getThreshold());
-            }
         });
         ruleList.forEach(rule -> {
             dataSourceNoSet.add(rule.getDataSourceNo());

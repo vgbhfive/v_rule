@@ -81,4 +81,10 @@ public class EnumController {
         return ResponseContent.success(ResultType.allInstance());
     }
 
+    @GetMapping("/sceneType")
+    @Permission
+    public ResponseContent sceneType() {
+        return ResponseContent.success(SceneType.allInstance());
+    }
+
 }

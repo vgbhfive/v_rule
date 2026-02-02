@@ -105,7 +105,12 @@
     <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
         SELECT strategy_no as value, strategy_name as `key`
         FROM strategy
-        WHERE is_valid = 1 AND is_delete = 0
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="lineNo != null and lineNo != ''">
+                line_no = #{lineNo}
+            </if>
+            AND is_valid = 1 AND is_delete = 0
+        </trim>
     </select>
 
 </mapper>

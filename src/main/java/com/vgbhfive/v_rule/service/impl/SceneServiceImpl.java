@@ -123,8 +123,8 @@ public class SceneServiceImpl implements SceneService {
     }
 
     @Override
-    public ResponseContent dropdownList() {
-        return ResponseContent.success(sceneMapper.selectDropdownList());
+    public ResponseContent dropdownList(SceneQueryParam param) {
+        return ResponseContent.success(sceneMapper.selectDropdownList(param.getLineNo()));
     }
 
 }

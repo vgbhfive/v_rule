@@ -2,6 +2,52 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vgbhfive.v_rule.mapper.DeployMapper">
 
+    <select id="queryList" resultType="com.vgbhfive.v_rule.dto.deploy.DeployDoneListDto">
+        SELECT
+            id, line_no, deploy_type, deploy_no as no, field, name, status_code, deploy_desc, create_at
+        FROM deploy
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.deployType != null and param.deployType != ''">
+                AND deploy_type = #{param.deployType}
+            </if>
+            <if test="param.no != null and param.no != ''">
+                AND deploy_no = #{param.no}
+            </if>
+            <if test="param.name != null and param.name != ''">
+                AND name like CONCAT(#{param.name}, '%')
+            </if>
+            <if test="param.field != null and param.field != ''">
+                AND field = #{param.field}
+            </if>
+        </trim>
+        LIMIT #{start}, #{limit}
+    </select>
+
+    <select id="queryTotalCount" resultType="java.lang.Integer">
+        SELECT COUNT(*)
+        FROM deploy
+        <trim prefix="WHERE" prefixOverrides="AND">
+            <if test="param.lineNo != null and param.lineNo != ''">
+                line_no = #{param.lineNo}
+            </if>
+            <if test="param.deployType != null and param.deployType != ''">
+                AND deploy_type = #{param.deployType}
+            </if>
+            <if test="param.no != null and param.no != ''">
+                AND deploy_no = #{param.no}
+            </if>
+            <if test="param.name != null and param.name != ''">
+                AND name like CONCAT(#{param.name}, '%')
+            </if>
+            <if test="param.field != null and param.field != ''">
+                AND field = #{param.field}
+            </if>
+        </trim>
+    </select>
+
     <select id="selectApprovalCount" resultType="java.lang.Integer">
         SELECT COUNT(*)
         FROM deploy

@@ -14,6 +14,10 @@ public interface DeployService {
 
     ResponseContent queryList(DeployQueryParam param);
 
+    ResponseContent queryDoneList(DeployQueryParam param);
+
+    ResponseContent dropdownList(DeployQueryParam param);
+
     ResponseContent diff(String sceneNo, String sceneType) throws Exception;
 
     ResponseContent pass(DeployEntity deployEntity);

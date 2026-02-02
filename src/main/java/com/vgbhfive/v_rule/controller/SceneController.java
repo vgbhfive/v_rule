@@ -50,11 +50,11 @@ public class SceneController {
         return sceneService.updateValid(sceneEntity.getId(), sceneEntity.getIsValid());
     }
 
-    @GetMapping("/dropdown/list")
+    @PostMapping("/dropdown/list")
     @Log
     @Permission
-    public ResponseContent dropdownList() {
-        return sceneService.dropdownList();
+    public ResponseContent dropdownList(@RequestBody SceneQueryParam param) {
+        return sceneService.dropdownList(param);
     }
 
 }

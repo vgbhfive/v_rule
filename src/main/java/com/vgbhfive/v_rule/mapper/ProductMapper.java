@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.entity.ProductEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
@@ -17,5 +18,7 @@ import java.util.List;
 public interface ProductMapper extends BaseMapper<ProductEntity> {
 
     Integer updateDeployTimeBatch(@Param("productNos") List<String> productNoList, @Param("deployTime") Date deployTime);
+
+    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo, @Param("type") String type);
 
 }

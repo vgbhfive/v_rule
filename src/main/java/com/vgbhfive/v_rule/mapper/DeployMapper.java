@@ -1,9 +1,13 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.deploy.DeployDoneListDto;
+import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
 import com.vgbhfive.v_rule.entity.DeployEntity;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 /**
  * @projectName: v_rule
@@ -12,6 +16,10 @@ import org.apache.ibatis.annotations.Param;
  */
 @Mapper
 public interface DeployMapper extends BaseMapper<DeployEntity> {
+
+    List<DeployDoneListDto> queryList(@Param("param") DeployQueryParam param, @Param("start") Integer start, @Param("limit") Integer limit);
+
+    Integer queryTotalCount(@Param("param") DeployQueryParam param);
 
     Integer selectApprovalCount(@Param("no") String no, @Param("type") String type);
 

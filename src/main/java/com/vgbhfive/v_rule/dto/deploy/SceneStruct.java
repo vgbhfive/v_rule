@@ -185,7 +185,6 @@ public class SceneStruct {
         private String combine;
         private String cond;
         private String threshold;
-        private String thresholdType;
         private String result;
     }
 

@@ -23,6 +23,8 @@ public interface DivideService {
 
     ResponseContent update(DivideEntity divideEntity);
 
+    ResponseContent updateValid(Integer id, Integer status);
+
     List<SceneStruct.Divide> queryDivideBySceneNo(String sceneNo);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.Divide> divideList, List<SceneStruct.Divide> lastDivideList) throws Exception;

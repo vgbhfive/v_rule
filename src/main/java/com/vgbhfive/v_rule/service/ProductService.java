@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 
 import java.util.Date;
 import java.util.List;
@@ -15,5 +16,7 @@ public interface ProductService {
     ResponseContent updateProductDeployTime(List<String> productNoList, Date deployTime);
 
     ResponseContent updateValid(Integer id, Integer status);
+
+    ResponseContent dropdownList(ProductQueryParam param);
 
 }

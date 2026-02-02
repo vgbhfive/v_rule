@@ -57,11 +57,11 @@ public class StrategyController {
         return strategyService.updateValid(strategyEntity.getId(), strategyEntity.getIsValid());
     }
 
-    @GetMapping("/dropdown/list")
+    @PostMapping("/dropdown/list")
     @Log
     @Permission
-    public ResponseContent dropdownList() {
-        return strategyService.dropdownList();
+    public ResponseContent dropdownList(@RequestBody StrategyQueryParam param) {
+        return strategyService.dropdownList(param);
     }
 
 }

@@ -50,6 +50,13 @@ public class DivideController {
         return divideService.update(divideEntity);
     }
 
+    @PostMapping("/valid")
+    @Log
+    @Permission
+    public ResponseContent valid(@RequestBody DivideEntity divideEntity) {
+        return divideService.updateValid(divideEntity.getId(), divideEntity.getIsValid());
+    }
+
     @GetMapping("/dropdown/list")
     @Log
     @Permission

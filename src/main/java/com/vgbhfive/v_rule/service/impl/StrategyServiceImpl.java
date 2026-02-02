@@ -191,8 +191,8 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public ResponseContent dropdownList() {
-        return ResponseContent.success(strategyMapper.selectDropdownList());
+    public ResponseContent dropdownList(StrategyQueryParam param) {
+        return ResponseContent.success(strategyMapper.selectDropdownList(param.getLineNo()));
     }
 
 }

@@ -254,7 +254,7 @@ CREATE TABLE `deploy` (
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
   `deploy_type` varchar(16) NOT NULL COMMENT '发布模式 scene',
   `deploy_no` varchar(32) NOT NULL COMMENT '发布编码',
-  `field` varchar(128) NOT NULL COMMENT '发布编码',
+  `field` varchar(128) NOT NULL COMMENT '发布字段',
   `name` varchar(128) NOT NULL COMMENT '发布名称',
   `divide_list` varchar(2048) NOT NULL COMMENT '分流器编码列表',
   `deploy_desc` varchar(512) NOT NULL COMMENT '上线描述',
