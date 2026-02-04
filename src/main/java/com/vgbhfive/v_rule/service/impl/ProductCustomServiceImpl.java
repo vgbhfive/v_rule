@@ -76,7 +76,7 @@ public class ProductCustomServiceImpl implements ProductCustomService {
         if (insert < 1) {
             throw new DataBaseException("创建自定义产品失败");
         }
-        return ResponseContent.success(String.format("%s自定义产品成果", isUpdate ? "修改" : "新增"));
+        return ResponseContent.success(String.format("%s自定义产品成功", isUpdate ? "修改" : "新增"));
     }
 
     private List<ProductCustomEntity> buildCustomEntityList(ProductEntity entity) {
@@ -106,7 +106,7 @@ public class ProductCustomServiceImpl implements ProductCustomService {
                 new UpdateWrapper<ProductCustomEntity>().eq("product_no", productEntity.getProductNo()).eq("is_delete", 0));
         ProductEntity oldProductEntity = new ProductEntity();
         oldProductEntity.setProductNo(productEntity.getProductNo());
-        oldProductCustomEntity.setIsDelete(1);
+        oldProductEntity.setIsDelete(1);
         int update = productMapper.update(oldProductEntity,
                 new UpdateWrapper<ProductEntity>().eq("id", productEntity.getId()).eq("is_delete", 0));
         if (update < 1) {

@@ -93,7 +93,7 @@
         SELECT p.*, pc.value_type, pc.value, pc.key_name
         FROM product p
         LEFT JOIN product_custom pc ON p.product_no = pc.product_no
-        WHERE p.id = #{id}
+        WHERE p.id = #{id} AND p.is_delete = 0 AND pc.is_delete = 0
     </select>
 
     <select id="queryCustomByProductNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$ProductCustom">
