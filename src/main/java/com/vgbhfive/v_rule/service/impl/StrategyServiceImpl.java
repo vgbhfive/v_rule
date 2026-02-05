@@ -100,11 +100,8 @@ public class StrategyServiceImpl implements StrategyService {
         StrategyRuleDetailEntity oldStrategyRuleDetailEntity = new StrategyRuleDetailEntity();
         oldStrategyRuleDetailEntity.setIsDelete(1);
         oldStrategyRuleDetailEntity.setUpdateAt(new Date());
-        int updateInterest = strategyRuleDetailMapper.update(oldStrategyRuleDetailEntity,
+        strategyRuleDetailMapper.update(oldStrategyRuleDetailEntity,
                 new UpdateWrapper<StrategyRuleDetailEntity>().eq("strategy_no", strategyEntity.getStrategyNo()).eq("is_delete", 0));
-        if (updateInterest != strategyEntity.getRuleDetailEntityList().size()) {
-            throw new DataBaseException("更新策略集失败");
-        }
         return this.create(strategyEntity, true);
     }
 

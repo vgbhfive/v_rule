@@ -138,6 +138,7 @@ public class DivideServiceImpl implements DivideService {
     public List<SceneStruct.Divide> queryDivideBySceneNo(String sceneNo) {
         List<SceneStruct.Divide> divideList = divideMapper.queryDivideBySceneNo(sceneNo);
         divideList.forEach(divide -> {
+            List<String> allProductNoList = new ArrayList<>();
             List<String> interestNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "interest");
             List<String> periodNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "period");
             List<String> limitNoList = divideProductMapper.queryProductNoListByDivideNo(divide.getNo(), "limit");
@@ -146,12 +147,11 @@ public class DivideServiceImpl implements DivideService {
             divide.setProductPeriodNoList(periodNoList);
             divide.setProductLimitNoList(limitNoList);
             divide.setProductCustomNoList(customNoList);
-            divide.setProductNoList(new ArrayList<String>(){{
-                addAll(interestNoList);
-                addAll(periodNoList);
-                addAll(limitNoList);
-                addAll(customNoList);
-            }});
+            allProductNoList.addAll(interestNoList);
+            allProductNoList.addAll(periodNoList);
+            allProductNoList.addAll(limitNoList);
+            allProductNoList.addAll(customNoList);
+            divide.setProductNoList(allProductNoList);
         });
         return divideList;
     }
@@ -203,6 +203,5 @@ public class DivideServiceImpl implements DivideService {
     public ResponseContent dropdownList() {
         return ResponseContent.success(divideMapper.selectDropdownList());
     }
-
 
 }

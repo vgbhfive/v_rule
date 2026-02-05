@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.dto.deploy;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.util.List;
 
@@ -59,6 +60,8 @@ public class SceneStruct {
     }
 
     @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
     public static class DivideNode {
         private String no;
         private String name;
@@ -70,6 +73,7 @@ public class SceneStruct {
 
     @Data
     @AllArgsConstructor
+    @NoArgsConstructor
     public static class DivideDiversion {
         private String source;
         private String value;

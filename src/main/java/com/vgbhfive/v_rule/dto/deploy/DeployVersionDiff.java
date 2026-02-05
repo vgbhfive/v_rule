@@ -1,6 +1,8 @@
 package com.vgbhfive.v_rule.dto.deploy;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 import java.util.List;
@@ -11,6 +13,8 @@ import java.util.List;
  * @date: 2025/11/30 14:02
  */
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class DeployVersionDiff implements Serializable {
 
     // 1-首次上线、0-正常上线

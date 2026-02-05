@@ -68,7 +68,7 @@
         SELECT d.*, dp.divide_no, dp.product_no, dp.type
         FROM divide d
         LEFT JOIN divide_product dp ON d.divide_no = dp.divide_no
-        WHERE d.id = #{id} AND d.is_delete = 0
+        WHERE d.id = #{id} AND d.is_delete = 0 AND dp.is_delete = 0
     </select>
 
     <select id="queryDivideBySceneNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Divide">

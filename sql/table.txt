@@ -191,7 +191,6 @@ CREATE TABLE `product_custom` (
 CREATE TABLE `strategy` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
-  `scene_no` varchar(32) NOT NULL COMMENT '场景编码',
   `strategy_name` varchar(32) NOT NULL COMMENT '策略集名称',
   `strategy_no` varchar(32) NOT NULL COMMENT '策略集编码',
   `model` varchar(16) NOT NULL COMMENT '运行模型 serial/parallel',

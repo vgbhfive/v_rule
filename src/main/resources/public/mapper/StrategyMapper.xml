@@ -5,7 +5,6 @@
     <resultMap id="queryDetailById" type="com.vgbhfive.v_rule.entity.StrategyEntity">
         <id property="id" column="id"/>
         <result property="lineNo" column="line_no"/>
-        <result property="sceneNo" column="scene_no"/>
         <result property="strategyName" column="strategy_name"/>
         <result property="strategyNo" column="strategy_no"/>
         <result property="model" column="model"/>
@@ -23,14 +22,11 @@
 
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.strategy.StrategyListDto">
         SELECT
-            id, line_no, scene_no, strategy_name, strategy_no, model, version, deploy_at, is_valid, create_at
+            id, line_no, strategy_name, strategy_no, model, version, deploy_at, is_valid, create_at
         FROM strategy
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="param.lineNo != null and param.lineNo != ''">
                 line_no = #{param.lineNo}
-            </if>
-            <if test="param.sceneNo != null and param.sceneNo != ''">
-                AND scene_no = #{param.sceneNo}
             </if>
             <if test="param.strategyName != null and param.strategyName != ''">
                 AND strategy_name like CONCAT(#{param.strategyName}, '%')
@@ -73,7 +69,7 @@
         SELECT s.*, sr.strategy_no, sr.detail_no, sr.rule_type, sr.priority
         FROM strategy s
         LEFT JOIN strategy_rule_detail sr ON s.strategy_no = sr.strategy_no
-        WHERE s.id = #{id}
+        WHERE s.id = #{id} AND sr.is_delete = 0
     </select>
 
     <select id="queryStrategyByStrategyNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$Strategy">

@@ -35,12 +35,6 @@ public class StrategyEntity {
     private String lineNo;
 
     /**
-     * 场景编码
-     */
-    @NotBlank(message = "策略集所属场景不能为空")
-    private String sceneNo;
-
-    /**
      * 策略集名称
      */
     @NotBlank(message = "策略集名称不能为空")
