@@ -68,4 +68,10 @@
         LIMIT 1
     </select>
 
+    <select id="selectVersionList" resultType="java.lang.Integer">
+        SELECT version
+        FROM deploy
+        WHERE deploy_no = #{deployNo} AND status_code = 2 AND is_valid = 1
+    </select>
+
 </mapper>

@@ -1,9 +1,7 @@
 package com.vgbhfive.v_rule.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
-import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineListDto;
@@ -11,11 +9,13 @@ import com.vgbhfive.v_rule.dto.line.LineQueryParam;
 import com.vgbhfive.v_rule.entity.LineEntity;
 import com.vgbhfive.v_rule.mapper.LineMapper;
 import com.vgbhfive.v_rule.service.LineService;
+import com.vgbhfive.v_rule.service.validEntity.LineValid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.annotation.Resource;
 import java.util.Date;
 import java.util.List;
 
@@ -31,6 +31,8 @@ public class LineServiceImpl implements LineService {
 
     @Autowired
     private LineMapper lineMapper;
+    @Resource
+    private LineValid lineValid;
 
     @Override
     public ResponseContent queryList(LineQueryParam param) {
@@ -47,7 +49,7 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public ResponseContent create(LineEntity lineEntity, boolean isUpdate) {
-        checkParams(lineEntity, isUpdate);
+        lineValid.checkParams(lineEntity, isUpdate);
         Date now = new Date();
         if (!isUpdate) {
             lineEntity.setCreateAt(now);
@@ -73,23 +75,6 @@ public class LineServiceImpl implements LineService {
             throw new DataBaseException("修改业务线失败");
         }
         return this.create(lineEntity, true);
-    }
-
-    private void checkParams(LineEntity lineEntity, Boolean isUpdate) {
-        List<LineEntity> objectList = lineMapper.selectList(new QueryWrapper<LineEntity>()
-                .and(wrapper -> wrapper.eq("line_name", lineEntity.getLineName()).or().eq("line_no", lineEntity.getLineNo()))
-                .eq("is_delete", 0));
-        if (isUpdate) {
-            for (LineEntity entity : objectList) {
-                if (!lineEntity.getId().equals(entity.getId())) {
-                    throw new ParamException("不允许名称相同:" + lineEntity.getLineName());
-                }
-            }
-        } else {   // 新增
-            if (null != objectList && objectList.size() > 0) {
-                throw new ParamException("不允许名称相同:" + lineEntity.getLineName());
-            }
-        }
     }
 
     @Override

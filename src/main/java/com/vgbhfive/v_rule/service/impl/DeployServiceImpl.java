@@ -253,7 +253,7 @@ public class DeployServiceImpl implements DeployService {
                 return ResponseContent.error("error deploy type!");
         }
 
-        Integer insert = deployMapper.insert(deployEntity);
+        int insert = deployMapper.insert(deployEntity);
         if (insert < 1) {
             ResponseContent.success("新增上线部署失败");
         }
@@ -388,8 +388,8 @@ public class DeployServiceImpl implements DeployService {
 
                 preNodeList.add(nextNode);
                 prevDivide.setNodeList(preNodeList);
-                prevDiversionList.clear();
-                preNodeList.clear();
+                prevDiversionList = new ArrayList<>();
+                preNodeList = new ArrayList<>();
             }
 
             // accessStrategyNo
@@ -581,6 +581,11 @@ public class DeployServiceImpl implements DeployService {
             ruleSetList.addAll(nextRuleSetList);
             getRuleSetList(ruleSetList, nextRuleSetList, ruleNoSet, ruleSetNoSet);
         }
+    }
+
+    @Override
+    public ResponseContent rollbackVersionList(String deployNo) {
+        return ResponseContent.success(deployMapper.selectVersionList(deployNo));
     }
 
     @Override

@@ -79,6 +79,13 @@ public class DeployController {
         return deployService.pass(deployEntity);
     }
 
+    @PostMapping("/rollback/versions")
+    @Log
+    @Permission
+    public ResponseContent rollbackVersionList(@RequestBody DeployEntity deployEntity) {
+        return deployService.rollbackVersionList(deployEntity.getDeployNo());
+    }
+
     /**
      * 回滚场景
      * @return
