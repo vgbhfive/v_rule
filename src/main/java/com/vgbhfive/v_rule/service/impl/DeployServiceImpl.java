@@ -377,13 +377,13 @@ public class DeployServiceImpl implements DeployService {
             // diversionItem
             if (Objects.nonNull(prevDivide)) {
                 prevDiversionList.add(new SceneStruct.DivideDiversion(String.format("divide[%s]->accessStrategyNo[%s]", prevDivide.getNo(), prevDivide.getAccessStrategyNo()),
-                        "reject", divide.getNo()));
+                        "reject", String.format("divide[%s]->accessStrategyNo[%s]", divide.getNo(), divide.getAccessStrategyNo())));
                 prevDiversionList.add(new SceneStruct.DivideDiversion(String.format("divide[%s]->accessStrategyNo[%s]", prevDivide.getNo(), prevDivide.getAccessStrategyNo()),
-                        "review", divide.getNo()));
+                        "review", String.format("divide[%s]->accessStrategyNo[%s]", divide.getNo(), divide.getAccessStrategyNo())));
                 prevDivide.setDiversionItem(prevDiversionList);
                 SceneStruct.DivideNode nextNode = new SceneStruct.DivideNode();
-                nextNode.setNo(prevDivide.getNo());
-                nextNode.setName(prevDivide.getName());
+                nextNode.setNo(divide.getNo());
+                nextNode.setName(String.format("divide[%s]->accessStrategyNo[%s]", divide.getNo(), divide.getAccessStrategyNo()));
                 nextNode.setType("diversion");
 
                 preNodeList.add(nextNode);
@@ -511,19 +511,19 @@ public class DeployServiceImpl implements DeployService {
             kv.put(key, gson.toJson(strategy));
         });
         params.getInterestList().forEach(interest -> {
-            String key = String.format(corePrefix, lineNo, field, "interest", interest.getNo());
+            String key = String.format(corePrefix, lineNo, field, "product", interest.getNo());
             kv.put(key, gson.toJson(interest));
         });
         params.getPeriodList().forEach(period -> {
-            String key = String.format(corePrefix, lineNo, field, "period", period.getNo());
+            String key = String.format(corePrefix, lineNo, field, "product", period.getNo());
             kv.put(key, gson.toJson(period));
         });
         params.getLimitList().forEach(limit -> {
-            String key = String.format(corePrefix, lineNo, field, "limit", limit.getNo());
+            String key = String.format(corePrefix, lineNo, field, "product", limit.getNo());
             kv.put(key, gson.toJson(limit));
         });
         params.getCustomList().forEach(custom -> {
-            String key = String.format(corePrefix, lineNo, field, "custom", custom.getNo());
+            String key = String.format(corePrefix, lineNo, field, "product", custom.getNo());
             kv.put(key, gson.toJson(custom));
         });
         params.getRuleSetList().forEach(ruleSet -> {
