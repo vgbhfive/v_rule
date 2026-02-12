@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
@@ -33,6 +35,7 @@ public class ProductInterestController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.PRODUCT)
     public ResponseContent create(@RequestBody ProductInterestEntity productInterestEntity) {
         return productInterestService.create(productInterestEntity, false);
     }
@@ -40,6 +43,7 @@ public class ProductInterestController {
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.PRODUCT, isUpdate = true)
     public ResponseContent update(@RequestBody ProductInterestEntity productInterestEntity) {
         return productInterestService.update(productInterestEntity);
     }

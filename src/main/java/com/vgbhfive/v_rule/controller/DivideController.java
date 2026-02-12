@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.divide.DivideQueryParam;
 import com.vgbhfive.v_rule.entity.DivideEntity;
@@ -32,6 +34,7 @@ public class DivideController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.DIVIDE)
     public ResponseContent create(@RequestBody DivideEntity divideEntity) {
         return divideService.create(divideEntity, false);
     }
@@ -46,6 +49,7 @@ public class DivideController {
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.DIVIDE, isUpdate = true)
     public ResponseContent update(@RequestBody DivideEntity divideEntity) {
         return divideService.update(divideEntity);
     }

@@ -39,6 +39,12 @@ public class EnumController {
         return ResponseContent.success(ConditionType.allInstance());
     }
 
+    @GetMapping("/conditionType/ruleSet")
+    @Permission
+    public ResponseContent conditionTypeRuleSet() {
+        return ResponseContent.success(ConditionType.allRuleSetInstance());
+    }
+
     @GetMapping("/combineType")
     @Permission
     public ResponseContent combineType() {

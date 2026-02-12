@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
@@ -32,6 +34,7 @@ public class ProductCustomController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.PRODUCT)
     public ResponseContent create(@RequestBody ProductEntity productEntity) {
         return productCustomService.create(productEntity, false);
     }
@@ -39,13 +42,14 @@ public class ProductCustomController {
     @GetMapping("/detail/{id}")
     @Log
     @Permission
-    public ResponseContent create(@PathVariable("id") Integer id) {
+    public ResponseContent detail(@PathVariable("id") Integer id) {
         return productCustomService.detail(id);
     }
 
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.PRODUCT, isUpdate = true)
     public ResponseContent update(@RequestBody ProductEntity productEntity) {
         return productCustomService.update(productEntity);
     }

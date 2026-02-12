@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.SceneEntity;
@@ -32,6 +34,7 @@ public class SceneController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.SCENE)
     public ResponseContent create(@RequestBody SceneEntity sceneEntity) {
         return sceneService.create(sceneEntity, false);
     }
@@ -39,6 +42,7 @@ public class SceneController {
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.SCENE, isUpdate = true)
     public ResponseContent update(@RequestBody SceneEntity sceneEntity) {
         return sceneService.update(sceneEntity);
     }

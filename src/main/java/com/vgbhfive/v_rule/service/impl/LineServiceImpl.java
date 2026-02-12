@@ -1,15 +1,18 @@
 package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
+import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineListDto;
 import com.vgbhfive.v_rule.dto.line.LineQueryParam;
+import com.vgbhfive.v_rule.entity.DataCategoryEntity;
 import com.vgbhfive.v_rule.entity.LineEntity;
+import com.vgbhfive.v_rule.mapper.DataCategoryMapper;
 import com.vgbhfive.v_rule.mapper.LineMapper;
 import com.vgbhfive.v_rule.service.LineService;
-import com.vgbhfive.v_rule.service.validEntity.LineValid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,8 +34,10 @@ public class LineServiceImpl implements LineService {
 
     @Autowired
     private LineMapper lineMapper;
+    @Autowired
+    private DataCategoryMapper dataCategoryMapper;
     @Resource
-    private LineValid lineValid;
+    private NoGenerateUtil noGenerateUtil;
 
     @Override
     public ResponseContent queryList(LineQueryParam param) {
@@ -49,7 +54,6 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public ResponseContent create(LineEntity lineEntity, boolean isUpdate) {
-        lineValid.checkParams(lineEntity, isUpdate);
         Date now = new Date();
         if (!isUpdate) {
             lineEntity.setCreateAt(now);
@@ -61,7 +65,33 @@ public class LineServiceImpl implements LineService {
         if (insert < 1) {
             throw new DataBaseException("新增业务线失败");
         }
+
+        // 新增业务线时自动新增固定数据源分类
+        autoInsertDataCategory(lineEntity.getLineNo(), "local", "basicInfo", 0);
+        autoInsertDataCategory(lineEntity.getLineNo(), "local", "userInfo", 0);
+        autoInsertDataCategory(lineEntity.getLineNo(), "local", "orderInfo", 0);
+        autoInsertDataCategory(lineEntity.getLineNo(), "local", "deviceInfo", 0);
+        autoInsertDataCategory(lineEntity.getLineNo(), "local", "extractInfo", 0);
+
         return ResponseContent.success(String.format("业务线%s成功", isUpdate ? "修改" : "新增"));
+    }
+
+    private void autoInsertDataCategory(String lineNo, String sourceFrom, String sourceType, Integer categoryType) {
+        Date now = new Date();
+        DataCategoryEntity entity = new DataCategoryEntity();
+        entity.setLineNo(lineNo);
+        entity.setDataCategoryName(String.format("%s-%s", sourceFrom, sourceType));
+        entity.setDataCategoryNo(noGenerateUtil.generateNo(Constant.NO_SJYFL));
+        entity.setSourceFrom(sourceFrom);
+        entity.setSourceType(sourceType);
+        entity.setCategoryType(categoryType);
+        entity.setPriority(1);
+        entity.setVersion(1);
+        entity.setIsValid(1);
+        entity.setIsDelete(0);
+        entity.setCreateAt(now);
+        entity.setUpdateAt(now);
+        dataCategoryMapper.insert(entity);
     }
 
     @Override

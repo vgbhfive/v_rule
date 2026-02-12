@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
@@ -32,6 +34,7 @@ public class StrategyController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.STRATEGY)
     public ResponseContent create(@RequestBody StrategyEntity strategyEntity) {
         return strategyService.create(strategyEntity, false);
     }
@@ -46,6 +49,7 @@ public class StrategyController {
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.STRATEGY, isUpdate = true)
     public ResponseContent update(@RequestBody StrategyEntity strategyEntity) {
         return strategyService.update(strategyEntity);
     }

@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineQueryParam;
 import com.vgbhfive.v_rule.entity.LineEntity;
@@ -33,6 +35,7 @@ public class LineController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.LINE)
     public ResponseContent create(@Valid @RequestBody LineEntity lineEntity) {
         return lineService.create(lineEntity, false);
     }
@@ -40,6 +43,7 @@ public class LineController {
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.LINE, isUpdate = true)
     public ResponseContent update(@Valid @RequestBody LineEntity lineEntity) {
         return lineService.update(lineEntity);
     }

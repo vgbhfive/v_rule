@@ -1,7 +1,9 @@
 package com.vgbhfive.v_rule.controller;
 
+import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.rule.RuleQueryParam;
 import com.vgbhfive.v_rule.entity.RuleEntity;
@@ -32,6 +34,7 @@ public class RuleController {
     @PostMapping("/create")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.RULE)
     public ResponseContent create(@RequestBody RuleEntity ruleEntity) {
         return ruleService.create(ruleEntity, false);
     }
@@ -39,6 +42,7 @@ public class RuleController {
     @PostMapping("/update")
     @Log
     @Permission
+    @CheckParams(type = ElementTypes.RULE, isUpdate = true)
     public ResponseContent update(@RequestBody RuleEntity ruleEntity) {
         return ruleService.update(ruleEntity);
     }

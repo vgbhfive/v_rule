@@ -1,6 +1,8 @@
-package com.vgbhfive.v_rule.service.validEntity;
+package com.vgbhfive.v_rule.service.valid;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.vgbhfive.v_rule.common.aop.Valid;
+import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.entity.LineEntity;
 import com.vgbhfive.v_rule.mapper.LineMapper;
@@ -14,12 +16,14 @@ import java.util.List;
  * @Date 2026/2/6 11:56
  */
 @Service
-public class LineValid {
+@Valid(type = ElementTypes.LINE)
+public class LineValid implements ValidService<LineEntity> {
 
     @Autowired
     private LineMapper lineMapper;
 
-    public void checkParams(LineEntity lineEntity, Boolean isUpdate) {
+    @Override
+    public void checkParams(LineEntity lineEntity, boolean isUpdate) {
         List<LineEntity> objectList = lineMapper.selectList(new QueryWrapper<LineEntity>()
                 .and(wrapper -> wrapper.eq("line_name", lineEntity.getLineName()).or().eq("line_no", lineEntity.getLineNo()))
                 .eq("is_delete", 0));
