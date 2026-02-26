@@ -55,11 +55,25 @@ public class DataCategoryController {
         return dataCategoryService.updateValid(dataCategoryEntity.getId(), dataCategoryEntity.getIsValid());
     }
 
+    @PostMapping("/detail/{id}")
+    @Log
+    @Permission
+    public ResponseContent detail(@PathVariable("id") Integer id) {
+        return dataCategoryService.detail(id);
+    }
+
     @PostMapping("/dropdown/list")
     @Log
     @Permission
     public ResponseContent dropdownList(@RequestBody DataCategoryQueryParam param) {
         return dataCategoryService.dropdownList(param);
+    }
+
+    @PostMapping("/trial")
+    @Log
+    @Permission
+    public ResponseContent trial(@RequestBody DataCategoryEntity dataCategoryEntity) {
+        return dataCategoryService.trial(dataCategoryEntity);
     }
 
 }

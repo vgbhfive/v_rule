@@ -13,6 +13,7 @@ import com.vgbhfive.v_rule.dto.datasource.DataSourceQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
+import com.vgbhfive.v_rule.entity.DataCategoryDetailEntity;
 import com.vgbhfive.v_rule.entity.DataSourceEntity;
 import com.vgbhfive.v_rule.mapper.DataSourceMapper;
 import com.vgbhfive.v_rule.service.DataSourceService;

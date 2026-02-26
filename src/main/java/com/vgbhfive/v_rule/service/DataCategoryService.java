@@ -24,10 +24,14 @@ public interface DataCategoryService {
 
     ResponseContent updateValid(Integer id, Integer status);
 
+    ResponseContent detail(Integer id);
+
     List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(Set<String> dataCategoryNoSet);
 
     List<VersionDiffDetail> queryDeployDiff(List<SceneStruct.DataCategory> dataCategoryList, List<SceneStruct.DataCategory> lastDataCategoryList) throws Exception;
 
     ResponseContent dropdownList(DataCategoryQueryParam param);
+
+    ResponseContent trial(DataCategoryEntity dataCategoryEntity);
 
 }

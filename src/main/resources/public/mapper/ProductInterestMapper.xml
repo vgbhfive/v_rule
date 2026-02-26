@@ -61,7 +61,7 @@
         <foreach collection="productNos" item="no" open="(" separator="," close=")">
             #{no}
         </foreach>
-        AND p.is_delete = 0 AND pi.is_delete = 0
+        AND p.is_delete = 0 AND pi.is_delete = 0 AND is_valid = 1
     </select>
 
 </mapper>

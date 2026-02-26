@@ -16,12 +16,16 @@ import java.util.Map;
 @AllArgsConstructor
 public enum CategoryType {
 
-    LOCAL(1, "请求", 0),
-    PYTHON(2, "Python", 1),;
+    LOCAL(1, "请求", "local", 0),
+    PYTHON(2, "Python", "python", 1),
+    HTTP(3, "HTTP", "http", 2),
+    ;
 
     private Integer id;
 
     private String name;
+
+    private String key;
 
     private Integer type;
 

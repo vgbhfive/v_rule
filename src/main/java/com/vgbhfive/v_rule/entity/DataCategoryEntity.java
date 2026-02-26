@@ -1,15 +1,18 @@
 package com.vgbhfive.v_rule.entity;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
+import net.minidev.json.annotate.JsonIgnore;
 
 import javax.validation.constraints.NotBlank;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @projectName: v_rule
@@ -75,5 +78,8 @@ public class DataCategoryEntity {
     private Date createAt;
 
     private Date updateAt;
+
+    @TableField(exist = false)
+    private List<DataCategoryDetailEntity> detailList;
 
 }

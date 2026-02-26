@@ -39,6 +39,7 @@
             </if>
             AND is_delete = 0
         </trim>
+        ORDER BY create_at DESC
         LIMIT #{start}, #{limit}
     </select>
 
@@ -79,13 +80,13 @@
         <foreach collection="strategyNos" item="no" open="(" separator="," close=")">
             #{no}
         </foreach>
-        AND is_delete = 0
+        AND is_delete = 0 AND is_valid = 1
     </select>
 
     <select id="queryStrategyDetailRuleNoByStrategyNo" resultType="java.lang.String">
         SELECT detail_no
         FROM strategy_rule_detail
-        WHERE strategy_no = #{strategyNo} AND rule_type = #{ruleType} AND is_delete = 0
+        WHERE strategy_no = #{strategyNo} AND rule_type = #{ruleType} AND is_delete = 0 AND is_valid = 1
     </select>
 
     <update id="updateDeployTimeBatch">

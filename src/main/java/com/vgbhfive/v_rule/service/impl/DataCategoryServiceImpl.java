@@ -13,9 +13,13 @@ import com.vgbhfive.v_rule.dto.datacategory.DataCategoryQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
 import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
+import com.vgbhfive.v_rule.entity.DataCategoryDetailEntity;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
+import com.vgbhfive.v_rule.mapper.DataCategoryDetailMapper;
 import com.vgbhfive.v_rule.mapper.DataCategoryMapper;
 import com.vgbhfive.v_rule.service.DataCategoryService;
+import org.apache.tomcat.util.buf.UDecoder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,8 +33,10 @@ import java.util.*;
 @Service
 public class DataCategoryServiceImpl implements DataCategoryService {
 
-    @Resource
+    @Autowired
     private DataCategoryMapper dataCategoryMapper;
+    @Autowired
+    private DataCategoryDetailMapper dataCategoryDetailMapper;
     @Resource
     private NoGenerateUtil noGenerateUtil;
 
@@ -61,19 +67,45 @@ public class DataCategoryServiceImpl implements DataCategoryService {
         dataCategoryEntity.setIsValid(1);
         dataCategoryEntity.setIsDelete(0);
         dataCategoryEntity.setUpdateAt(now);
-        Integer insert = dataCategoryMapper.insert(dataCategoryEntity);
+
+        buildDetailEntityList(dataCategoryEntity.getDetailList(), dataCategoryEntity);
+        int insertDetail = dataCategoryDetailMapper.batchInsertDetails(dataCategoryEntity.getDetailList());
+        if (insertDetail != dataCategoryEntity.getDetailList().size()) {
+            throw new DataBaseException("创建数据源分类失败");
+        }
+        int insert = dataCategoryMapper.insert(dataCategoryEntity);
         if (insert < 1) {
             throw new DataBaseException("创建数据源分类失败");
         }
         return ResponseContent.success(String.format("%s数据源分类成功", isUpdate ? "修改" : "新增"));
     }
 
+    private void buildDetailEntityList(List<DataCategoryDetailEntity> detailEntityList, DataCategoryEntity dataCategoryEntity) {
+        Date now = new Date();
+        detailEntityList.forEach(detail -> {
+            detail.setDataCategoryNo(dataCategoryEntity.getDataCategoryNo());
+            detail.setVersion(dataCategoryEntity.getVersion());
+            detail.setIsDelete(0);
+            detail.setCreateAt(now);
+            detail.setUpdateAt(now);
+        });
+    }
+
     @Override
     public ResponseContent update(DataCategoryEntity dataCategoryEntity) {
+        Date now = new Date();
+        DataCategoryDetailEntity oldDataCategoryDetailEntity = new DataCategoryDetailEntity();
+        oldDataCategoryDetailEntity.setIsDelete(1);
+        oldDataCategoryDetailEntity.setUpdateAt(now);
+        int updateDetail = dataCategoryDetailMapper.update(oldDataCategoryDetailEntity, new UpdateWrapper<DataCategoryDetailEntity>().
+                eq("data_category_no", dataCategoryEntity.getDataCategoryNo()).eq("is_delete", 0));
+        if (updateDetail < 1) {
+            throw new DataBaseException("更新数据源分类失败");
+        }
         DataCategoryEntity oldDataCategoryEntity = new DataCategoryEntity();
         oldDataCategoryEntity.setIsDelete(1);
-        oldDataCategoryEntity.setUpdateAt(new Date());
-        Integer update = dataCategoryMapper.update(oldDataCategoryEntity,
+        oldDataCategoryEntity.setUpdateAt(now);
+        int update = dataCategoryMapper.update(oldDataCategoryEntity,
                 new UpdateWrapper<DataCategoryEntity>().eq("id", dataCategoryEntity.getId()).eq("is_delete", 0));
         if (update < 1) {
             throw new DataBaseException("更新数据源分类失败");
@@ -95,6 +127,11 @@ public class DataCategoryServiceImpl implements DataCategoryService {
             throw new DataBaseException("更新数据源分类状态失败");
         }
         return ResponseContent.success("更新数据源分类状态成功");
+    }
+
+    @Override
+    public ResponseContent detail(Integer id) {
+        return ResponseContent.success(dataCategoryMapper.queryDetailById(id));
     }
 
     @Override
@@ -138,6 +175,12 @@ public class DataCategoryServiceImpl implements DataCategoryService {
     @Override
     public ResponseContent dropdownList(DataCategoryQueryParam param) {
         return ResponseContent.success(dataCategoryMapper.selectDropdownList(param.getLineNo()));
+    }
+
+    @Override
+    public ResponseContent trial(DataCategoryEntity dataCategoryEntity) {
+        // TODO
+        return ResponseContent.success();
     }
 
 }

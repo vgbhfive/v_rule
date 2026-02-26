@@ -2,6 +2,27 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.vgbhfive.v_rule.mapper.DataCategoryMapper">
 
+    <resultMap id="queryDetailById" type="com.vgbhfive.v_rule.entity.DataCategoryEntity">
+        <id property="id" column="id"/>
+        <result property="lineNo" column="line_no"/>
+        <result property="dataCategoryName" column="data_category_name"/>
+        <result property="dataCategoryNo" column="data_category_no"/>
+        <result property="sourceFrom" column="source_from"/>
+        <result property="sourceType" column="source_type"/>
+        <result property="categoryType" column="category_type"/>
+        <result property="priority" column="priority"/>
+        <result property="version" column="version"/>
+        <result property="isValid" column="is_valid"/>
+        <result property="isDelete" column="is_delete"/>
+        <result property="createAt" column="create_at"/>
+        <collection property="detailList" javaType="List" ofType="com.vgbhfive.v_rule.entity.DataCategoryDetailEntity">
+            <result property="key" column="key"/>
+            <result property="valueType" column="value_type"/>
+            <result property="value" column="value"/>
+            <result property="trialValue" column="trial_value"/>
+        </collection>
+    </resultMap>
+
     <select id="queryList" resultType="com.vgbhfive.v_rule.dto.datacategory.DataCategoryListDto">
         SELECT
             id, line_no, data_category_name, data_category_no, source_from, source_type, category_type, priority, version, is_valid, create_at
@@ -21,6 +42,7 @@
             </if>
             AND is_delete = 0
         </trim>
+        ORDER BY create_at DESC
         LIMIT #{start}, #{limit}
     </select>
 
@@ -44,6 +66,13 @@
         </trim>
     </select>
 
+    <select id="queryDetailById" resultMap="queryDetailById">
+        SELECT d.*, dd.key, dd.value_type, dd.value, dd.trial_value
+        FROM data_category d
+        LEFT JOIN data_category_detail dd ON d.data_category_no = dd.data_category_no
+        WHERE d.id = #{id} AND d.is_delete = 0 AND dd.is_delete = 0
+    </select>
+
     <select id="queryDataCategoryByDataCategoryNos" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$DataCategory">
         SELECT data_category_no as no, data_category_name as name, source_from, source_type, category_type, priority, version, is_valid
         FROM data_category
@@ -51,7 +80,7 @@
         <foreach collection="dataCategoryNos" item="no" open="(" separator="," close=")">
             #{no}
         </foreach>
-        AND is_delete = 0
+        AND is_delete = 0 AND is_valid = 1
     </select>
 
     <select id="selectDropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">

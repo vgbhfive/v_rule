@@ -24,6 +24,8 @@ public interface DataCategoryMapper extends BaseMapper<DataCategoryEntity> {
 
     Integer queryTotalCount(@Param("param") DataCategoryQueryParam param);
 
+    DataCategoryEntity queryDetailById(@Param("id") Integer id);
+
     List<SceneStruct.DataCategory> queryDataCategoryByDataCategoryNos(@Param("dataCategoryNos") Set<String> dataCategoryNos);
 
     List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo);
