@@ -589,7 +589,7 @@ public class DeployServiceImpl implements DeployService {
     }
 
     @Override
-    public ResponseContent rollback() {
+    public ResponseContent rollback(DeployRollBack deployRollBack) {
         return null;
     }
 

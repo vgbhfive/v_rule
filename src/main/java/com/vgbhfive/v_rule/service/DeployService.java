@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.DeployRollBack;
 import com.vgbhfive.v_rule.dto.deploy.SceneParams;
 import com.vgbhfive.v_rule.entity.DeployEntity;
 
@@ -26,6 +27,6 @@ public interface DeployService {
 
     ResponseContent rollbackVersionList(String deployNo);
 
-    ResponseContent rollback();
+    ResponseContent rollback(DeployRollBack deployRollBack);
 
 }

@@ -4,6 +4,7 @@ import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
+import com.vgbhfive.v_rule.dto.deploy.DeployRollBack;
 import com.vgbhfive.v_rule.entity.DeployEntity;
 import com.vgbhfive.v_rule.service.DeployService;
 import org.springframework.web.bind.annotation.*;
@@ -79,6 +80,11 @@ public class DeployController {
         return deployService.pass(deployEntity);
     }
 
+    /**
+     * 回滚场景版本列表
+     * @param deployEntity
+     * @return
+     */
     @PostMapping("/rollback/versions")
     @Log
     @Permission
@@ -93,8 +99,8 @@ public class DeployController {
     @PostMapping("/rollback")
     @Log
     @Permission
-    public ResponseContent rollback() {
-        return ResponseContent.success();
+    public ResponseContent rollback(@RequestBody DeployRollBack deployRollBack) {
+        return deployService.rollback(deployRollBack);
     }
 
 }
