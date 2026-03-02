@@ -3,6 +3,8 @@ package com.vgbhfive.v_rule.dto.line;
 import com.vgbhfive.v_rule.dto.PageRequest;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
@@ -16,5 +18,7 @@ public class LineQueryParam extends PageRequest {
     private String lineName;
 
     private Integer isValid;
+
+    private List<String> lineNoSet;
 
 }

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineListDto;
@@ -19,8 +20,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * @projectName: v_rule
@@ -41,11 +41,15 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public ResponseContent queryList(LineQueryParam param) {
+        List<String> lineSet = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoSet(lineSet);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<LineListDto> lineListDtoList = lineMapper.queryList(param, start, limit);
-        int totalCount = lineMapper.queryTotalCount(param);
+        List<LineListDto> lineListDtoList = Objects.isNull(lineSet) || !lineSet.isEmpty() ?
+                lineMapper.queryList(param, start, limit) : new ArrayList<>();
+        int totalCount = Objects.isNull(lineSet) || !lineSet.isEmpty() ?
+                lineMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
         PageResponse<LineListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, lineListDtoList);

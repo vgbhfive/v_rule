@@ -1,11 +1,14 @@
 package com.vgbhfive.v_rule.common.constants;
 
 /**
- * @projectName: v_rule
  * @author: vgbhfive
  * @date: 2025/11/26 21:49
  */
 public interface Constant {
+
+    String LINE_PERMISSION_SET = "line_permission_set";
+
+    String USER_INFO = "user_info";
 
     String REDIS_PREFIX = "v_rule:";
 

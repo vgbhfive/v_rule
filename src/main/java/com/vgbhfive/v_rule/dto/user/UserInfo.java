@@ -3,6 +3,7 @@ package com.vgbhfive.v_rule.dto.user;
 import lombok.Data;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * @projectName: v_rule
@@ -21,5 +22,10 @@ public class UserInfo implements Serializable {
     private String mobile;
 
     private boolean isAdmin;
+
+    /**
+     * 当前用户可访问的业务线权限
+     */
+    private List<String> lineNoSet;
 
 }

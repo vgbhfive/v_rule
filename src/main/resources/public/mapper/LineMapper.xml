@@ -16,6 +16,12 @@
             <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
+            <if test="param.lineNoSet != null">
+                AND line_no IN
+                <foreach collection="param.lineNoSet" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
+            </if>
             AND is_delete = 0
         </trim>
         LIMIT #{start}, #{limit}
@@ -33,6 +39,12 @@
             </if>
             <if test="param.isValid != null and param.isValid != ''">
                 AND is_valid = #{param.isValid}
+            </if>
+            <if test="param.lineNoSet != null">
+                AND line_no IN
+                <foreach collection="param.lineNoSet" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
             </if>
             AND is_delete = 0
         </trim>

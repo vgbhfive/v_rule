@@ -1,6 +1,9 @@
 package com.vgbhfive.v_rule.common.aop;
 
+import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.dto.user.UserInfo;
 import com.vgbhfive.v_rule.service.UserService;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
@@ -18,7 +21,9 @@ import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
+import java.util.HashMap;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * @projectName: v_rule
@@ -53,15 +58,28 @@ public class PermissionAspect {
                 response.setStatus(401);
                 return ResponseContent.success("token 不能为空");
             }
-            ResponseContent resp = userService.verifyLogin(token);
+            ResponseContent<UserInfo> resp = userService.verifyLogin(token);
             if (!resp.getStatus().equals(200)) {
                 response.setStatus(401);
                 return ResponseContent.success("登陆失效");
             }
+
+            UserInfo userInfo = resp.getData();
+            logger.info("userInfo: " + userInfo);
+            if (Objects.isNull(RequestHolder.get())) {
+                RequestHolder.set(new HashMap<>());
+            }
+
+            if (!userInfo.isAdmin()) {
+                RequestHolder.get().put(Constant.LINE_PERMISSION_SET, userInfo.getLineNoSet());
+            }
+            RequestHolder.get().put(Constant.USER_INFO, userInfo);
         }
 
         //调用执行目标方法
         Object obj = point.proceed();
+        // 清除 ThreadLocal 中权限相关内容
+        RequestHolder.remove();
         return obj;
     }
 

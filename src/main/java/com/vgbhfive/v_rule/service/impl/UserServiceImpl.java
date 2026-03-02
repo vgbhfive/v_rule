@@ -10,6 +10,7 @@ import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.*;
 import com.vgbhfive.v_rule.entity.UserEntity;
+import com.vgbhfive.v_rule.mapper.UserLineMapper;
 import com.vgbhfive.v_rule.mapper.UserMapper;
 import com.vgbhfive.v_rule.service.UserService;
 import org.apache.commons.lang3.StringUtils;
@@ -34,6 +35,8 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserMapper userMapper;
+    @Autowired
+    private UserLineMapper userLineMapper;
     @Resource
     private RedisUtil redisUtil;
 
@@ -65,6 +68,7 @@ public class UserServiceImpl implements UserService {
         userInfo.setEmail(entity.getEmail());
         userInfo.setMobile(entity.getMobile());
         userInfo.setAdmin(entity.getEmail().equals("admin"));
+        userInfo.setLineNoSet(userLineMapper.userLineDetails(entity.getId()));
         return userInfo;
     }
 
@@ -190,7 +194,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public ResponseContent verifyLogin(String token) {
+    public ResponseContent<UserInfo> verifyLogin(String token) {
         String key = Constant.REDIS_PREFIX + token;
         UserInfo userInfo = redisUtil.getObject(key, UserInfo.class);
         if (Objects.nonNull(userInfo)) {

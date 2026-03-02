@@ -57,7 +57,7 @@
     <select id="dropdownList" resultType="com.vgbhfive.v_rule.dto.DropdownList">
         SELECT name as `key`, id as value
         FROM user
-        WHERE status IN (0, 2)
+        WHERE status IN (0, 2) AND name != 'admin'
     </select>
 
 </mapper>
