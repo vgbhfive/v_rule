@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
+import com.vgbhfive.v_rule.dto.DropdownList;
 import com.vgbhfive.v_rule.dto.user.UserListDto;
 import com.vgbhfive.v_rule.dto.user.UserQueryParam;
 import com.vgbhfive.v_rule.entity.UserEntity;
@@ -23,5 +24,7 @@ public interface UserMapper extends BaseMapper<UserEntity> {
     List<UserListDto> queryList(@Param("param") UserQueryParam param,  @Param("start") Integer start, @Param("limit") Integer limit);
 
     Integer queryTotalCount(@Param("param") UserQueryParam param);
+
+    List<DropdownList> dropdownList();
 
 }

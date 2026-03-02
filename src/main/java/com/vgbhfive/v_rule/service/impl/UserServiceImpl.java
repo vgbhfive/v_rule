@@ -230,4 +230,9 @@ public class UserServiceImpl implements UserService {
         return ResponseContent.success(result);
     }
 
+    @Override
+    public ResponseContent dropdownList() {
+        return ResponseContent.success(userMapper.dropdownList());
+    }
+
 }

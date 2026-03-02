@@ -34,4 +34,6 @@ public interface UserService {
 
     ResponseContent list(UserQueryParam param);
 
+    ResponseContent dropdownList();
+
 }

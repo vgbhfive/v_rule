@@ -27,6 +27,16 @@ CREATE TABLE `line` (
   KEY `line_no` (`line_no`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='业务线表';
 
+CREATE TABLE `user_line` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '角色ID',
+  `line_no` varchar(32) NOT NULL COMMENT '业务线编码',
+  `is_delete` int(11) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户业务线表';
+
 CREATE TABLE `scene` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',

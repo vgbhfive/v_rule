@@ -87,4 +87,11 @@ public class UserController {
         return userService.list(param);
     }
 
+    @PostMapping("/dropdown")
+    @Log
+    @Permission
+    public ResponseContent dropdownList() {
+        return userService.dropdownList();
+    }
+
 }
