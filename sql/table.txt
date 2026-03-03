@@ -37,6 +37,29 @@ CREATE TABLE `user_line` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户业务线表';
 
+CREATE TABLE `operate_permission` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(32) NOT NULL COMMENT '名称',
+  `unique_sign` varchar(64) NOT NULL COMMENT '与系统交互的唯一标识',
+  `type` int(11) NOT NULL COMMENT '类型 1-页面  2-按钮',
+  `parent_id` int(11) NOT NULL COMMENT '上级id',
+  `is_valid` int(11) NOT NULL COMMENT '是否有效',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='操作权限表';
+
+CREATE TABLE `user_operate` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL COMMENT '角色ID',
+  `unique_sign` varchar(32) NOT NULL COMMENT '标识',
+  `type` int(11) NOT NULL COMMENT '类型 1-页面  2-按钮',
+  `is_delete` int(11) NOT NULL COMMENT '是否删除',
+  `create_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `update_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户操作权限表';
+
 CREATE TABLE `scene` (
   `id` int(11) NOT NULL AUTO_INCREMENT COMMENT '自增主键',
   `line_no` varchar(32) NOT NULL COMMENT '业务线编码',

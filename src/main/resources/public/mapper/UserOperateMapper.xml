@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.vgbhfive.v_rule.mapper.UserOperateMapper">
+
+    <select id="queryPermission" resultType="java.lang.String">
+        SELECT unique_sign
+        FROM user_operate
+        WHERE user_id = #{userId} AND type = #{type} AND is_delete = 0
+    </select>
+
+</mapper>

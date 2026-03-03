@@ -1,5 +1,7 @@
 package com.vgbhfive.v_rule.common.aop;
 
+import com.vgbhfive.v_rule.common.enums.PermissionType;
+
 import java.lang.annotation.Documented;
 import java.lang.annotation.Retention;
 import java.lang.annotation.Target;
@@ -16,4 +18,12 @@ import static java.lang.annotation.RetentionPolicy.RUNTIME;
 @Retention(RUNTIME)
 @Target(METHOD)
 public @interface Permission {
+
+    String sign() default "N/A";
+
+    // 是否需要校验使用权限
+    boolean checkPermission() default true;
+
+    PermissionType type() default PermissionType.PAGE;
+
 }

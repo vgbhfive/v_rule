@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.common.enums.UserStatus;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.Md5Util;
@@ -12,6 +13,7 @@ import com.vgbhfive.v_rule.dto.user.*;
 import com.vgbhfive.v_rule.entity.UserEntity;
 import com.vgbhfive.v_rule.mapper.UserLineMapper;
 import com.vgbhfive.v_rule.mapper.UserMapper;
+import com.vgbhfive.v_rule.mapper.UserOperateMapper;
 import com.vgbhfive.v_rule.service.UserService;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletRequest;
 import java.security.SecureRandom;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +36,8 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
     @Autowired
     private UserLineMapper userLineMapper;
+    @Autowired
+    private UserOperateMapper userOperateMapper;
     @Resource
     private RedisUtil redisUtil;
 
@@ -55,7 +56,8 @@ public class UserServiceImpl implements UserService {
                 String token = UUID.randomUUID().toString().replace("-", "");
                 UserInfo userInfo = buildUserInfo(entity);
                 redisUtil.set(Constant.REDIS_PREFIX + token, userInfo, 30, TimeUnit.MINUTES);
-                return ResponseContent.success(new LoginResp(entity.getEmail(), entity.getName(), entity.getMobile(), token));
+                return ResponseContent.success(new LoginResp(entity.getEmail(), entity.getName(), entity.getMobile(), token,
+                        userInfo.getPagePermission(), userInfo.getButtonPermission()));
             }
         }
         return ResponseContent.success("用户名或密码错误");
@@ -69,6 +71,8 @@ public class UserServiceImpl implements UserService {
         userInfo.setMobile(entity.getMobile());
         userInfo.setAdmin(entity.getEmail().equals("admin"));
         userInfo.setLineNoSet(userLineMapper.userLineDetails(entity.getId()));
+        userInfo.setPagePermission(userOperateMapper.queryPermission(entity.getId(), PermissionType.PAGE.getType()));
+        userInfo.setButtonPermission(userOperateMapper.queryPermission(entity.getId(), PermissionType.BUTTON.getType()));
         return userInfo;
     }
 
@@ -81,7 +85,9 @@ public class UserServiceImpl implements UserService {
         String key = Constant.REDIS_PREFIX + token;
         UserInfo userInfo = redisUtil.getObject(key, UserInfo.class);
         if (Objects.nonNull(userInfo)) {
-            return ResponseContent.success(new LoginResp(userInfo.getEmail(), userInfo.getName(), userInfo.getMobile(), token));
+            return ResponseContent.success(
+                    new LoginResp(userInfo.getEmail(), userInfo.getName(), userInfo.getMobile(), token,
+                            userInfo.getPagePermission(), userInfo.getButtonPermission()));
         }
         return ResponseContent.success("token 已失效");
     }
@@ -216,7 +222,7 @@ public class UserServiceImpl implements UserService {
         if (Objects.nonNull(userInfo)) {
             String tokenNew = UUID.randomUUID().toString().replace("-", "");
             redisUtil.set(Constant.REDIS_PREFIX + tokenNew, userInfo, 30, TimeUnit.MINUTES);
-            return ResponseContent.success(new LoginResp("", "", "", token));
+            return ResponseContent.success(new LoginResp("", "", "", token, new ArrayList<>(), new ArrayList<>()));
         }
         return ResponseContent.success("token 已失效");
     }

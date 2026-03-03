@@ -28,12 +28,12 @@ public class ResponseContent<T> {
         this.reqId = UUID.randomUUID().toString().replace("-", "");
     }
 
-    public static ResponseContent success() {
+    public static <Object> ResponseContent<Object> success() {
         return success(null);
     }
 
-    public static ResponseContent success(Object object) {
-        ResponseContent<Object> result = new ResponseContent<>();
+    public static <T> ResponseContent<T> success(T object) {
+        ResponseContent<T> result = new ResponseContent<>();
         result.setStatus(200);
         result.setMsg("success");
         result.setData(object);
@@ -48,21 +48,21 @@ public class ResponseContent<T> {
         return result;
     }
 
-    public static ResponseContent error() {
-        ResponseContent res = new ResponseContent();
+    public static <Object> ResponseContent<Object> error() {
+        ResponseContent<Object> res = new ResponseContent<Object>();
         res.setStatus(199);
         return res;
     }
 
-    public static ResponseContent error(String msg) {
-        ResponseContent res = new ResponseContent();
+    public static <Object> ResponseContent<Object> error(String msg) {
+        ResponseContent<Object> res = new ResponseContent<Object>();
         res.setStatus(199);
         res.setMsg(msg);
         return res;
     }
 
-    public static ResponseContent error(Integer code, String msg) {
-        ResponseContent res = new ResponseContent();
+    public static <Object> ResponseContent<Object> error(Integer code, String msg) {
+        ResponseContent<Object> res = new ResponseContent<Object>();
         res.setStatus(code);
         res.setMsg(msg);
         return res;

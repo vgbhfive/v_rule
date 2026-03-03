@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.common.aop;
 
 import com.vgbhfive.v_rule.common.constants.Constant;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.UserInfo;
@@ -22,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.lang.reflect.Method;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Objects;
 import java.util.Set;
 
@@ -68,6 +70,16 @@ public class PermissionAspect {
             logger.info("userInfo: " + userInfo);
             if (Objects.isNull(RequestHolder.get())) {
                 RequestHolder.set(new HashMap<>());
+            }
+            // TODO
+            if (permission.checkPermission() && !userInfo.isAdmin()) {
+                List<String> operatePermissionSet = permission.type().equals(PermissionType.PAGE) ?
+                        userInfo.getPagePermission() : userInfo.getButtonPermission();
+                if (Objects.isNull(operatePermissionSet) ||
+                        !operatePermissionSet.contains(permission.sign())) {
+                    logger.info("permission set:{}, permission:{}", operatePermissionSet, permission);
+                    return ResponseContent.error("你没有此权限，请联系管理员");
+                }
             }
 
             if (!userInfo.isAdmin()) {

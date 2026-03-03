@@ -28,4 +28,14 @@ public class UserInfo implements Serializable {
      */
     private List<String> lineNoSet;
 
+    /**
+     * 当前用户页面权限
+     */
+    private List<String> pagePermission;
+
+    /**
+     * 当前用户按钮权限
+     */
+    private List<String> buttonPermission;
+
 }
