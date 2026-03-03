@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datacategory.DataCategoryListDto;
@@ -42,11 +43,15 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Override
     public ResponseContent queryList(DataCategoryQueryParam param) {
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoList(lineList);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<DataCategoryListDto> dataCategoryListDtoList = dataCategoryMapper.queryList(param, start, limit);
-        int totalCount = dataCategoryMapper.queryTotalCount(param);
+        List<DataCategoryListDto> dataCategoryListDtoList = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                dataCategoryMapper.queryList(param, start, limit) : new ArrayList<>();
+        int totalCount = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                dataCategoryMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
         PageResponse<DataCategoryListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, dataCategoryListDtoList);
@@ -174,7 +179,8 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Override
     public ResponseContent dropdownList(DataCategoryQueryParam param) {
-        return ResponseContent.success(dataCategoryMapper.selectDropdownList(param.getLineNo()));
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        return ResponseContent.success(dataCategoryMapper.selectDropdownList(param.getLineNo(), lineList));
     }
 
     @Override

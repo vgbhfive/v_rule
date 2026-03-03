@@ -28,6 +28,11 @@ public class UserLineController {
         return userLineService.userLineDetails(userId);
     }
 
+    /**
+     * 管理员操作用户业务线权限后需要重新登录
+     * @param userLineEntityList
+     * @return
+     */
     @PostMapping("/update")
     @Log
     @Permission

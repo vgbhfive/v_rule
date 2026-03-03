@@ -54,7 +54,7 @@ public class UserLineServiceImpl implements UserLineService {
         if (insert != userLineEntityList.size()) {
             return ResponseContent.error("用户业务线权限操作异常");
         }
-        return ResponseContent.error("用户业务线权限操作成功");
+        return ResponseContent.success("用户业务线权限操作成功");
     }
 
 }

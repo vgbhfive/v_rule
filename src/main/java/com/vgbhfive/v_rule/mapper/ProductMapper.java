@@ -19,6 +19,6 @@ public interface ProductMapper extends BaseMapper<ProductEntity> {
 
     Integer updateDeployTimeBatch(@Param("productNos") List<String> productNoList, @Param("deployTime") Date deployTime);
 
-    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo, @Param("type") String type);
+    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo, @Param("type") String type, @Param("list") List<String> lineNoList);
 
 }

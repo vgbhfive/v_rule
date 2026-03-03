@@ -19,6 +19,6 @@ public class LineQueryParam extends PageRequest {
 
     private Integer isValid;
 
-    private List<String> lineNoSet;
+    private List<String> lineNoList;
 
 }

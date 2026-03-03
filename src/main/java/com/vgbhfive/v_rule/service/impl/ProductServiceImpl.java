@@ -1,8 +1,10 @@
 package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
@@ -56,7 +58,8 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public ResponseContent dropdownList(ProductQueryParam param) {
-        return ResponseContent.success(productMapper.selectDropdownList(param.getLineNo(), param.getType()));
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        return ResponseContent.success(productMapper.selectDropdownList(param.getLineNo(), param.getType(), lineList));
     }
 
 }

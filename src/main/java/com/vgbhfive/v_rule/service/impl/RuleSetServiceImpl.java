@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
@@ -36,11 +37,15 @@ public class RuleSetServiceImpl implements RuleSetService {
 
     @Override
     public ResponseContent queryList(RuleSetQueryParam param) {
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoList(lineList);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<RuleSetListDto> ruleSetListDtoList = ruleSetMapper.queryList(param, start, limit);
-        int totalCount = ruleSetMapper.queryTotalCount(param);
+        List<RuleSetListDto> ruleSetListDtoList = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                ruleSetMapper.queryList(param, start, limit) : new ArrayList<>();
+        int totalCount = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                ruleSetMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
         PageResponse<RuleSetListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, ruleSetListDtoList);
@@ -145,7 +150,8 @@ public class RuleSetServiceImpl implements RuleSetService {
 
     @Override
     public ResponseContent dropdownList(RuleSetQueryParam param) {
-        return ResponseContent.success(ruleSetMapper.selectDropdownList(param.getLineNo()));
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        return ResponseContent.success(ruleSetMapper.selectDropdownList(param.getLineNo(), lineList));
     }
 
 }

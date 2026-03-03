@@ -29,6 +29,6 @@ public interface DivideMapper extends BaseMapper<DivideEntity> {
 
     Integer updateDeployTimeBatch(@Param("divideList") List<SceneStruct.Divide> divideList, @Param("deployTime") Date deployTime);
 
-    List<DropdownList> selectDropdownList();
+    List<DropdownList> selectDropdownList(@Param("list") List<String> lineNoList);
 
 }

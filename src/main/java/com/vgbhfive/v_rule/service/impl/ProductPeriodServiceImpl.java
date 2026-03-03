@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.enums.ProductType;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
@@ -40,11 +41,15 @@ public class ProductPeriodServiceImpl implements ProductPeriodService {
 
     @Override
     public ResponseContent queryList(ProductQueryParam param) {
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoList(lineList);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<ProductPeriodListDto> productPeriodListDtoList = productPeriodMapper.queryList(param, start, limit);
-        int totalCount = productPeriodMapper.queryTotalCount(param);
+        List<ProductPeriodListDto> productPeriodListDtoList = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                productPeriodMapper.queryList(param, start, limit) : new ArrayList<>();
+        int totalCount = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                productPeriodMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
         PageResponse<ProductPeriodListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, productPeriodListDtoList);

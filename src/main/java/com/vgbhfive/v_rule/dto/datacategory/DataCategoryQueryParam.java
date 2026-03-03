@@ -3,6 +3,8 @@ package com.vgbhfive.v_rule.dto.datacategory;
 import com.vgbhfive.v_rule.dto.PageRequest;
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * @projectName: v_rule
  * @author: vgbhfive
@@ -18,5 +20,7 @@ public class DataCategoryQueryParam extends PageRequest {
     private String dataCategoryNo;
 
     private Integer isValid;
+
+    private List<String> lineNoList;
 
 }

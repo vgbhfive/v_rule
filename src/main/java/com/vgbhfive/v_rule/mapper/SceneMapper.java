@@ -27,6 +27,6 @@ public interface SceneMapper extends BaseMapper<SceneEntity> {
 
     SceneStruct.Scene querySceneBySceneNo(@Param("sceneNo") String sceneNo);
 
-    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo);
+    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo, @Param("list") List<String> lineNoList);
 
 }

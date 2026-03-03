@@ -24,6 +24,6 @@ public interface LineMapper extends BaseMapper<LineEntity> {
 
     LineEntity selectByLineNo(@Param("lineNo") String lineNo);
 
-    List<DropdownList> selectDropdownList();
+    List<DropdownList> selectDropdownList(@Param("list") List<String> lineNoList);
 
 }

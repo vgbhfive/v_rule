@@ -25,6 +25,12 @@
             <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
+            <if test="param.lineNoList != null">
+                AND line_no IN
+                <foreach collection="param.lineNoList" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
+            </if>
             AND is_delete = 0
         </trim>
         ORDER BY create_at DESC
@@ -53,6 +59,12 @@
             <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
+            <if test="param.lineNoList != null">
+                AND line_no IN
+                <foreach collection="param.lineNoList" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
+            </if>
             AND is_delete = 0
         </trim>
     </select>
@@ -73,6 +85,12 @@
         <trim prefix="WHERE" prefixOverrides="AND">
             <if test="lineNo != null and lineNo != ''">
                 line_no = #{lineNo}
+            </if>
+            <if test="list != null">
+                AND line_no IN
+                <foreach collection="list" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
             </if>
             AND is_valid = 1 AND is_delete = 0
         </trim>

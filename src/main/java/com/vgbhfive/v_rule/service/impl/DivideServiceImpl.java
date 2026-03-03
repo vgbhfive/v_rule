@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DetailCompareResult;
@@ -42,11 +43,15 @@ public class DivideServiceImpl implements DivideService {
 
     @Override
     public ResponseContent queryList(DivideQueryParam param) {
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoList(lineList);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<DivideListDto> divideListDtoList = divideMapper.queryList(param, start, limit);
-        int totalCount = divideMapper.queryTotalCount(param);
+        List<DivideListDto> divideListDtoList = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                divideMapper.queryList(param, start, limit) : new ArrayList<>();
+        int totalCount = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                divideMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
         PageResponse<DivideListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, divideListDtoList);
@@ -201,7 +206,8 @@ public class DivideServiceImpl implements DivideService {
 
     @Override
     public ResponseContent dropdownList() {
-        return ResponseContent.success(divideMapper.selectDropdownList());
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        return ResponseContent.success(divideMapper.selectDropdownList(lineList));
     }
 
 }

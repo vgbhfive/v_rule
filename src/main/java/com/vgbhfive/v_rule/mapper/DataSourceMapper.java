@@ -25,6 +25,6 @@ public interface DataSourceMapper extends BaseMapper<DataSourceEntity> {
 
     List<SceneStruct.DataSource> queryDataSourceByDataSourceNos(@Param("dataSourceNos") Set<String> dataSourceNos);
 
-    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo);
+    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo, @Param("list") List<String> lineNoList);
 
 }

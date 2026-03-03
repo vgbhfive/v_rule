@@ -9,6 +9,7 @@ import com.vgbhfive.v_rule.common.enums.ValueType;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.HttpUtil;
 import com.vgbhfive.v_rule.common.utils.RedisUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.*;
@@ -153,10 +154,11 @@ public class DeployServiceImpl implements DeployService {
 
     @Override
     public ResponseContent dropdownList(DeployQueryParam param) {
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
         SceneType type = SceneType.getInstance(param.getDeployType());
         switch (type) {
             case SCENE:
-                return ResponseContent.success(sceneMapper.selectDropdownList(param.getLineNo()));
+                return ResponseContent.success(sceneMapper.selectDropdownList(param.getLineNo(), lineList));
             default:
                 return ResponseContent.success();
         }

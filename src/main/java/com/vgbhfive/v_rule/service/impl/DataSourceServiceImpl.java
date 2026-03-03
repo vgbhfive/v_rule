@@ -6,6 +6,7 @@ import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
+import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceListDto;
@@ -37,11 +38,15 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public ResponseContent queryList(DataSourceQueryParam param) {
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoList(lineList);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<DataSourceListDto> lineListDtoList = dataSourceMapper.queryList(param, start, limit);
-        int totalCount = dataSourceMapper.queryTotalCount(param);
+        List<DataSourceListDto> lineListDtoList = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                dataSourceMapper.queryList(param, start, limit) : new ArrayList<>();
+        int totalCount = Objects.isNull(lineList) || !lineList.isEmpty() ?
+                dataSourceMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
         PageResponse<DataSourceListDto> result = new PageResponse<>(param.getCurrPage(), limit, totalCount, totalPage, lineListDtoList);
@@ -137,7 +142,8 @@ public class DataSourceServiceImpl implements DataSourceService {
 
     @Override
     public ResponseContent dropdownList(DataSourceQueryParam param) {
-        return ResponseContent.success(dataSourceMapper.selectDropdownList(param.getLineNo()));
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        return ResponseContent.success(dataSourceMapper.selectDropdownList(param.getLineNo(), lineList));
     }
 
 }

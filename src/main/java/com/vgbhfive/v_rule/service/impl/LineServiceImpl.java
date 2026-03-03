@@ -41,14 +41,14 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public ResponseContent queryList(LineQueryParam param) {
-        List<String> lineSet = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
-        param.setLineNoSet(lineSet);
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        param.setLineNoList(lineList);
         int start = (param.getCurrPage() - 1) * param.getLimit();
         int limit = param.getLimit();
 
-        List<LineListDto> lineListDtoList = Objects.isNull(lineSet) || !lineSet.isEmpty() ?
+        List<LineListDto> lineListDtoList = Objects.isNull(lineList) || !lineList.isEmpty() ?
                 lineMapper.queryList(param, start, limit) : new ArrayList<>();
-        int totalCount = Objects.isNull(lineSet) || !lineSet.isEmpty() ?
+        int totalCount = Objects.isNull(lineList) || !lineList.isEmpty() ?
                 lineMapper.queryTotalCount(param) : 0;
 
         int totalPage = (totalCount - 1) / limit + 1;
@@ -113,7 +113,8 @@ public class LineServiceImpl implements LineService {
 
     @Override
     public ResponseContent dropdownList() {
-        return ResponseContent.success(lineMapper.selectDropdownList());
+        List<String> lineList = (List<String>) RequestHolder.get().get(Constant.LINE_PERMISSION_SET);
+        return ResponseContent.success(lineMapper.selectDropdownList(lineList));
     }
 
 }

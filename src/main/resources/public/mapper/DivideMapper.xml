@@ -39,6 +39,12 @@
             <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
             </if>
+            <if test="param.lineNoList != null">
+                AND line_no IN
+                <foreach collection="param.lineNoList" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
+            </if>
             AND is_delete = 0
         </trim>
         ORDER BY create_at DESC
@@ -60,6 +66,12 @@
             </if>
             <if test="param.isValid != null">
                 AND is_valid = #{param.isValid}
+            </if>
+            <if test="param.lineNoList != null">
+                AND line_no IN
+                <foreach collection="param.lineNoList" open="(" close=")" separator="," item="no">
+                    #{no}
+                </foreach>
             </if>
             AND is_delete = 0
         </trim>
@@ -93,6 +105,12 @@
         SELECT divide_no as value, divide_name as `key`
         FROM divide
         WHERE is_valid = 1 AND is_delete = 0
+        <if test="list != null">
+            AND line_no IN
+            <foreach collection="list" open="(" close=")" separator="," item="no">
+                #{no}
+            </foreach>
+        </if>
     </select>
 
 </mapper>

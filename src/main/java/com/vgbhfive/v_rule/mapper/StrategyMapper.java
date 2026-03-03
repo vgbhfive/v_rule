@@ -32,6 +32,6 @@ public interface StrategyMapper extends BaseMapper<StrategyEntity> {
 
     Integer updateDeployTimeBatch(@Param("strategyList") List<SceneStruct.Strategy> strategyList, @Param("deployTime") Date deployTime);
 
-    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo);
+    List<DropdownList> selectDropdownList(@Param("lineNo") String lineNo, @Param("list") List<String> lineNoList);
 
 }
