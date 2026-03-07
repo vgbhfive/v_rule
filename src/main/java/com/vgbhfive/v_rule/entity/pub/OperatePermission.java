@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.entity.pub;
 
 import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Getter;
@@ -8,7 +9,9 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @Author vgbhfive
@@ -49,5 +52,8 @@ public class OperatePermission {
     private Date createAt;
 
     private Date updateAt;
+
+    @TableField(exist = false)
+    private List<OperatePermission> nextLevelOperatePermission = new ArrayList<>();
 
 }

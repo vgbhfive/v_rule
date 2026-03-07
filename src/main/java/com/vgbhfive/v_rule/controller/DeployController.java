@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.deploy.DeployQueryParam;
 import com.vgbhfive.v_rule.dto.deploy.DeployRollBack;
@@ -31,7 +32,7 @@ public class DeployController {
      */
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "deploy_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent queryList(@Valid @RequestBody DeployQueryParam param) {
         return deployService.queryList(param);
     }
@@ -63,7 +64,7 @@ public class DeployController {
      */
     @PostMapping("/diff")
     @Log
-    @Permission
+    @Permission(sign = "deploy_manage_diff", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent diff(@RequestParam("no") String sceneNo, @RequestParam("type") String sceneType) throws Exception {
         return deployService.diff(sceneNo, sceneType);
     }
@@ -75,7 +76,7 @@ public class DeployController {
      */
     @PostMapping("/pass")
     @Log
-    @Permission
+    @Permission(sign = "deploy_manage_deploy", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent pass(@RequestBody DeployEntity deployEntity) {
         return deployService.pass(deployEntity);
     }
@@ -98,7 +99,7 @@ public class DeployController {
      */
     @PostMapping("/rollback")
     @Log
-    @Permission
+    @Permission(sign = "deploy_manage_rollback", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent rollback(@RequestBody DeployRollBack deployRollBack) {
         return deployService.rollback(deployRollBack);
     }

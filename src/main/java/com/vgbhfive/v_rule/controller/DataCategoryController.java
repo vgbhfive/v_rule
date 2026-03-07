@@ -28,14 +28,14 @@ public class DataCategoryController {
 
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "data_category_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent queryList(@Valid @RequestBody DataCategoryQueryParam param) {
         return dataCategoryService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
-    @Permission
+    @Permission(sign = "data_category_manage_create", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.DATA_CATEGORY)
     public ResponseContent create(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.create(dataCategoryEntity, false);
@@ -43,7 +43,7 @@ public class DataCategoryController {
 
     @PostMapping("/update")
     @Log
-    @Permission
+    @Permission(sign = "data_category_manage_update", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.DATA_CATEGORY, isUpdate = true)
     public ResponseContent update(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.update(dataCategoryEntity);
@@ -51,14 +51,14 @@ public class DataCategoryController {
 
     @PostMapping("/valid")
     @Log
-    @Permission
+    @Permission(sign = "data_category_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent valid(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.updateValid(dataCategoryEntity.getId(), dataCategoryEntity.getIsValid());
     }
 
     @PostMapping("/detail/{id}")
     @Log
-    @Permission
+    @Permission(sign = "data_category_manage_detail", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent detail(@PathVariable("id") Integer id) {
         return dataCategoryService.detail(id);
     }
@@ -72,7 +72,7 @@ public class DataCategoryController {
 
     @PostMapping("/trial")
     @Log
-    @Permission
+    @Permission(sign = "data_category_manage_trial", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent trial(@RequestBody DataCategoryEntity dataCategoryEntity) {
         return dataCategoryService.trial(dataCategoryEntity);
     }

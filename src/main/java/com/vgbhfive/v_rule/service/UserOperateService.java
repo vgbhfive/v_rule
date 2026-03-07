@@ -1,6 +1,7 @@
 package com.vgbhfive.v_rule.service;
 
 import com.vgbhfive.v_rule.dto.ResponseContent;
+import com.vgbhfive.v_rule.entity.UserOperateEntity;
 import com.vgbhfive.v_rule.entity.pub.OperatePermission;
 
 import java.util.List;
@@ -12,5 +13,9 @@ import java.util.List;
 public interface UserOperateService {
 
     ResponseContent<List<OperatePermission>> operatePermissionList();
+
+    ResponseContent<List<Integer>> userOperateDetails(Integer userId);
+
+    ResponseContent updateUserOperateDetail(List<UserOperateEntity> userOperateEntityList);
 
 }

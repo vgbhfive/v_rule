@@ -8,4 +8,27 @@
         WHERE user_id = #{userId} AND type = #{type} AND is_delete = 0
     </select>
 
+    <select id="userOperateDetails" resultType="java.lang.Integer">
+        SELECT op.id
+        FROM user_operate u
+        LEFT JOIN operate_permission op ON u.unique_sign = op.unique_sign
+        WHERE u.user_id = #{userId} AND u.is_delete = 0
+    </select>
+
+    <insert id="batchInsertEntity" parameterType="java.util.List">
+        INSERT INTO user_operate
+        (user_id, unique_sign, type, is_delete, create_at, update_at)
+        VALUES
+        <foreach collection="list" item="item" separator=",">
+            (
+            #{item.userId},
+            #{item.uniqueSign},
+            #{item.type},
+            #{item.isDelete},
+            #{item.createAt},
+            #{item.updateAt}
+            )
+        </foreach>
+    </insert>
+
 </mapper>

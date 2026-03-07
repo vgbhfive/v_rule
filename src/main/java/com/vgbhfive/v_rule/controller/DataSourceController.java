@@ -4,6 +4,7 @@ import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.common.enums.ElementTypes;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.datasource.DataSourceQueryParam;
 import com.vgbhfive.v_rule.entity.DataSourceEntity;
@@ -26,14 +27,14 @@ public class DataSourceController {
 
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "data_source_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent queryList(@Valid @RequestBody DataSourceQueryParam param) {
         return dataSourceService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
-    @Permission
+    @Permission(sign = "data_source_manage_create", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.DATA_SOURCE)
     public ResponseContent create(@RequestBody DataSourceEntity dataSourceEntity) {
         return dataSourceService.create(dataSourceEntity, false);
@@ -41,14 +42,14 @@ public class DataSourceController {
 
     @PostMapping("/update")
     @Log
-    @Permission
+    @Permission(sign = "data_source_manage_update", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent update(@RequestBody DataSourceEntity dataSourceEntity) {
         return dataSourceService.update(dataSourceEntity);
     }
 
     @PostMapping("/valid")
     @Log
-    @Permission
+    @Permission(sign = "data_source_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent valid(@RequestBody DataSourceEntity dataSourceEntity) {
         return dataSourceService.updateValid(dataSourceEntity.getId(), dataSourceEntity.getIsValid());
     }

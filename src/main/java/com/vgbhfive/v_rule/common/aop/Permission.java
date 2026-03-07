@@ -22,7 +22,7 @@ public @interface Permission {
     String sign() default "N/A";
 
     // 是否需要校验使用权限
-    boolean checkPermission() default true;
+    boolean checkPermission() default false;
 
     PermissionType type() default PermissionType.PAGE;
 

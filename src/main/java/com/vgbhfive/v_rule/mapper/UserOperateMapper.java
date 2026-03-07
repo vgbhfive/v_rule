@@ -16,4 +16,8 @@ public interface UserOperateMapper extends BaseMapper<UserOperateEntity> {
 
     List<String> queryPermission(@Param("userId") Integer userId, @Param("type") Integer type);
 
+    List<Integer> userOperateDetails(@Param("userId") Integer userId);
+
+    Integer batchInsertEntity(@Param("list") List<UserOperateEntity> userOperateEntityList);
+
 }

@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.user.ChangePasswordParam;
 import com.vgbhfive.v_rule.dto.user.LoginReq;
@@ -41,28 +42,28 @@ public class UserController {
 
     @PostMapping("/register")
     @Log
-    @Permission
+    @Permission(sign = "user_manage_create", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent register(@RequestBody UserEntity userEntity) {
         return userService.register(userEntity);
     }
 
     @PostMapping("/resetPassword")
     @Log
-    @Permission
+    @Permission(sign = "user_manage_reset_password", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent resetPassword(@RequestBody UserQueryParam param) {
         return userService.resetPassword(param.getEmail());
     }
 
     @PostMapping("/freeze")
     @Log
-    @Permission
+    @Permission(sign = "user_manage_freeze", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent freeze(@RequestBody UserQueryParam param) {
         return userService.freeze(param.getEmail());
     }
 
     @PostMapping("/normal")
     @Log
-    @Permission
+    @Permission(sign = "user_manage_normal", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent normal(@RequestBody UserQueryParam param) {
         return userService.normal(param.getEmail());
     }
@@ -82,7 +83,7 @@ public class UserController {
 
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "user_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent list(@Valid @RequestBody UserQueryParam param) {
         return userService.list(param);
     }

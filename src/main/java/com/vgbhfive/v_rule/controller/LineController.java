@@ -4,6 +4,7 @@ import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.common.enums.ElementTypes;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.line.LineQueryParam;
 import com.vgbhfive.v_rule.entity.LineEntity;
@@ -27,14 +28,14 @@ public class LineController {
 
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "line_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent queryList(@RequestBody LineQueryParam param) {
         return lineService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
-    @Permission
+    @Permission(sign = "line_manage_create", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.LINE)
     public ResponseContent create(@Valid @RequestBody LineEntity lineEntity) {
         return lineService.create(lineEntity, false);
@@ -42,7 +43,7 @@ public class LineController {
 
     @PostMapping("/update")
     @Log
-    @Permission
+    @Permission(sign = "line_manage_update", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.LINE, isUpdate = true)
     public ResponseContent update(@Valid @RequestBody LineEntity lineEntity) {
         return lineService.update(lineEntity);

@@ -2,6 +2,7 @@ package com.vgbhfive.v_rule.controller;
 
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.entity.UserLineEntity;
 import com.vgbhfive.v_rule.service.UserLineService;
@@ -23,7 +24,7 @@ public class UserLineController {
 
     @PostMapping("/detail/{id}")
     @Log
-    @Permission
+    @Permission(sign = "user_line_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent userLineDetails(@PathVariable("id") Integer userId) {
         return userLineService.userLineDetails(userId);
     }
@@ -35,7 +36,7 @@ public class UserLineController {
      */
     @PostMapping("/update")
     @Log
-    @Permission
+    @Permission(sign = "user_line_manage_update", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent updateUserLine(@RequestBody List<UserLineEntity> userLineEntityList) {
         return userLineService.updateUserLineDetail(userLineEntityList);
     }

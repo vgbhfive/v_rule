@@ -4,6 +4,7 @@ import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.common.enums.ElementTypes;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.scene.SceneQueryParam;
 import com.vgbhfive.v_rule.entity.SceneEntity;
@@ -26,14 +27,14 @@ public class SceneController {
 
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "scene_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent queryList(@RequestBody SceneQueryParam param) {
         return sceneService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
-    @Permission
+    @Permission(sign = "scene_manage_create", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.SCENE)
     public ResponseContent create(@RequestBody SceneEntity sceneEntity) {
         return sceneService.create(sceneEntity, false);
@@ -41,7 +42,7 @@ public class SceneController {
 
     @PostMapping("/update")
     @Log
-    @Permission
+    @Permission(sign = "scene_manage_update", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.SCENE, isUpdate = true)
     public ResponseContent update(@RequestBody SceneEntity sceneEntity) {
         return sceneService.update(sceneEntity);
@@ -49,7 +50,7 @@ public class SceneController {
 
     @PostMapping("/valid")
     @Log
-    @Permission
+    @Permission(sign = "scene_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent valid(@RequestBody SceneEntity sceneEntity) {
         return sceneService.updateValid(sceneEntity.getId(), sceneEntity.getIsValid());
     }

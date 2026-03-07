@@ -4,6 +4,7 @@ import com.vgbhfive.v_rule.common.aop.CheckParams;
 import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.common.enums.ElementTypes;
+import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.strategy.StrategyQueryParam;
 import com.vgbhfive.v_rule.entity.StrategyEntity;
@@ -26,14 +27,14 @@ public class StrategyController {
 
     @PostMapping("/list")
     @Log
-    @Permission
+    @Permission(sign = "strategy_manage", checkPermission = true, type = PermissionType.PAGE)
     public ResponseContent queryList(@Valid @RequestBody StrategyQueryParam param) {
         return strategyService.queryList(param);
     }
 
     @PostMapping("/create")
     @Log
-    @Permission
+    @Permission(sign = "strategy_manage_create", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.STRATEGY)
     public ResponseContent create(@RequestBody StrategyEntity strategyEntity) {
         return strategyService.create(strategyEntity, false);
@@ -41,14 +42,14 @@ public class StrategyController {
 
     @GetMapping("/detail/{id}")
     @Log
-    @Permission
+    @Permission(sign = "strategy_manage_detail", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent detail(@PathVariable("id") Integer id) {
         return strategyService.detail(id);
     }
 
     @PostMapping("/update")
     @Log
-    @Permission
+    @Permission(sign = "strategy_manage_update", checkPermission = true, type = PermissionType.BUTTON)
     @CheckParams(type = ElementTypes.STRATEGY, isUpdate = true)
     public ResponseContent update(@RequestBody StrategyEntity strategyEntity) {
         return strategyService.update(strategyEntity);
@@ -56,7 +57,7 @@ public class StrategyController {
 
     @PostMapping("/valid")
     @Log
-    @Permission
+    @Permission(sign = "strategy_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
     public ResponseContent updateValid(@RequestBody StrategyEntity strategyEntity) {
         return strategyService.updateValid(strategyEntity.getId(), strategyEntity.getIsValid());
     }
