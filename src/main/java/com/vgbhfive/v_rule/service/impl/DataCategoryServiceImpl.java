@@ -1,10 +1,13 @@
 package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
+import com.baomidou.mybatisplus.core.toolkit.StringUtils;
+import com.google.gson.Gson;
 import com.vgbhfive.v_rule.common.constants.Constant;
 import com.vgbhfive.v_rule.common.exception.DataBaseException;
 import com.vgbhfive.v_rule.common.exception.ParamException;
 import com.vgbhfive.v_rule.common.utils.CompareUtil;
+import com.vgbhfive.v_rule.common.utils.HttpUtil;
 import com.vgbhfive.v_rule.common.utils.NoGenerateUtil;
 import com.vgbhfive.v_rule.common.utils.RequestHolder;
 import com.vgbhfive.v_rule.dto.PageResponse;
@@ -16,8 +19,10 @@ import com.vgbhfive.v_rule.dto.deploy.SceneStruct;
 import com.vgbhfive.v_rule.dto.deploy.VersionDiffDetail;
 import com.vgbhfive.v_rule.entity.DataCategoryDetailEntity;
 import com.vgbhfive.v_rule.entity.DataCategoryEntity;
+import com.vgbhfive.v_rule.entity.LineEntity;
 import com.vgbhfive.v_rule.mapper.DataCategoryDetailMapper;
 import com.vgbhfive.v_rule.mapper.DataCategoryMapper;
+import com.vgbhfive.v_rule.mapper.LineMapper;
 import com.vgbhfive.v_rule.service.DataCategoryService;
 import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,6 +45,12 @@ public class DataCategoryServiceImpl implements DataCategoryService {
     private DataCategoryDetailMapper dataCategoryDetailMapper;
     @Resource
     private NoGenerateUtil noGenerateUtil;
+    @Autowired
+    private LineMapper lineMapper;
+    @Resource
+    private Gson gson;
+    @Resource
+    private HttpUtil httpUtil;
 
     @Override
     public ResponseContent queryList(DataCategoryQueryParam param) {
@@ -185,8 +196,13 @@ public class DataCategoryServiceImpl implements DataCategoryService {
 
     @Override
     public ResponseContent trial(DataCategoryEntity dataCategoryEntity) {
-        // TODO
-        return ResponseContent.success();
+        LineEntity lineEntity = lineMapper.selectByLineNo(dataCategoryEntity.getLineNo());
+        if (StringUtils.isBlank(lineEntity.getUrl())) {
+            return ResponseContent.error("业务线配置异常！");
+        }
+        String url = lineEntity.getUrl() + "/deploy/trial";
+        String resp = httpUtil.post(url, gson.toJson(dataCategoryEntity));
+        return gson.fromJson(resp, ResponseContent.class);
     }
 
 }
