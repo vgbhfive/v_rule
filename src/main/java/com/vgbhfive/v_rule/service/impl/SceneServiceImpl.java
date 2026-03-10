@@ -108,20 +108,27 @@ public class SceneServiceImpl implements SceneService {
         Map<String, SceneStruct.Scene> lastSceneMap = new HashMap<>();
         lastSceneList.forEach(lastScene -> lastSceneMap.put(lastScene.getNo(), lastScene));
 
+        List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("divideNoList");
+        ignoreList.add("productNoList");
+        ignoreList.add("ruleNoList");
+        ignoreList.add("ruleSetNoList");
+        ignoreList.add("dataSourceNoList");
+        ignoreList.add("dataCategoryNoList");
         for (SceneStruct.Scene scene : sceneList) {
             List<DetailCompareResult> detailCompareResultList;
             if (lastSceneMap.containsKey(scene.getNo())) {
                 SceneStruct.Scene lastScene = lastSceneMap.get(scene.getNo());
-                detailCompareResultList = CompareUtil.compare(lastScene, scene, null);
+                detailCompareResultList = CompareUtil.compare(lastScene, scene, ignoreList);
                 lastSceneList.remove(lastScene);
             } else {
-                detailCompareResultList = CompareUtil.compare(null, scene, null);
+                detailCompareResultList = CompareUtil.compare(null, scene, ignoreList);
             }
             versionDiffDetailList.add(new VersionDiffDetail(scene.getNo(), scene.getName(), detailCompareResultList));
         }
 
         for (SceneStruct.Scene lastScene : lastSceneList) {
-            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastScene, null, null);
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastScene, null, ignoreList);
             versionDiffDetailList.add(new VersionDiffDetail(lastScene.getNo(), lastScene.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;

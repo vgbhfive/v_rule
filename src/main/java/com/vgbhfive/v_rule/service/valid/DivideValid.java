@@ -42,7 +42,11 @@ public class DivideValid implements ValidService<DivideEntity> {
         }
 
         // 1. 所属同一场景下不允许存在相同优先级的分流器
-        List<DivideEntity> priorityList = divideMapper.selectList(new QueryWrapper<DivideEntity>().eq("line_no", divideEntity.getLineNo()).eq("scene_no", divideEntity.getSceneNo()).eq("priority", divideEntity.getPriority()).eq("is_delete", 0));
+        List<DivideEntity> priorityList = divideMapper.selectList(new QueryWrapper<DivideEntity>().eq("line_no", divideEntity.getLineNo()).
+                eq("scene_no", divideEntity.getSceneNo()).
+                ne("divide_no", divideEntity.getDivideNo()).
+                eq("priority", divideEntity.getPriority()).
+                eq("is_delete", 0));
         if (Objects.nonNull(priorityList) && !priorityList.isEmpty()) {
             throw new ParamException("同一场景下不允许存在相同优先级的分流器:" + divideEntity.getDivideName());
         }

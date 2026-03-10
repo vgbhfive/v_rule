@@ -160,6 +160,9 @@ public class StrategyServiceImpl implements StrategyService {
         lastStrategyList.forEach(strategy -> lastStrategyMap.put(strategy.getNo(), strategy));
 
         List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("ruleNoList");
+        ignoreList.add("ruleSetNoList");
+        ignoreList.add("productNoList");
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.Strategy strategy : strategyList) {
@@ -169,7 +172,7 @@ public class StrategyServiceImpl implements StrategyService {
                 detailCompareResultList = CompareUtil.compare(lastStrategy, strategy, ignoreList);
                 lastStrategyList.remove(lastStrategy);
             } else {
-                detailCompareResultList = CompareUtil.compare(null, strategy, null);
+                detailCompareResultList = CompareUtil.compare(null, strategy, ignoreList);
             }
             if (!detailCompareResultList.isEmpty()) {
                 versionDiffDetailList.add(new VersionDiffDetail(strategy.getNo(), strategy.getName(), detailCompareResultList));
@@ -177,7 +180,7 @@ public class StrategyServiceImpl implements StrategyService {
         }
 
         for (SceneStruct.Strategy lastStrategy : lastStrategyList) {
-            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastStrategy, null, null);
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastStrategy, null, ignoreList);
             versionDiffDetailList.add(new VersionDiffDetail(lastStrategy.getNo(), lastStrategy.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;

@@ -170,6 +170,13 @@ public class DivideServiceImpl implements DivideService {
 
         // 与最近一次上线版本分流器对比
         List<String> ignoreList = new ArrayList<>();
+        ignoreList.add("nodeList");
+        ignoreList.add("diversionItem");
+        ignoreList.add("productNoList");
+        ignoreList.add("productInterestNoList");
+        ignoreList.add("productPeriodNoList");
+        ignoreList.add("productLimitNoList");
+        ignoreList.add("productCustomNoList");
         ignoreList.add("version");
         ignoreList.add("isValid");
         for (SceneStruct.Divide divide : divideList) {
@@ -180,7 +187,7 @@ public class DivideServiceImpl implements DivideService {
                 lastDivideList.remove(lastDivide);
             } else {
                 // 现在多配置的分流器
-                detailCompareResultList = CompareUtil.compare(null, divide, null);
+                detailCompareResultList = CompareUtil.compare(null, divide, ignoreList);
             }
             if (!detailCompareResultList.isEmpty()) {
                 versionDiffDetailList.add(new VersionDiffDetail(divide.getNo(), divide.getName(), detailCompareResultList));
@@ -189,7 +196,7 @@ public class DivideServiceImpl implements DivideService {
 
         // 相比现在多配置的分流器
         for (SceneStruct.Divide lastDeployDivide : lastDivideList) {
-            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDeployDivide, null, null);
+            List<DetailCompareResult> detailCompareResultList = CompareUtil.compare(lastDeployDivide, null, ignoreList);
             versionDiffDetailList.add(new VersionDiffDetail(lastDeployDivide.getNo(), lastDeployDivide.getName(), detailCompareResultList));
         }
         return versionDiffDetailList;

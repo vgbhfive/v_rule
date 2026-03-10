@@ -98,7 +98,7 @@
     <select id="queryStrategyDetailRuleNoByStrategyNo" resultType="java.lang.String">
         SELECT detail_no
         FROM strategy_rule_detail
-        WHERE strategy_no = #{strategyNo} AND rule_type = #{ruleType} AND is_delete = 0 AND is_valid = 1
+        WHERE strategy_no = #{strategyNo} AND rule_type = #{ruleType} AND is_delete = 0
     </select>
 
     <update id="updateDeployTimeBatch">
