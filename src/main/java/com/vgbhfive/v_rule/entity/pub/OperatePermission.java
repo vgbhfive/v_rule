@@ -4,7 +4,6 @@ import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import com.baomidou.mybatisplus.extension.handlers.JacksonTypeHandler;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -32,13 +31,6 @@ public class OperatePermission {
      * 名称
      */
     private String name;
-
-    @TableField(typeHandler = JacksonTypeHandler.class)
-    private OperatePermissionMeta meta;
-
-    private String path;
-
-    private String component;
 
     /**
      * 系统交互唯一标识
