@@ -56,7 +56,7 @@ public class UserServiceImpl implements UserService {
                 String token = UUID.randomUUID().toString().replace("-", "");
                 UserInfo userInfo = buildUserInfo(entity);
                 redisUtil.set(Constant.REDIS_PREFIX + token, userInfo, 30, TimeUnit.MINUTES);
-                return ResponseContent.success(new LoginResp(entity.getEmail(), entity.getName(), entity.getMobile(), token,
+                return ResponseContent.success(new LoginResp(entity.getId(), entity.getEmail(), entity.getName(), entity.getMobile(), token,
                         userInfo.getPagePermission(), userInfo.getButtonPermission()));
             }
         }
@@ -86,7 +86,7 @@ public class UserServiceImpl implements UserService {
         UserInfo userInfo = redisUtil.getObject(key, UserInfo.class);
         if (Objects.nonNull(userInfo)) {
             return ResponseContent.success(
-                    new LoginResp(userInfo.getEmail(), userInfo.getName(), userInfo.getMobile(), token,
+                    new LoginResp(userInfo.getId(), userInfo.getEmail(), userInfo.getName(), userInfo.getMobile(), token,
                             userInfo.getPagePermission(), userInfo.getButtonPermission()));
         }
         return ResponseContent.success("token 已失效");
@@ -222,7 +222,7 @@ public class UserServiceImpl implements UserService {
         if (Objects.nonNull(userInfo)) {
             String tokenNew = UUID.randomUUID().toString().replace("-", "");
             redisUtil.set(Constant.REDIS_PREFIX + tokenNew, userInfo, 30, TimeUnit.MINUTES);
-            return ResponseContent.success(new LoginResp("", "", "", token, new ArrayList<>(), new ArrayList<>()));
+            return ResponseContent.success(new LoginResp(0, "", "", "", token, new ArrayList<>(), new ArrayList<>()));
         }
         return ResponseContent.success("token 已失效");
     }

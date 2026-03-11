@@ -13,6 +13,8 @@ import java.util.List;
 @AllArgsConstructor
 public class LoginResp {
 
+    private Integer id;
+
     private String email;
 
     private String name;

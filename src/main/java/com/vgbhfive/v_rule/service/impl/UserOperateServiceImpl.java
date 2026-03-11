@@ -2,7 +2,6 @@ package com.vgbhfive.v_rule.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.update.UpdateWrapper;
 import com.vgbhfive.v_rule.dto.ResponseContent;
-import com.vgbhfive.v_rule.entity.UserLineEntity;
 import com.vgbhfive.v_rule.entity.UserOperateEntity;
 import com.vgbhfive.v_rule.entity.pub.OperatePermission;
 import com.vgbhfive.v_rule.mapper.OperatePermissionMapper;
@@ -38,7 +37,7 @@ public class UserOperateServiceImpl implements UserOperateService {
             } else {
                 OperatePermission tmp = operateMap.get(operate.getParentId());
                 if (Objects.nonNull(tmp)) {
-                    tmp.getNextLevelOperatePermission().add(operate);
+                    tmp.getChildren().add(operate);
                 }
             }
         });

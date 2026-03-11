@@ -8,6 +8,14 @@
         WHERE user_id = #{userId} AND type = #{type} AND is_delete = 0
     </select>
 
+
+    <select id="queryUniqueSignByUserId" resultType="com.vgbhfive.v_rule.entity.pub.OperatePermission">
+        SELECT u.unique_sign, o.id, o.parent_id, o.meta
+        FROM user_operate u
+        LEFT JOIN operate_permission o ON o.unique_sign = u.unique_sign
+        WHERE u.user_id = #{userId} AND u.is_delete = 0
+    </select>
+
     <select id="userOperateDetails" resultType="java.lang.Integer">
         SELECT op.id
         FROM user_operate u

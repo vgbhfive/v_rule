@@ -119,10 +119,10 @@ INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid,
 INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(54, '策略管理-策略集管理-生效/失效', 'strategy_manage_valid', 1, 50, 1, now(), now());
 
 INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(64, '发布管理', 'deploy_data_manage', 1, 0, 1, now(), now());
-INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(65, '发布管理-部署上线管理', 'deploy_manage', 1, 49, 1, now(), now());
-INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(66, '发布管理-部署上线管理-发布', 'deploy_manage_deploy', 1, 50, 1, now(), now());
-INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(67, '发布管理-部署上线管理-DIFF', 'deploy_manage_diff', 1, 50, 1, now(), now());
-INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(68, '发布管理-部署上线管理-回滚', 'deploy_manage_rollback', 1, 50, 1, now(), now());
+INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(65, '发布管理-部署上线管理', 'deploy_manage', 1, 64, 1, now(), now());
+INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(66, '发布管理-部署上线管理-发布', 'deploy_manage_deploy', 1, 65, 1, now(), now());
+INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(67, '发布管理-部署上线管理-DIFF', 'deploy_manage_diff', 1, 65, 1, now(), now());
+INSERT INTO operate_permission(id, name, unique_sign, type, parent_id, is_valid, create_at, update_at)VALUES(68, '发布管理-部署上线管理-回滚', 'deploy_manage_rollback', 1, 65, 1, now(), now());
 
 CREATE TABLE `user_operate` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
