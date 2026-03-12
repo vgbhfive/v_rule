@@ -4,7 +4,6 @@ import com.vgbhfive.v_rule.common.aop.Log;
 import com.vgbhfive.v_rule.common.aop.Permission;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
-import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 import com.vgbhfive.v_rule.service.ProductService;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -23,13 +22,6 @@ public class ProductController {
 
     @Resource
     private ProductService productService;
-
-    @PostMapping("/valid")
-    @Log
-    @Permission
-    public ResponseContent valid(@RequestBody ProductInterestEntity productInterestEntity) {
-        return productService.updateValid(productInterestEntity.getId(), productInterestEntity.getIsValid());
-    }
 
     @PostMapping("/dropdown/list")
     @Log

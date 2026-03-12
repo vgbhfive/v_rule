@@ -43,6 +43,7 @@ public class DataSourceController {
     @PostMapping("/update")
     @Log
     @Permission(sign = "data_source_manage_update", checkPermission = true, type = PermissionType.BUTTON)
+    @CheckParams(type = ElementTypes.DATA_SOURCE, isUpdate = true)
     public ResponseContent update(@RequestBody DataSourceEntity dataSourceEntity) {
         return dataSourceService.update(dataSourceEntity);
     }

@@ -7,8 +7,10 @@ import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
+import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 import com.vgbhfive.v_rule.entity.ProductPeriodEntity;
 import com.vgbhfive.v_rule.service.ProductPeriodService;
+import com.vgbhfive.v_rule.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +27,8 @@ public class ProductPeriodController {
 
     @Resource
     private ProductPeriodService productPeriodService;
+    @Resource
+    private ProductService productService;
 
     @PostMapping("/list")
     @Log
@@ -47,6 +51,13 @@ public class ProductPeriodController {
     @CheckParams(type = ElementTypes.PRODUCT, isUpdate = true)
     public ResponseContent update(@RequestBody ProductPeriodEntity productPeriodEntity) {
         return productPeriodService.update(productPeriodEntity);
+    }
+
+    @PostMapping("/valid")
+    @Log
+    @Permission(sign = "product_period_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
+    public ResponseContent valid(@RequestBody ProductInterestEntity productInterestEntity) {
+        return productService.updateValid(productInterestEntity.getId(), productInterestEntity.getIsValid());
     }
 
 }

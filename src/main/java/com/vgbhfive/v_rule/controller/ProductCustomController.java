@@ -8,7 +8,9 @@ import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductEntity;
+import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 import com.vgbhfive.v_rule.service.ProductCustomService;
+import com.vgbhfive.v_rule.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +27,8 @@ public class ProductCustomController {
 
     @Resource
     private ProductCustomService productCustomService;
+    @Resource
+    private ProductService productService;
 
     @PostMapping("/list")
     @Log
@@ -54,6 +58,13 @@ public class ProductCustomController {
     @CheckParams(type = ElementTypes.PRODUCT, isUpdate = true)
     public ResponseContent update(@RequestBody ProductEntity productEntity) {
         return productCustomService.update(productEntity);
+    }
+
+    @PostMapping("/valid")
+    @Log
+    @Permission(sign = "product_custom_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
+    public ResponseContent valid(@RequestBody ProductInterestEntity productInterestEntity) {
+        return productService.updateValid(productInterestEntity.getId(), productInterestEntity.getIsValid());
     }
 
 }

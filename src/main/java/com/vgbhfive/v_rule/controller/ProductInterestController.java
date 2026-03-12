@@ -9,6 +9,7 @@ import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
 import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 import com.vgbhfive.v_rule.service.ProductInterestService;
+import com.vgbhfive.v_rule.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +26,8 @@ public class ProductInterestController {
 
     @Resource
     private ProductInterestService productInterestService;
+    @Resource
+    private ProductService productService;
 
     @PostMapping("/list")
     @Log
@@ -47,6 +50,13 @@ public class ProductInterestController {
     @CheckParams(type = ElementTypes.PRODUCT, isUpdate = true)
     public ResponseContent update(@RequestBody ProductInterestEntity productInterestEntity) {
         return productInterestService.update(productInterestEntity);
+    }
+
+    @PostMapping("/valid")
+    @Log
+    @Permission(sign = "product_interest_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
+    public ResponseContent valid(@RequestBody ProductInterestEntity productInterestEntity) {
+        return productService.updateValid(productInterestEntity.getId(), productInterestEntity.getIsValid());
     }
 
 }

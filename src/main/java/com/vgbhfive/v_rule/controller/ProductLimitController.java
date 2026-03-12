@@ -7,8 +7,10 @@ import com.vgbhfive.v_rule.common.enums.ElementTypes;
 import com.vgbhfive.v_rule.common.enums.PermissionType;
 import com.vgbhfive.v_rule.dto.ResponseContent;
 import com.vgbhfive.v_rule.dto.product.ProductQueryParam;
+import com.vgbhfive.v_rule.entity.ProductInterestEntity;
 import com.vgbhfive.v_rule.entity.ProductLimitEntity;
 import com.vgbhfive.v_rule.service.ProductLimitService;
+import com.vgbhfive.v_rule.service.ProductService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -25,6 +27,8 @@ public class ProductLimitController {
 
     @Resource
     private ProductLimitService productLimitService;
+    @Resource
+    private ProductService productService;
 
     @PostMapping("/list")
     @Log
@@ -47,6 +51,13 @@ public class ProductLimitController {
     @CheckParams(type = ElementTypes.PRODUCT, isUpdate = true)
     public ResponseContent update(@RequestBody ProductLimitEntity productLimitEntity) {
         return productLimitService.update(productLimitEntity);
+    }
+
+    @PostMapping("/valid")
+    @Log
+    @Permission(sign = "product_limit_manage_valid", checkPermission = true, type = PermissionType.BUTTON)
+    public ResponseContent valid(@RequestBody ProductInterestEntity productInterestEntity) {
+        return productService.updateValid(productInterestEntity.getId(), productInterestEntity.getIsValid());
     }
 
 }
