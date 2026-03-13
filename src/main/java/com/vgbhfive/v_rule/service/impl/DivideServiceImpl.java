@@ -158,6 +158,9 @@ public class DivideServiceImpl implements DivideService {
             allProductNoList.addAll(customNoList);
             divide.setProductNoList(allProductNoList);
         });
+        if (divideList.isEmpty()) {
+            throw new ParamException("scene no divide!");
+        }
         return divideList;
     }
 
@@ -170,8 +173,6 @@ public class DivideServiceImpl implements DivideService {
 
         // 与最近一次上线版本分流器对比
         List<String> ignoreList = new ArrayList<>();
-        ignoreList.add("nodeList");
-        ignoreList.add("diversionItem");
         ignoreList.add("productNoList");
         ignoreList.add("productInterestNoList");
         ignoreList.add("productPeriodNoList");
