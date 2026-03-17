@@ -214,6 +214,15 @@ public class SceneStruct {
         private String sourceType;
         private Integer categoryType;
         private Integer priority;
+        private List<DataCategoryDetail> detailList;
+    }
+
+    @Data
+    public static class DataCategoryDetail {
+        private String dataCategoryNo;
+        private String key;
+        private String valueType;
+        private String value;
     }
 
 }

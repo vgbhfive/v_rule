@@ -21,4 +21,10 @@
         </foreach>
     </insert>
 
+    <select id="queryListByDataCategoryNo" resultType="com.vgbhfive.v_rule.dto.deploy.SceneStruct$DataCategoryDetail">
+        SELECT data_category_no, `key`, value_type, `value`
+        FROM data_category_detail
+        WHERE data_category_no = #{no} AND is_delete = 0
+    </select>
+
 </mapper>

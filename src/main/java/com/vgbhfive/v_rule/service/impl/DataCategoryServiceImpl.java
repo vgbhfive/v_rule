@@ -24,7 +24,6 @@ import com.vgbhfive.v_rule.mapper.DataCategoryDetailMapper;
 import com.vgbhfive.v_rule.mapper.DataCategoryMapper;
 import com.vgbhfive.v_rule.mapper.LineMapper;
 import com.vgbhfive.v_rule.service.DataCategoryService;
-import org.apache.tomcat.util.buf.UDecoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -155,7 +154,11 @@ public class DataCategoryServiceImpl implements DataCategoryService {
         if (dataCategoryNoSet.isEmpty()) {
             return new ArrayList<>();
         }
-        return dataCategoryMapper.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
+        List<SceneStruct.DataCategory> dataCategoryList = dataCategoryMapper.queryDataCategoryByDataCategoryNos(dataCategoryNoSet);
+        dataCategoryList.forEach(dataCategory -> {
+            dataCategory.setDetailList(dataCategoryDetailMapper.queryListByDataCategoryNo(dataCategory.getNo()));
+        });
+        return dataCategoryList;
     }
 
     @Override
